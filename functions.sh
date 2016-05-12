@@ -9,7 +9,7 @@ echo() {
             command echo "${GREEN}$2${NORM}";;
 
         warn )
-            command echo "${WARN}$2${NORM}";;
+            command echo "${YELLOW}$2${NORM}";;
 
         error )
             command echo "${RED}$2${NORM}";;
@@ -50,4 +50,15 @@ pushd() {
 # Override `popd` to dump data onto `/dev/null`
 popd() {
     command popd "$@" > /dev/null
+}
+
+# Override cp
+cp() {
+    command cp "$@"
+    if [ $? -eq 0 ]; then
+        echo success "Finished copying..."
+    else
+        echo error "Copying failed..."
+        exit 1
+    fi
 }
