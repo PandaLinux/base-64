@@ -2,36 +2,52 @@
 
 ## This file contains all the function that will be used throughout the build process
 
+# Override echo to colorize output
+echo() {
+    case $1 in
+        success )
+            command echo "${GREEN}$2${NORM}";;
+
+        warn )
+            command echo "${WARN}$2${NORM}";;
+
+        error )
+            command echo "${RED}$2${NORM}";;
+
+        bold )
+            command echo "${BOLD}$2${NORM}";;
+
+        norm )
+            command echo "$2";;
+
+        empty )
+            command echo "";;
+    esac
+}
+
+# This script tries to run the command as `root`
 function requireRoot() {
     # Already root?
     if [[ `whoami` == 'root' ]]; then
-        echo "${BOLD}S*${NORM}"
+        echo bold "$*"
         $*
     elif [[ -x /bin/sudo || -x /usr/bin/sudo ]]; then
-        echo "${BOLD}sudo $*${NORM}"
+        echo bold "sudo $*"
         sudo $*
     else
-        echos error "${REV}We require root privileges to install.${NORM}"
-        echos error "${REV}Please run the script as root.${NORM}"
+        echo error "We require root privileges to install."
+        echo error "Please run the script as root."
+        echo empty
         exit 1
     fi
 }
 
-function echos() {
-    case $1 in
-        success )
-            echo "${GREEN}$2${NORM}";;
+# Override `pushd` to dump data onto `/dev/null`
+pushd() {
+    command pushd "$@" > /dev/null
+}
 
-        warn )
-            echo "${WARN}$2${NORM}";;
-
-        error )
-            echo "${RED}$2${NORM}";;
-
-        bold )
-            echo "${BOLD}$2${NORM}";;
-
-        empty )
-            echo "";;
-    esac
+# Override `popd` to dump data onto `/dev/null`
+popd() {
+    command popd "$@" > /dev/null
 }
