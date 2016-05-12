@@ -28,4 +28,4 @@ BOLD=`tput bold`
 REV=`tput smso`
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
-WARN=`tput setaf 3`
+YELLOW=`tput setaf 3`
