@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e # Stop the script upon errors
+
 ## This is script configures the system and download all the necessary packages required
 ## for compiling the system from source.
 
@@ -47,9 +49,9 @@ function configureSys() {
         [ -s errors.log ] && echo -e "${REV}\nThe following packages could not be found:\n${NORM}$(cat errors.log)"
 
         # Remove symlink /bin/sh
-        requireRoot rm -v /bin/sh
+        requireRoot rm /bin/sh
         # Link `bash` to `sh`
-        requireRoot ln -sv /bin/bash /bin/sh
+        requireRoot ln -s /bin/bash /bin/sh
 
         # Make `install.sh` executable by default
         requireRoot chmod +x install.sh
