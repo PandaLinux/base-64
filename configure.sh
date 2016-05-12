@@ -54,9 +54,6 @@ function configureSys() {
         # Make `install.sh` executable by default
         requireRoot chmod +x install.sh
 
-        echo "${BOLD}Your system is now configured!!${NORM}"
-        echo "${BOLD}You can now run ${REV}./install.sh${NORM}${BOLD} to continue...${NORM}"
-
     elif [[ $DISTRIB_NAME == "redhat" || $DISTRIB_NAME == "centos" || $DISTRIB_NAME == "Scientific" ]]; then
         # Redhat/CentOS/SL
 
@@ -90,6 +87,9 @@ function configureSys() {
     # Download the required packages
     echo "${BOLD}wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources${NORM}"
     wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
+
+    echo "${BOLD}Your system is now configured!!${NORM}"
+    echo "${BOLD}You can now run ${REV}./install.sh${NORM}${BOLD} to continue...${NORM}"
 }
 
 time { configureSys; }
