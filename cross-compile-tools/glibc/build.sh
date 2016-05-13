@@ -35,7 +35,7 @@ function build() {
     echo "libc_cv_ssp=no" > config.cache &&
 
     BUILD_CC="gcc" CC="${TARGET}-gcc ${BUILD64}"                \
-    AR="${CLFS_TARGET}-ar" RANLIB="${CLFS_TARGET}-ranlib"       \
+    AR="${TARGET}-ar" RANLIB="${TARGET}-ranlib"                 \
     ../configure --prefix="${HOST_TOOLS_DIR}"                   \
                  --host="${TARGET}"                             \
                  --build="${HOST}"                              \
