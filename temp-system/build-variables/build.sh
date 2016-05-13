@@ -12,11 +12,7 @@ export STRIP="${TARGET}-strip"
 EOF
 }
 
-function instal() {
-    source "${CONFIG_FILE}"
-}
-
 # Run the installation procedure
-time { build;instal; }
+time { build; }
 # There is no need for verification
 touch DONE

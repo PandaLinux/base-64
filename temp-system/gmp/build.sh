@@ -20,6 +20,7 @@ function help() {
 
 function prepare() {
     ln -sv "../../sources/$TARBALL" "$TARBALL"
+    source "${CONFIG_FILE}"
 }
 
 function unpack() {

@@ -6,6 +6,7 @@ set -e 		# Exit on error
 
 source "${INSTALL_DIR}/variables.sh"
 source "${INSTALL_DIR}/functions.sh"
+source "${CONFIG_FILE}"
 
 if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
     _list=(build-variables gmp mpfr mpc isl cloog zlib)
