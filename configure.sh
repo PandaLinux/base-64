@@ -27,7 +27,7 @@ function configureSys() {
         done
     fi
 
-    echo "${REV}Detected system${NORM}" ${BOLD}$DISTRIB_NAME${NORM}
+    echo warn "Detected system" ${BOLD}$DISTRIB_NAME${NORM}
 
     shopt -s nocasematch
     # Let's do the installation of missing packages
@@ -46,7 +46,7 @@ function configureSys() {
 
         # Check version of the installed packages
         bash version-check.sh 2>errors.log &&
-        [ -s errors.log ] && echo -e "${REV}\nThe following packages could not be found:\n${NORM}$(cat errors.log)"
+        [ -s errors.log ] && echo error "The following packages could not be found: $(cat errors.log)"
 
         # Remove symlink /bin/sh
         requireRoot rm /bin/sh
@@ -87,11 +87,11 @@ function configureSys() {
     shopt -u nocasematch
 
     # Download the required packages
-    echo "${BOLD}wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources${NORM}"
+    echo warn "wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources"
     wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
 
-    echo "${BOLD}Your system is now configured!!${NORM}"
-    echo "${BOLD}You can now run ${REV}./install.sh${NORM}${BOLD} to continue...${NORM}"
+    echo success "Your system is now configured!!"
+    echo success "You can now run ${REV}./install.sh${NORM}${BOLD} to continue..."
 }
 
 time { configureSys; }
