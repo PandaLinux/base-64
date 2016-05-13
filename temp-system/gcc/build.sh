@@ -40,10 +40,27 @@ function build() {
     mkdir   "${BUILD_DIR}"  &&
     cd      "${BUILD_DIR}"  &&
 
-    ../configure
+    ../configure --prefix="${HOST_TOOLS_DIR}"               \
+                 --build="${HOST}"                          \
+                 --host="${TARGET}"                         \
+                 --target="${TARGET}"                       \
+                 --with-local-prefix="${HOST_TOOLS_DIR}"    \
+                 --disable-multilib                         \
+                 --disable-nls                              \
+                 --enable-languages=c,c++                   \
+                 --disable-libstdcxx-pch                    \
+                 --with-system-zlib                         \
+                 --with-native-system-header-dir="${HOST_TOOLS_DIR}/include" \
+                 --disable-libssp                           \
+                 --enable-checking=release                  \
+                 --enable-libstdcxx-time
 
-    make "${MAKE_PARALLEL}" AS_FOR_TARGET="${TARGET}-as" \
-                            LD_FOR_TARGET="${TARGET}-ld"
+    cp -v Makefile{,.orig}
+    sed "/^HOST_\(GMP\|ISL\|CLOOG\)\(LIBS\|INC\)/s:/tools:/cross-tools:g" \
+        Makefile.orig > Makefile
+
+    make "${MAKE_PARALLEL}" AS_FOR_TARGET="${AS}" \
+                            LD_FOR_TARGET="${LD}"
 }
 
 function test() {
@@ -52,6 +69,7 @@ function test() {
 
 function instal() {
     make "${MAKE_PARALLEL}" install
+    cp -v ../include/libiberty.h "${HOST_TOOLS_DIR}/include"
 }
 
 function clean() {
@@ -61,6 +79,6 @@ function clean() {
 # Run the installation procedure
 time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_CROSS_TOOLS_DIR}/${TARGET}/lib/libtsan.so" ]; then
+if [ -f "${HOST_TOOLS_DIR}/bin/gcc" ]; then
     touch DONE
 fi
