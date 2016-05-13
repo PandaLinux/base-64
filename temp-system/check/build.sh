@@ -39,7 +39,11 @@ function test() {
 }
 
 function instal() {
+<<<<<<< refs/remotes/origin/master
     make install
+=======
+    make "${MAKE_PARALLEL}" install
+>>>>>>> Added check package
 }
 
 function clean() {
