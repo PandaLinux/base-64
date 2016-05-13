@@ -7,7 +7,7 @@ set -e 		# Exit on error
 source "${INSTALL_DIR}/variables.sh"
 source "${INSTALL_DIR}/functions.sh"
 
-_list=(file linux-headers)
+_list=(file linux-headers m4)
 
 for i in ${_list[@]}; do
     case $i in
