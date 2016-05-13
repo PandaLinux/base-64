@@ -12,6 +12,9 @@ TOOLS_DIR="${INSTALL_DIR}/tools"
 CROSS_TOOLS_DIR="${INSTALL_DIR}/cross-tools"
 CROSS_COMPILE_TOOLS_DIR="${INSTALL_DIR}/cross-compile-tools"
 
+HOST_TOOLS_DIR="/tools"
+HOST_CROSS_TOOLS_DIR="/cross-tools"
+
 ## Rest of the configurations
 HOST=$(echo ${MACHTYPE} | sed -e 's/-[^-]*/-cross/')
 TARGET="x86_64-panda-linux-gnu"
