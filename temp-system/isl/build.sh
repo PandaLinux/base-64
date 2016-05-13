@@ -4,16 +4,16 @@ set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
-PKG_NAME="gmp"
-PKG_VERSION="6.0.0"
+PKG_NAME="isl"
+PKG_VERSION="0.12.2"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}a.tar.xz"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.lzma"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function help() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
-    echo -e "Description: GMP is a library for arithmetic on arbitrary precision integers, rational numbers, and"
-    echo -e "floating-point numbers."
+    echo -e "Description: ISL is a library for manipulating sets and relations of integer points bounded by linear"
+    echo -e "constraints."
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e ""
 }
@@ -27,11 +27,9 @@ function unpack() {
 }
 
 function build() {
-    CC_FOR_BUILD=gcc \
     ./configure --prefix="${HOST_TOOLS_DIR}"    \
                 --build="${HOST}"               \
-                --host="${TARGET}"              \
-                --enable-cxx
+                --host="${TARGET}"
 
     make "${MAKE_PARALLEL}"
 }
@@ -51,6 +49,6 @@ function clean() {
 # Run the installation procedure
 time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_TOOLS_DIR}/lib/libgmp.so" ]; then
+if [ -f "${HOST_TOOLS_DIR}/lib/libisl.so" ]; then
     touch DONE
 fi
