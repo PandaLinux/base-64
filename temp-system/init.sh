@@ -10,7 +10,7 @@ source "${CONFIG_FILE}"
 
 if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
     _list=(build-variables gmp mpfr mpc isl cloog zlib binutils gcc ncurses bash bzip2 check coreutils diffutils file \
-           findutils gawk gettext grep gzip make patch sed tar texinfo util-linux)
+           findutils gawk gettext grep gzip make patch sed tar texinfo util-linux vim)
 
     for i in ${_list[@]}; do
         case $i in
