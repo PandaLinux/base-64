@@ -9,7 +9,6 @@ PKG_VERSION="4.3"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
-BUILD_DIR="${PKG_NAME}-build"
 
 function help() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
