@@ -64,6 +64,6 @@ function clean() {
 # Run the installation procedure
 time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_TOOLS_DIR}/bin/${TARGET}-ldd" ]; then
+if [ -f "${HOST_TOOLS_DIR}/bin/ldd" ]; then
     touch DONE
 fi
