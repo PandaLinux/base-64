@@ -6,16 +6,28 @@ source functions.sh
 
 # Remove all the old files/folders
 echo warn "Removing old folders"
-requireRoot rm -rf /tools
-requireRoot rm -rf /cross-tools
+requireRoot rm -rf "${HOST_TOOLS_DIR}"
+requireRoot rm -rf "${HOST_CROSS_TOOLS_DIR}"
 echo success "Finished..."
 echo empty
 
 # Create installation folder
 requireRoot mkdir -p "${INSTALL_DIR}"
 
+# Create necessary directories and symlinks
+echo warn "Creating necessary folders. Please wait..."
+requireRoot install -d "${TOOLS_DIR}"
+requireRoot ln -s "${TOOLS_DIR}" /
+requireRoot install -d "${CROSS_TOOLS_DIR}"
+requireRoot ln -s "${CROSS_TOOLS_DIR}" /
+
 # Change folder permissions to `whoami`
 requireRoot chown -R `whoami` "${INSTALL_DIR}"
+requireRoot chown -R `whoami` "${HOST_TOOLS_DIR}"
+requireRoot chown -R `whoami` "${HOST_CROSS_TOOLS_DIR}"
+
+echo success "Finished..."
+echo empty
 
 # Create new configuration file
 cat > "${INSTALL_DIR}/.config" << "EOF"
@@ -24,6 +36,8 @@ EOF
 
 # Update installation configuration information
 echo norm "export INSTALL_DIR=${INSTALL_DIR}"                                       >> "${INSTALL_DIR}/.config"
+echo norm "export HOST_TOOLS_DIR=${HOST_TOOLS_DIR}"                                 >> "${INSTALL_DIR}/.config"
+echo norm "export HOST_CROSS_TOOLS_DIR=${HOST_CROSS_TOOLS_DIR}"                     >> "${INSTALL_DIR}/.config"
 echo norm "export MAKE_TESTS=TRUE"                                                  >> "${INSTALL_DIR}/.config"
 echo norm "export MAKE_PARALLEL="-j$(cat /proc/cpuinfo | grep processor | wc -l)""  >> "${INSTALL_DIR}/.config"
 echo norm "export TARGET=$TARGET" 		                                            >> "${INSTALL_DIR}/.config"
@@ -37,15 +51,6 @@ echo norm "export CONFIG_BACKUP=$CONFIG_BACKUP"                                 
 
 # Make all the configurations available
 source "${INSTALL_DIR}/.config"
-
-# Create necessary directories and symlinks
-echo warn "Creating necessary folders. Please wait..."
-requireRoot install -d "${TOOLS_DIR}"
-requireRoot ln -s "${TOOLS_DIR}" /
-requireRoot install -d "${CROSS_TOOLS_DIR}"
-requireRoot ln -s "${CROSS_TOOLS_DIR}" /
-echo success "Finished..."
-echo empty
 
 # Copy the data to the installation directory
 echo warn "Copying data to ${INSTALL_DIR}. Please wait..."
