@@ -7,7 +7,7 @@ set -e 		# Exit on error
 source "${INSTALL_DIR}/variables.sh"
 source "${INSTALL_DIR}/functions.sh"
 
-_list=(gmp)
+_list=(gmp mpfr)
 
 for i in ${_list[@]}; do
     case $i in
