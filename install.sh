@@ -48,6 +48,14 @@ echo norm "export LC_ALL=$LC_ALL" 		                                            
 echo norm "export VM_LINUZ=$VM_LINUZ" 		                                        >> "${INSTALL_DIR}/.config"
 echo norm "export SYSTEM_MAP=$SYSTEM_MAP"                                        	>> "${INSTALL_DIR}/.config"
 echo norm "export CONFIG_BACKUP=$CONFIG_BACKUP"                                     >> "${INSTALL_DIR}/.config"
+echo norm "unset CFLAGS CXXFLAGS"                                                   >> "${INSTALL_DIR}/.config"
+echo norm "export CC=$CC"                                                           >> "${INSTALL_DIR}/.config"
+echo norm "export CXX=$CXX"                                                         >> "${INSTALL_DIR}/.config"
+echo norm "export AR=$AR"                                                           >> "${INSTALL_DIR}/.config"
+echo norm "export AS=$AS"                                                           >> "${INSTALL_DIR}/.config"
+echo norm "export RANLIB=$RANLIB"                                                   >> "${INSTALL_DIR}/.config"
+echo norm "export LD=$LD"                                                           >> "${INSTALL_DIR}/.config"
+echo norm "export STRIP=$STRIP"                                                     >> "${INSTALL_DIR}/.config"
 
 # Make all the configurations available
 source "${INSTALL_DIR}/.config"
@@ -62,4 +70,6 @@ echo empty
 #----------------------------------------------------------------------------------------------------#
 
 # Construct cross-compile tools
-cd "${CROSS_COMPILE_TOOLS_DIR}" && bash init.sh
+pushd "${CROSS_COMPILE_TOOLS_DIR}" && bash init.sh && popd
+# Build temporary system
+pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
