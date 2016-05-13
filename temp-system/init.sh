@@ -9,7 +9,7 @@ source "${INSTALL_DIR}/functions.sh"
 source "${CONFIG_FILE}"
 
 if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
-    _list=(build-variables gmp mpfr mpc isl cloog zlib binutils gcc ncurses bash bzip2 check)
+    _list=(build-variables gmp mpfr mpc isl cloog zlib binutils gcc ncurses bash bzip2 check coreutils)
 
     for i in ${_list[@]}; do
         case $i in
