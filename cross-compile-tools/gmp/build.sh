@@ -14,7 +14,6 @@ function help() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: GMP is a library for arithmetic on arbitrary precision integers, rational numbers, and"
     echo -e "floating-point numbers."
-    echo -e ""
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e ""
 }

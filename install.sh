@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e # Exit upon error
+
 # This script generates a 64-bit system
 source variables.sh
 source functions.sh
@@ -30,35 +32,28 @@ echo success "Finished..."
 echo empty
 
 # Create new configuration file
-cat > "${INSTALL_DIR}/.config" << "EOF"
+cat > "${CONFIG_FILE}" << EOF
 #!/usr/bin/env bash
+
+export INSTALL_DIR="${INSTALL_DIR}"
+export HOST_TOOLS_DIR="${HOST_TOOLS_DIR}"
+export HOST_CROSS_TOOLS_DIR="${HOST_CROSS_TOOLS_DIR}"
+export CONFIG_FILE="${CONFIG_FILE}"
+export MAKE_TESTS="TRUE"
+export MAKE_PARALLEL="-j$(cat /proc/cpuinfo | grep processor | wc -l)"
+export TARGET="${TARGET}"
+export PATH="${TMP_PATH}"
+export HOST="${HOST}"
+export BUILD64="${BUILD64}"
+export LC_ALL="${LC_ALL}"
+export VM_LINUZ="${VM_LINUZ}"
+export SYSTEM_MAP="${SYSTEM_MAP}"
+export CONFIG_BACKUP="${CONFIG_BACKUP}"
+unset CFLAGS CXXFLAGS
 EOF
 
-# Update installation configuration information
-echo norm "export INSTALL_DIR=${INSTALL_DIR}"                                       >> "${INSTALL_DIR}/.config"
-echo norm "export HOST_TOOLS_DIR=${HOST_TOOLS_DIR}"                                 >> "${INSTALL_DIR}/.config"
-echo norm "export HOST_CROSS_TOOLS_DIR=${HOST_CROSS_TOOLS_DIR}"                     >> "${INSTALL_DIR}/.config"
-echo norm "export MAKE_TESTS=TRUE"                                                  >> "${INSTALL_DIR}/.config"
-echo norm "export MAKE_PARALLEL="-j$(cat /proc/cpuinfo | grep processor | wc -l)""  >> "${INSTALL_DIR}/.config"
-echo norm "export TARGET=$TARGET" 		                                            >> "${INSTALL_DIR}/.config"
-echo norm "export PATH=$TMP_PATH"		                                            >> "${INSTALL_DIR}/.config"
-echo norm "export HOST=$HOST"     		                                            >> "${INSTALL_DIR}/.config"
-echo norm "export BUILD64=$BUILD64"  	                                            >> "${INSTALL_DIR}/.config"
-echo norm "export LC_ALL=$LC_ALL" 		                                            >> "${INSTALL_DIR}/.config"
-echo norm "export VM_LINUZ=$VM_LINUZ" 		                                        >> "${INSTALL_DIR}/.config"
-echo norm "export SYSTEM_MAP=$SYSTEM_MAP"                                        	>> "${INSTALL_DIR}/.config"
-echo norm "export CONFIG_BACKUP=$CONFIG_BACKUP"                                     >> "${INSTALL_DIR}/.config"
-echo norm "unset CFLAGS CXXFLAGS"                                                   >> "${INSTALL_DIR}/.config"
-echo norm "export CC=$CC"                                                           >> "${INSTALL_DIR}/.config"
-echo norm "export CXX=$CXX"                                                         >> "${INSTALL_DIR}/.config"
-echo norm "export AR=$AR"                                                           >> "${INSTALL_DIR}/.config"
-echo norm "export AS=$AS"                                                           >> "${INSTALL_DIR}/.config"
-echo norm "export RANLIB=$RANLIB"                                                   >> "${INSTALL_DIR}/.config"
-echo norm "export LD=$LD"                                                           >> "${INSTALL_DIR}/.config"
-echo norm "export STRIP=$STRIP"                                                     >> "${INSTALL_DIR}/.config"
-
 # Make all the configurations available
-source "${INSTALL_DIR}/.config"
+source "${CONFIG_FILE}"
 
 # Copy the data to the installation directory
 echo warn "Copying data to ${INSTALL_DIR}. Please wait..."

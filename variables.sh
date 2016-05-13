@@ -10,6 +10,7 @@
 INSTALL_DIR="/tmp/panda64"
 TOOLS_DIR="${INSTALL_DIR}/tools"
 CROSS_TOOLS_DIR="${INSTALL_DIR}/cross-tools"
+CONFIG_FILE="${INSTALL_DIR}/.config"
 
 CROSS_COMPILE_TOOLS_DIR="${INSTALL_DIR}/cross-compile-tools"
 TEMP_SYSTEM_DIR="${INSTALL_DIR}/temp-system"
@@ -26,15 +27,6 @@ LC_ALL="POSIX"
 VM_LINUZ="vmlinuz-4.4.2-systemd"
 SYSTEM_MAP="System.map-4.4.2"
 CONFIG_BACKUP="config-4.4.2"
-
-# Temporary system variables
-CC="${TARGET}-gcc ${BUILD64}"
-CXX="${TARGET}-g++ ${BUILD64}"
-AR="${TARGET}-ar"
-AS="${TARGET}-as"
-RANLIB="${TARGET}-ranlib"
-LD="${TARGET}-ld"
-STRIP="${TARGET}-strip"
 
 # Set fonts for Help.
 NORM=`tput sgr0`

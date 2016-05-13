@@ -7,28 +7,33 @@ set -e 		# Exit on error
 source "${INSTALL_DIR}/variables.sh"
 source "${INSTALL_DIR}/functions.sh"
 
-_list=(gmp mpfr mpc isl cloog zlib)
+if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
+    _list=(build-variables gmp mpfr mpc isl cloog zlib)
 
-for i in ${_list[@]}; do
-    case $i in
-        * )
-            pushd ${i}
-                if [ -e DONE ]; then
-                    echo success "${i} --> Already Built"
-                else
-                    echo empty
-                    echo warn "Building ---> ${i}"
-                    bash build.sh |& tee build.log
-
+    for i in ${_list[@]}; do
+        case $i in
+            * )
+                pushd ${i}
                     if [ -e DONE ]; then
-                        echo success "Building ---> ${i} completed"
+                        echo success "${i} --> Already Built"
                     else
-                        echo error "Building ---> ${i} failed"
-                        exit 1
-                    fi
+                        echo empty
+                        echo warn "Building ---> ${i}"
+                        bash build.sh |& tee build.log
 
-                    echo empty
-                fi
-            popd;;
-    esac
-done
+                        if [ -e DONE ]; then
+                            echo success "Building ---> ${i} completed"
+                        else
+                            echo error "Building ---> ${i} failed"
+                            exit 1
+                        fi
+
+                        echo empty
+                    fi
+                popd;;
+        esac
+    done
+else
+    echo error "Installation failed..."
+    exit 1
+fi

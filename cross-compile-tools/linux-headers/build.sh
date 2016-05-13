@@ -36,7 +36,7 @@ function test() {
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" ARCH=x86_64 INSTALL_HDR_PATH=/tools headers_install
+    make "${MAKE_PARALLEL}" ARCH=x86_64 INSTALL_HDR_PATH="${HOST_TOOLS_DIR}" headers_install
 }
 
 function clean() {
