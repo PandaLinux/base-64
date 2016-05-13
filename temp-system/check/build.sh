@@ -39,7 +39,7 @@ function test() {
 }
 
 function instal() {
-    make install
+    make "${MAKE_PARALLEL}" install
 }
 
 function clean() {
