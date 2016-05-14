@@ -38,7 +38,7 @@ vim_cv_toupper_broken=no
 vim_cv_tty_group=world
 EOF
 
-    echo '#define SYS_VIMRC_FILE "/tools/etc/vimrc"' >> src/feature.h
+    printf '#define SYS_VIMRC_FILE "%s/etc/vimrc"' "${HOST_TOOLS_DIR}" >> src/feature.h
 
     ./configure --prefix="${HOST_TOOLS_DIR}"    \
                 --build="${HOST}"               \
