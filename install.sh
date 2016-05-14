@@ -68,3 +68,5 @@ echo empty
 pushd "${CROSS_COMPILE_TOOLS_DIR}" && bash init.sh && popd
 # Build temporary system
 pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
+# Build the system
+pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd

@@ -14,6 +14,7 @@ CONFIG_FILE="${INSTALL_DIR}/.config"
 
 CROSS_COMPILE_TOOLS_DIR="${INSTALL_DIR}/cross-compile-tools"
 TEMP_SYSTEM_DIR="${INSTALL_DIR}/temp-system"
+BUILD_SYSTEM_DIR="${INSTALL_DIR}/build-system"
 
 HOST_TOOLS_DIR="/tools"
 HOST_CROSS_TOOLS_DIR="/cross-tools"
