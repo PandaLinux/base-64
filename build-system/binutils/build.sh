@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set +h		# disable hashall
+shopt -s -o pipefail
+set -e 		# Exit on error
+
+PKG_NAME="binutils"
+PKG_VERSION="2.24"
+
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
+BUILD_DIR="${PKG_NAME}-build"
+
+function help() {
+    echo -e "--------------------------------------------------------------------------------------------------------------"
+    echo -e "Description: The Binutils package contains a linker, an assembler, and other tools for handling object files."
+    echo -e "--------------------------------------------------------------------------------------------------------------"
+    echo -e ""
+}
+
+function prepare() {
+    ln -sv "/sources/$TARBALL" "$TARBALL"
+}
+
+function unpack() {
+    tar xf "${TARBALL}"
+}
+
+function build() {
+    mkdir   "${BUILD_DIR}"  &&
+    cd      "${BUILD_DIR}"  &&
+
+    CC="gcc -isystem /usr/include"          \
+    LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
+    ../configure --prefix=/usr              \
+                 --libdir=/usr/lib          \
+                 --enable-shared            \
+                 --disable-multilib         \
+                 --enable-64-bit-bfd
+
+    make "${MAKE_PARALLEL}" tooldir=/usr
+}
+
+function test() {
+    ln -sv /lib /lib64
+    make "${MAKE_PARALLEL}" check
+    rm -v /lib64
+    rm -v /usr/lib64/libstd*so*
+    rmdir -v /usr/lib64
+}
+
+function instal() {
+    make "${MAKE_PARALLEL}" tooldir=/usr install
+}
+
+function clean() {
+    rm -rf "${SRC_DIR}" "${TARBALL}"
+}
+
+# Run the installation procedure
+time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+# Verify installation
+if [ -f "/usr/bin/ld" ]; then
+    touch DONE
+fi
