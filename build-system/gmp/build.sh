@@ -31,8 +31,7 @@ function build() {
     CXX="g++ -isystem /usr/include"         \
     LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
     ./configure --prefix=/usr               \
-                --enable-cxx                \
-                --docdir=/usr/share/doc/gmp-6.0.0
+                --enable-cxx
 
     make "${MAKE_PARALLEL}"
 }
