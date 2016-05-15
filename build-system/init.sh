@@ -11,7 +11,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
     echo norm 'export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin' >> "${CONFIG_FILE}"
     source "${CONFIG_FILE}"
 
-    _list=(virtual-kernel-fs prepare-env)
+    _list=(virtual-kernel-fs prepare-env testsuite-tools)
 
     for i in ${_list[@]}; do
         case $i in
@@ -33,6 +33,35 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
 
                         echo empty
                     fi
+                popd;;
+
+            testsuite-tools )
+                pushd ${i}
+                    _testsuite_list=(tcl)
+
+                    for j in ${_testsuite_list[@]}; do
+                        case $j in
+                            * )
+                                pushd ${j}
+                                    if [ -e DONE ]; then
+                                        echo success "${j} --> Already Built"
+                                    else
+                                        echo empty
+                                        echo warn "Building ---> ${j}"
+                                        chrootTmp "source /.config && pushd /build-system/testsuite-tools/${j} && bash build.sh |& tee build.log popd"
+
+                                        if [ -e DONE ]; then
+                                            echo success "Building ---> ${j} completed"
+                                        else
+                                            echo error "Building ---> ${i} failed"
+                                            exit 1
+                                        fi
+
+                                        echo empty
+                                    fi
+                                popd;;
+                        esac
+                    done
                 popd;;
 
             * )
