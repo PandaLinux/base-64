@@ -27,7 +27,6 @@ function unpack() {
 
 function build() {
     patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-uname-1.patch"
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-noman-1.patch"
 
     FORCE_UNSAFE_CONFIGURE=1                            \
     ./configure --prefix=/usr                           \
@@ -61,7 +60,7 @@ function clean() {
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build; }#[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
 # Verify installation
 if [ -f "/bin/cat" ]; then
     touch DONE
