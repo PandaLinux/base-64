@@ -33,7 +33,9 @@ function build() {
 
 function test() {
     if [ -f "/usr/bin/bison" ];then
+        set +e
         make "${MAKE_PARALLEL}" check
+        set -e
     fi
 }
 
