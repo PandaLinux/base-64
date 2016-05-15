@@ -12,7 +12,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
     source "${CONFIG_FILE}"
 
     _list=(virtual-kernel-fs prepare-env testsuite-tools perl-temp linux-headers man-pages glibc adjust-toolchain m4 \
-           gmp mpfr mpc)
+           gmp mpfr mpc isl)
 
     for i in ${_list[@]}; do
         case $i in
