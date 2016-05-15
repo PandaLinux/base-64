@@ -37,7 +37,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
 
             testsuite-tools )
                 pushd ${i}
-                    _testsuite_list=(tcl)
+                    _testsuite_list=(tcl expect)
 
                     for j in ${_testsuite_list[@]}; do
                         case $j in
