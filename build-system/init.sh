@@ -11,7 +11,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
     echo norm 'export PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin' >> "${CONFIG_FILE}"
     source "${CONFIG_FILE}"
 
-    _list=(virtual-kernel-fs prepare-env testsuite-tools perl-temp linux-headers)
+    _list=(virtual-kernel-fs prepare-env testsuite-tools perl-temp linux-headers man-pages)
 
     for i in ${_list[@]}; do
         case $i in
