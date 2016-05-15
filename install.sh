@@ -22,15 +22,17 @@ if [ ! -d "${INSTALL_DIR}/dev" ]; then
     # Create necessary directories and symlinks
     echo warn "Creating necessary folders. Please wait..."
     requireRoot install -d "${TOOLS_DIR}"
-    requireRoot ln -s "${TOOLS_DIR}" /
     requireRoot install -d "${CROSS_TOOLS_DIR}"
-    requireRoot ln -s "${CROSS_TOOLS_DIR}" /
 
     # Change folder permissions to `whoami`
     requireRoot chown -R `whoami` "${INSTALL_DIR}"
     requireRoot chown -R `whoami` "${HOST_TOOLS_DIR}"
     requireRoot chown -R `whoami` "${HOST_CROSS_TOOLS_DIR}"
 fi
+
+echo warn "Creating symlinks..."
+requireRoot ln -s "${TOOLS_DIR}" /
+requireRoot ln -s "${CROSS_TOOLS_DIR}" /
 
 echo success "Finished..."
 echo empty
