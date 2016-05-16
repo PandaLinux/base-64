@@ -76,10 +76,10 @@ function chrootTmp() {
 
     [ -h "${INSTALL_DIR}/dev/shm" ] && sudo mkdir -p "${INSTALL_DIR}/$(readlink ${INSTALL_DIR}/dev/shm)"
 
-    sudo chroot "${INSTALL_DIR}" /tools/bin/env -i  \
-    HOME=/root TERM="${TERM}" PS1='\u:\w\$ '        \
-    PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin   \
-    /tools/bin/bash -c "$@"
+    sudo chroot "${INSTALL_DIR}" "${HOST_TOOLS_DIR}/bin/env" -i\
+    HOME=/root TERM="${TERM}" PS1='\u:\w\$ '                   \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin:${HOST_TOOLS_DIR}/bin   \
+    ${HOST_TOOLS_DIR}/bin/bash -c "$@" +h
 
     sync && sleep 1
 
