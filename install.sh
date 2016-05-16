@@ -24,15 +24,24 @@ if [ ! -d "${INSTALL_DIR}/dev" ]; then
     requireRoot install -d "${TOOLS_DIR}"
     requireRoot install -d "${CROSS_TOOLS_DIR}"
 
+    echo warn "Creating symlinks..."
+    requireRoot ln -s "${TOOLS_DIR}" /
+    requireRoot ln -s "${CROSS_TOOLS_DIR}" /
+
     # Change folder permissions to `whoami`
     requireRoot chown -R `whoami` "${INSTALL_DIR}"
     requireRoot chown -R `whoami` "${HOST_TOOLS_DIR}"
     requireRoot chown -R `whoami` "${HOST_CROSS_TOOLS_DIR}"
-fi
 
-echo warn "Creating symlinks..."
-requireRoot ln -s "${TOOLS_DIR}" /
-requireRoot ln -s "${CROSS_TOOLS_DIR}" /
+else
+    echo warn "Creating symlinks..."
+    requireRoot ln -s "${TOOLS_DIR}" /
+    requireRoot ln -s "${CROSS_TOOLS_DIR}" /
+
+    # Change folder permissions to `root`
+    requireRoot chown -R 'root' "${HOST_TOOLS_DIR}"
+    requireRoot chown -R 'root' "${HOST_CROSS_TOOLS_DIR}"
+fi
 
 echo success "Finished..."
 echo empty
@@ -60,6 +69,15 @@ EOF
 
 # Make all the configurations available
 source "${CONFIG_FILE}"
+
+# Show installation configuration information to the user
+echo warn "General Installation Configuration"
+echo norm "${BOLD}Installation Directory:${NORM}    ${INSTALL_DIR}"
+echo norm "${BOLD}Configuration File:${NORM}        ${CONFIG_FILE}"
+echo norm "${BOLD}Run tests?:${NORM}                ${MAKE_TESTS}"
+echo norm "${BOLD}Speed:${NORM}                     $(cat /proc/cpuinfo | grep processor | wc -l)x"
+echo norm "${BOLD}Building for:${NORM}              ${TARGET}"
+echo empty
 
 # Copy the data to the installation directory
 echo warn "Copying data to ${INSTALL_DIR}. Please wait..."
