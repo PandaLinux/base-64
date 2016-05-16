@@ -38,9 +38,9 @@ else
     requireRoot ln -s "${TOOLS_DIR}" /
     requireRoot ln -s "${CROSS_TOOLS_DIR}" /
 
-    # Change folder permissions to `root`
-    requireRoot chown -R 'root' "${HOST_TOOLS_DIR}"
-    requireRoot chown -R 'root' "${HOST_CROSS_TOOLS_DIR}"
+    # Change folder permissions to `0:0`
+    requireRoot chown -R 0:0 "${HOST_TOOLS_DIR}"
+    requireRoot chown -R 0:0 "${HOST_CROSS_TOOLS_DIR}"
 fi
 
 echo success "Finished..."
