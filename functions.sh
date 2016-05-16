@@ -89,6 +89,14 @@ function chrootTmp() {
     sudo umount -l "${INSTALL_DIR}/dev/pts"
     sudo umount -l "${INSTALL_DIR}/dev"
 
+    if [ -h ${INSTALL_DIR}/dev/shm ]; then
+        link=$(readlink ${INSTALL_DIR}/dev/shm)
+        umount -l "${INSTALL_DIR}/$link"
+        unset link
+    else
+        umount -l "${INSTALL_DIR}/dev/shm"
+    fi
+
     sudo rm -rf "${INSTALL_DIR}/dev/console"
     sudo rm -rf "${INSTALL_DIR}/dev/null"
 }

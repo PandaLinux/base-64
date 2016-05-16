@@ -38,7 +38,7 @@ function configureSys() {
         export DEBIAN_FRONTEND=noninteractive
 
         # Make sure the package repository is up to date
-        requireRoot apt-get --yes --force-yes update
+        requireRoot apt-get update
 
         # Install prerequisites
         requireRoot apt-get install --yes --force-yes bash binutils bison bzip2 build-essential coreutils diffutils \

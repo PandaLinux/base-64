@@ -25,9 +25,9 @@ TARGET="x86_64-panda-linux-gnu"
 TMP_PATH="/cross-tools/bin:/bin:/usr/bin"
 BUILD64="-m64"
 LC_ALL="POSIX"
-VM_LINUZ="vmlinuz-4.4.2-systemd"
-SYSTEM_MAP="System.map-4.4.2"
-CONFIG_BACKUP="config-4.4.2"
+VM_LINUZ="vmlinuz-3.14.21-systemd"
+SYSTEM_MAP="System.map-3.14.21"
+CONFIG_BACKUP="config-3.14.21"
 
 # Set fonts for Help.
 NORM=`tput sgr0`
