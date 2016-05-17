@@ -1,5 +1,6 @@
 # PANDA LINUX
 
+[![Gitter](https://badges.gitter.im/PandaLinux/base-64.svg)](https://gitter.im/PandaLinux/base-64?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Gratipay Team](https://img.shields.io/gratipay/team/Panda-Linux.svg?style=flat-square)](https://gratipay.com/Panda-Linux)
 [![GitHub forks](https://img.shields.io/github/forks/PandaLinux/base-64.svg?style=flat-square)](https://github.com/PandaLinux/base-64/network)
 [![GitHub stars](https://img.shields.io/github/stars/PandaLinux/base-64.svg?style=flat-square)](https://github.com/PandaLinux/base-64/stargazers)
