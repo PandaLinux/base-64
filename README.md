@@ -11,6 +11,8 @@ It is built entirely by compiling source-code, using custom optimizations.
 
 Currently, Panda Linux only supports `x86-64` architecture.
 
+**Note: We have also opened up two chat portals for our disscussions: [Gitter](gitter.im/PandaLinux/base-64) and [Slack](https://panda-linux.slack.com/messages). You can use either to discuss out your ideas and other stuff related to development of `Panda Linux`**
+
 ## Installation Instructions
 
 **The system is built in the `/tmp` directory, so it is advised to complete the build without restarting the system.**
