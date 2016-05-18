@@ -15,6 +15,7 @@ echo empty
 
 if [ ! -d "${INSTALL_DIR}" ]; then
     # Create installation folder
+    echo warn "Create root folder..."
     requireRoot mkdir -p "${INSTALL_DIR}"
 fi
 
@@ -94,3 +95,6 @@ pushd "${CROSS_COMPILE_TOOLS_DIR}" && bash init.sh && popd
 pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
 # Build the system
 pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
+
+# Backup the system
+tar -jcvf "${PWD}/${INSTALL_DIR}.tar.bz2" "${INSTALL_DIR}"
