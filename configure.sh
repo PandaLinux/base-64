@@ -10,7 +10,7 @@ source variables.sh
 
 function configureSys() {
     # Detect distribution name
-    if [[ `which lsb_releaseX 2>&1 /dev/null` ]]; then
+    if [[ `which lsb_release 2>&1 /dev/null` ]]; then
         # lsb_release is available
         DISTRIB_NAME=`lsb_release -is`
     else
@@ -27,7 +27,7 @@ function configureSys() {
         done
     fi
 
-    echo warn "Detected system" ${BOLD}$DISTRIB_NAME${NORM}
+    echo warn "Detected system: ${BOLD}$DISTRIB_NAME${NORM}"
 
     shopt -s nocasematch
     # Let's do the installation of missing packages
