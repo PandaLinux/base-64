@@ -36,17 +36,20 @@ function configureSys() {
         # Set non interactive mode
         set -eo pipefail
         export DEBIAN_FRONTEND=noninteractive
+        echo empty
 
         # Make sure the package repository is up to date
         requireRoot apt-get update
+        echo empty
 
         # Install prerequisites
         requireRoot apt-get install --yes --force-yes bash binutils bison bzip2 build-essential coreutils diffutils \
             findutils gawk glibc-2.19-1 grep gzip make ncurses-dev patch perl sed tar texinfo xz-utils
+        echo empty
 
         # Check version of the installed packages
-        bash version-check.sh 2>errors.log &&
-        [ -s errors.log ] && echo error "Fix the problems: $(cat errors.log)" && exit 1
+        bash version-check.sh
+        echo empty
 
         # Remove symlink /bin/sh
         requireRoot rm /bin/sh
@@ -55,6 +58,7 @@ function configureSys() {
 
         # Make `install.sh` executable by default
         requireRoot chmod +x install.sh
+        echo empty
 
     elif [[ $DISTRIB_NAME == "redhat" || $DISTRIB_NAME == "centos" || $DISTRIB_NAME == "Scientific" ]]; then
         # Redhat/CentOS/SL
@@ -86,12 +90,17 @@ function configureSys() {
 
     shopt -u nocasematch
 
-    # Download the required packages
-    echo warn "wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources"
-    wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
+    if [ ! -f dummy.log ]; then
+        # Download the required packages
+        echo warn "wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources"
+        wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
 
-    echo success "Your system is now configured!!"
-    echo success "You can now run ${REV}./install.sh${NORM}${BOLD} to continue..."
+        echo success "Your system is now configured!!"
+        echo success "You can now run ${REV}./install.sh${NORM}${BOLD} to continue..."
+    else
+        echo error "Configuration failed! Fix your errors and try again later..."
+        exit 1
+    fi
 }
 
 time { configureSys; }
