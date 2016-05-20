@@ -32,6 +32,7 @@ http://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.xz
 http://ftp.gnu.org/gnu/gperf/gperf-3.0.4.tar.gz
 http://ftp.gnu.org/gnu/grep/grep-2.19.tar.xz
 http://ftp.gnu.org/gnu/groff/groff-1.22.2.tar.gz
+http://ftp.gnu.org/gnu/grub/grub-2.00.tar.xz
 http://ftp.gnu.org/gnu/gzip/gzip-1.6.tar.xz
 http://www.clfs.org/files/packages/3.0.0/SYSTEMD/iana-etc-2.30.tar.bz2
 http://launchpad.net/intltool/trunk/0.50.2/+download/intltool-0.50.2.tar.gz
@@ -71,4 +72,3 @@ ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
 http://search.cpan.org/CPAN/authors/id/T/TO/TODDR/XML-Parser-2.42_01.tar.gz
 http://tukaani.org/xz/xz-5.0.5.tar.xz
 http://zlib.net/zlib-1.2.8.tar.xz
-http://ftp.gnu.org/gnu/grub/grub-2.00.tar.xz

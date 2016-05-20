@@ -51,10 +51,12 @@ function configureSys() {
         bash version-check.sh
         echo empty
 
+        echo warn "Fixing bash symlink..."
         # Remove symlink /bin/sh
         requireRoot rm /bin/sh
         # Link `bash` to `sh`
         requireRoot ln -s /bin/bash /bin/sh
+        echo success "Fixed symlink."
 
         # Make `install.sh` executable by default
         requireRoot chmod +x install.sh
@@ -93,10 +95,10 @@ function configureSys() {
     if [ ! -f dummy.log ]; then
         # Download the required packages
         echo warn "wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources"
-        wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
+        wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources" &&
 
         echo success "Your system is now configured!!"
-        echo success "You can now run ${REV}./install.sh${NORM}${BOLD} to continue..."
+        echo success "You can now run ${REV}./install.sh${NORM}${BOLD}${GREEN} to continue...${NORM}"
     else
         echo error "Configuration failed! Fix your errors and try again later..."
         exit 1
