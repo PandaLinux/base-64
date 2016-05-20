@@ -3,6 +3,7 @@
 source variables.sh
 source functions.sh
 
+# TODO: Prettify the version check for better readability
 # Simple script to list version numbers of critical development tools
 bash --version | head -n1 | cut -d" " -f2-4
 ld --version | head -n1 | cut -d" " -f3-
