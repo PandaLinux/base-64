@@ -8,6 +8,7 @@ source functions.sh
 
 # Remove all the old files/folders
 echo warn "Removing old folders"
+requireRoot rm -rf "${INSTALL_DIR}"
 requireRoot rm -rf "${HOST_TOOLS_DIR}"
 requireRoot rm -rf "${HOST_CROSS_TOOLS_DIR}"
 echo success "Finished..."
@@ -106,7 +107,8 @@ pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
 # Build the system
 pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
 
+echo empty
 echo warn "Creating backup..."
 # Backup the system
-tar -jcf "${PWD}/backup.tar.bz2" "${INSTALL_DIR}"
+tar -jcPf "${PWD}/backup.tar.bz2" "${INSTALL_DIR}"
 echo success "Backup created at ${PWD}/backup.tar.bz2"
