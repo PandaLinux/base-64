@@ -46,7 +46,7 @@ function configureSys() {
 
         # Check version of the installed packages
         bash version-check.sh 2>errors.log &&
-        [ -s errors.log ] && echo error "The following packages could not be found: $(cat errors.log)"
+        [ -s errors.log ] && echo error "Fix the problems: $(cat errors.log)" && exit 1
 
         # Remove symlink /bin/sh
         requireRoot rm /bin/sh
