@@ -21,7 +21,7 @@ function configureSys() {
                 DISTRIB_NAME=${BASH_REMATCH[1]}
                 break
             else
-                echo "${BOLD}Sorry, Panda Linux cannot be complied from your system.${NORM}"
+                echo error "${BOLD}Sorry, Panda Linux cannot be complied from your system.${NORM}"
                 exit 1
             fi
         done
@@ -64,27 +64,27 @@ function configureSys() {
         # Redhat/CentOS/SL
 
         # TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script
-        echo "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
-        echo "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
+        echo norm "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
+        echo norm "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
 
     elif [[ $DISTRIB_NAME == "fedora" ]]; then
         # Fedora
 
         # TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script
-        echo "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
-        echo "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
+        echo norm "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
+        echo norm "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
 
     elif [[ $DISTRIB_NAME == "arch" ]]; then
         # Arch Linux
 
         # TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script
-        echo "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
-        echo "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
+        echo norm "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
+        echo norm "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
 
     else
         # Unsupported system
 
-        echo "${REV}Panda Linux cannot be compiled from your system.${NORM}"
+        echo norm "${REV}Panda Linux cannot be compiled from your system.${NORM}"
         exit 1
     fi
 
