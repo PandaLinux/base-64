@@ -17,6 +17,16 @@ if [ ! -d "${INSTALL_DIR}" ]; then
     # Create installation folder
     echo warn "Create root folder..."
     requireRoot mkdir -p "${INSTALL_DIR}"
+    requireRoot chown -R `whoami` "${INSTALL_DIR}"
+fi
+
+# If backup exists, untar and copy it to the ${INSTALL_DIR}
+if [ -f "backup.tar.bz2" ]; then
+    echo warn "Unpacking and moving backup to ${INSTALL_DIR}..."
+    tar xf backup.tar.bz2 &&
+    mv tmp/panda64/* ${INSTALL_DIR}
+    rm -r backup.tar.bz2 tmp
+    echo success "Finished moving backup..."
 fi
 
 if [ ! -d "${INSTALL_DIR}/dev" ]; then
@@ -96,5 +106,7 @@ pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
 # Build the system
 pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
 
+echo warn "Creating backup..."
 # Backup the system
-tar -jcvf "${PWD}/${INSTALL_DIR}.tar.bz2" "${INSTALL_DIR}"
+tar -jcf "${PWD}/backup.tar.bz2" "${INSTALL_DIR}"
+echo success "Backup created at ${PWD}/backup.tar.bz2"
