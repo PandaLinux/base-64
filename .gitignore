@@ -3,3 +3,4 @@
 sources/
 *log*
 .config
+*.tar.bz2
