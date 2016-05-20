@@ -29,7 +29,7 @@ echo warn "Tar:         ${BOLD}$(tar --version | head -n1)${NORM}"
 echo warn "Makeinfo:    ${BOLD}$(makeinfo --version | head -n1)${NORM}"
 echo warn "Xz-utils:    ${BOLD}$(xz --version | head -n1)${NORM}"
 
-echo 'int main(){}' | gcc -v -o /dev/null -x c - > dummy.log 2>&1
+echo norm 'int main(){}' | gcc -v -o /dev/null -x c - > dummy.log 2>&1
 
 if ! grep -q ' error' dummy.log; then
     echo success "Compilation successful" && rm dummy.log
