@@ -8,7 +8,7 @@ source functions.sh
 
 # Remove all the old files/folders
 echo warn "Removing old folders"
-requireRoot rm -rf "${INSTALL_DIR}"
+[ -f backup.tar.bz2 ] && requireRoot rm -rf "${INSTALL_DIR}"
 requireRoot rm -rf "${HOST_TOOLS_DIR}"
 requireRoot rm -rf "${HOST_CROSS_TOOLS_DIR}"
 echo empty
@@ -24,9 +24,8 @@ fi
 # If backup exists, untar and copy it to the ${INSTALL_DIR}
 if [ -f "backup.tar.bz2" ]; then
     echo warn "Unpacking and moving backup to ${INSTALL_DIR}..."
-    requireRoot tar -pxf backup.tar.bz2 &&
-    requireRoot mv tmp/panda64/* ${INSTALL_DIR}
-    requireRoot rm -r backup.tar.bz2 tmp
+    requireRoot tar -pxPf backup.tar.bz2 &&
+    requireRoot rm -r backup.tar.bz2
     echo success "Finished moving backup..."
     echo empty
 fi
