@@ -86,7 +86,7 @@ source "${CONFIG_FILE}"
 echo warn "General Installation Configuration"
 echo norm "${BOLD}Installation Directory:${NORM}    ${INSTALL_DIR}"
 echo norm "${BOLD}Configuration File:${NORM}        ${CONFIG_FILE}"
-echo norm "${BOLD}Run tests?:${NORM}                ${MAKE_TESTS}"
+echo norm "${BOLD}Run tests:${NORM}                ${MAKE_TESTS}"
 echo norm "${BOLD}Speed:${NORM}                     $(cat /proc/cpuinfo | grep processor | wc -l)x"
 echo norm "${BOLD}Building for:${NORM}              ${TARGET}"
 echo empty
