@@ -11,7 +11,6 @@ echo warn "Removing old folders"
 requireRoot rm -rf "${INSTALL_DIR}"
 requireRoot rm -rf "${HOST_TOOLS_DIR}"
 requireRoot rm -rf "${HOST_CROSS_TOOLS_DIR}"
-echo success "Finished..."
 echo empty
 
 if [ ! -d "${INSTALL_DIR}" ]; then
@@ -19,15 +18,17 @@ if [ ! -d "${INSTALL_DIR}" ]; then
     echo warn "Create root folder..."
     requireRoot mkdir -p "${INSTALL_DIR}"
     requireRoot chown -R `whoami` "${INSTALL_DIR}"
+    echo empty
 fi
 
 # If backup exists, untar and copy it to the ${INSTALL_DIR}
 if [ -f "backup.tar.bz2" ]; then
     echo warn "Unpacking and moving backup to ${INSTALL_DIR}..."
-    tar xf backup.tar.bz2 &&
-    mv tmp/panda64/* ${INSTALL_DIR}
-    rm -r backup.tar.bz2 tmp
+    requireRoot tar -pxf backup.tar.bz2 &&
+    requireRoot mv tmp/panda64/* ${INSTALL_DIR}
+    requireRoot rm -r backup.tar.bz2 tmp
     echo success "Finished moving backup..."
+    echo empty
 fi
 
 if [ ! -d "${INSTALL_DIR}/dev" ]; then
@@ -36,6 +37,7 @@ if [ ! -d "${INSTALL_DIR}/dev" ]; then
     requireRoot install -d "${TOOLS_DIR}"
     requireRoot install -d "${CROSS_TOOLS_DIR}"
 
+    echo empty
     echo warn "Creating symlinks..."
     requireRoot ln -s "${TOOLS_DIR}" /
     requireRoot ln -s "${CROSS_TOOLS_DIR}" /
@@ -54,9 +56,6 @@ else
     requireRoot chown -R 0:0 "${HOST_TOOLS_DIR}"
     requireRoot chown -R 0:0 "${HOST_CROSS_TOOLS_DIR}"
 fi
-
-echo success "Finished..."
-echo empty
 
 # Create new configuration file
 cat > "${CONFIG_FILE}" << EOF
@@ -86,7 +85,7 @@ source "${CONFIG_FILE}"
 echo warn "General Installation Configuration"
 echo norm "${BOLD}Installation Directory:${NORM}    ${INSTALL_DIR}"
 echo norm "${BOLD}Configuration File:${NORM}        ${CONFIG_FILE}"
-echo norm "${BOLD}Run tests:${NORM}                ${MAKE_TESTS}"
+echo norm "${BOLD}Run tests:${NORM}                 ${MAKE_TESTS}"
 echo norm "${BOLD}Speed:${NORM}                     $(cat /proc/cpuinfo | grep processor | wc -l)x"
 echo norm "${BOLD}Building for:${NORM}              ${TARGET}"
 echo empty
@@ -100,6 +99,9 @@ echo empty
 #                               S T A R T   I N S T A L L A T I O N
 #----------------------------------------------------------------------------------------------------#
 
+echo success "Starting installation..."
+echo empty
+
 # Construct cross-compile tools
 pushd "${CROSS_COMPILE_TOOLS_DIR}" && bash init.sh && popd
 # Build temporary system
@@ -109,6 +111,7 @@ pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
 
 echo empty
 echo warn "Creating backup..."
-# Backup the system
-tar -jcPf "${PWD}/backup.tar.bz2" "${INSTALL_DIR}"
+# Backup the system: pigz uses multicore to improve compression speed
+sudo tar -jcPf "${PWD}/backup.tar.bz2" "${INSTALL_DIR}"
 echo success "Backup created at ${PWD}/backup.tar.bz2"
+echo empty
