@@ -2,14 +2,15 @@
 
 ## [Unreleased](https://github.com/PandaLinux/base-64/tree/HEAD)
 
-**Implemented enhancements:**
-
-- Give users the right to make their own root name and password [\#4](https://github.com/PandaLinux/base-64/issues/4)
-
 **Fixed bugs:**
 
+- cannot open shared object file [\#3](https://github.com/PandaLinux/base-64/issues/3)
 - coreutils compile error [\#2](https://github.com/PandaLinux/base-64/issues/2)
 - `configure.sh` throws gcc error [\#1](https://github.com/PandaLinux/base-64/issues/1)
+
+**Closed issues:**
+
+- Give users the right to make their own root name and password [\#4](https://github.com/PandaLinux/base-64/issues/4)
 
 
 
