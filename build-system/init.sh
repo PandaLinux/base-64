@@ -39,33 +39,35 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                 popd;;
 
             testsuite-tools )
-                pushd ${i}
-                    _testsuite_list=(tcl expect dejagnu)
+                if [ "${MAKE_TESTS}" = TRUE ]; then
+                    pushd ${i}
+                        _testsuite_list=(tcl expect dejagnu)
 
-                    for j in ${_testsuite_list[@]}; do
-                        case $j in
-                            * )
-                                pushd ${j}
-                                    if [ -e DONE ]; then
-                                        echo success "${j} --> Already Built"
-                                    else
-                                        echo empty
-                                        echo warn "Building ---> ${j}"
-                                        chrootTmp "source /.config && pushd /build-system/testsuite-tools/${j} && bash build.sh |& tee build.log popd"
-
+                        for j in ${_testsuite_list[@]}; do
+                            case $j in
+                                * )
+                                    pushd ${j}
                                         if [ -e DONE ]; then
-                                            echo success "Building ---> ${j} completed"
+                                            echo success "${j} --> Already Built"
                                         else
-                                            echo error "Building ---> ${i} failed"
-                                            exit 1
-                                        fi
+                                            echo empty
+                                            echo warn "Building ---> ${j}"
+                                            chrootTmp "source /.config && pushd /build-system/testsuite-tools/${j} && bash build.sh |& tee build.log popd"
 
-                                        echo empty
-                                    fi
-                                popd;;
-                        esac
-                    done
-                popd;;
+                                            if [ -e DONE ]; then
+                                                echo success "Building ---> ${j} completed"
+                                            else
+                                                echo error "Building ---> ${i} failed"
+                                                exit 1
+                                            fi
+
+                                            echo empty
+                                        fi
+                                    popd;;
+                            esac
+                        done
+                    popd
+                fi;;
 
             * )
                 pushd ${i}
