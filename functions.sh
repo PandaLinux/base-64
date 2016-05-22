@@ -74,8 +74,6 @@ function chrootTmp() {
     sudo mount -t tmpfs tmpfs "${INSTALL_DIR}/run"
     sudo mount -t sysfs sysfs "${INSTALL_DIR}/sys"
 
-    [ -h "${INSTALL_DIR}/dev/shm" ] && sudo mkdir -p "${INSTALL_DIR}/$(readlink ${INSTALL_DIR}/dev/shm)"
-
     sudo chroot "${INSTALL_DIR}" "${HOST_TOOLS_DIR}/bin/env" -i\
     HOME=/root TERM="${TERM}" PS1='\u:\w\$ '                   \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin:${HOST_TOOLS_DIR}/bin   \
@@ -88,14 +86,6 @@ function chrootTmp() {
     sudo umount -l "${INSTALL_DIR}/proc"
     sudo umount -l "${INSTALL_DIR}/dev/pts"
     sudo umount -l "${INSTALL_DIR}/dev"
-
-#    if [ -h ${INSTALL_DIR}/dev/shm ]; then
-#        link=$(readlink ${INSTALL_DIR}/dev/shm)
-#        umount -l "${INSTALL_DIR}/$link"
-#        unset link
-#    else
-#        umount -l "${INSTALL_DIR}/dev/shm"
-#    fi
 
     sudo rm -rf "${INSTALL_DIR}/dev/console"
     sudo rm -rf "${INSTALL_DIR}/dev/null"
