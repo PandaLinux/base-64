@@ -3,7 +3,7 @@
 - Which distro should I use to build `Panda Linux`?
 
     Well, you can use either `Debian Jessie` or `Ubuntu 14.04`. Currently, we have only tested our build using `Ubuntu 14.04`
-    but you can test it on `Jessie` and let us know.
+    but you can test it on `Jessie` and let us know. *Make sure to use only `64bit` system for your build.*
 
 - When can I expect the stable release?
 
