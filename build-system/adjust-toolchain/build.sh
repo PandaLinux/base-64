@@ -19,4 +19,5 @@ echo 'main(){}' > dummy.c
 gcc dummy.c
 if [ "$(readelf -l a.out | grep ': /lib')" ]; then
     touch DONE
+    rm -v a.out dummy.c
 fi
