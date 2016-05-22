@@ -44,7 +44,6 @@ function test() {
 }
 
 function instal() {
-    ln -sv /lib/libattr.so.1 "${HOST_TOOLS_DIR}/lib/libattr.so.1"
     make "${MAKE_PARALLEL}" install
 
     mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date} /bin

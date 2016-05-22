@@ -22,14 +22,10 @@ function prepare() {
 }
 
 function unpack() {
-    ln -sv /lib/libbz2.so.1.0 "${HOST_TOOLS_DIR}/lib/libbz2.so.1.0"
     tar xf "${TARBALL}"
 }
 
 function build() {
-    ln -sv /usr/lib/libgdbm.so.4 "${HOST_TOOLS_DIR}/lib"
-    ln -sv /usr/lib/libgdbm_compat.so.4 "${HOST_TOOLS_DIR}/lib"
-
     export BUILD_ZLIB=False
     export BUILD_BZIP2=0
 
@@ -57,8 +53,7 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}" "${HOST_TOOLS_DIR}/lib/libbz2.so.1.0" "${HOST_TOOLS_DIR}/lib/libgdbm.so.4" \
-           "${HOST_TOOLS_DIR}/lib/libgdbm_compat.so.4"
+    rm -rf "${SRC_DIR}" "${TARBALL}"
 }
 
 # Run the installation procedure

@@ -26,10 +26,6 @@ function unpack() {
 }
 
 function build() {
-    if [-f "/usr/bin/cat" ];then
-        ln -sv /lib/libcap.so.2 "${HOST_TOOLS_DIR}/lib/libcap.so.2"
-    fi
-
     sed -i -e 's|/@pkg_name@|&-@pkg_version@|' include/builddefs.in
     sed -i "s:| sed.*::g" test/{sbits-restore,cp,misc}.test
     ./configure --prefix=/usr \
