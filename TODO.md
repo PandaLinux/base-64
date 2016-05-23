@@ -6,4 +6,5 @@
 - Thoroughly test the all the packages before the next release.
 - Prettify `version-check.sh` for better readability.
 - Improve `install.sh` script.
-- Fix `cannot open shared object file` error before moving on.
+- Backup the system: pigz uses multicore to improve compression speed.
+- Implement [#6](https://github.com/PandaLinux/base-64/issues/6) before the next release.
