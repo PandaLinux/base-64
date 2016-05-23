@@ -28,7 +28,7 @@ function unpack() {
 
 function build() {
     patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-branch_update-1.patch"
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-pure64_specs-1.patch"
+    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-pure64-1.patch"
 
     sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
