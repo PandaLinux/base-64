@@ -17,7 +17,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
            util-linux procps-ng e2fsprogs libcap coreutils acl iana-etc libtool iproute2 bzip2 gdbm perl readline    \
            autoconf automake bash bc diffutils file gawk findutils gettext gperf grep groff less gzip ip-utils kbd   \
            libpipeline man-db make xz-utils expat xml-parser intltool kmod patch psmisc systemd dbus tar texinfo vim \
-           grub)
+           grub clean)
 
     for i in ${_list[@]}; do
         case $i in
@@ -72,6 +72,26 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                     popd
                 fi;;
 
+            clean )
+                pushd clean
+                    if [ -e DONE ]; then
+                        echo success "System already cleaned"
+                    else
+                        echo empty
+                        echo warn "Cleaning system..."
+                        chrootSys "export HOST_TOOLS_DIR=${HOST_TOOLS_DIR} && pushd /build-system/clean && bash build.sh |& tee build.log popd"
+
+                        if [ -e DONE ]; then
+                            echo success "Cleaning completed"
+                        else
+                            echo error "Cleaning failed"
+                            exit 1
+                        fi
+
+                        echo empty
+                    fi
+                popd;;
+
             * )
                 pushd ${i}
                     if [ -e DONE ]; then
@@ -79,7 +99,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        chrootTmp "source /.config && pushd /build-system/${i} && bash build.sh |& tee build.log popd"
+                        chrootTmp "pushd /build-system/${i} && bash build.sh |& tee build.log popd"
 
                         if [ -e DONE ]; then
                             echo success "Building ---> ${i} completed"

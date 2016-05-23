@@ -90,3 +90,31 @@ function chrootTmp() {
     sudo rm -rf "${INSTALL_DIR}/dev/console"
     sudo rm -rf "${INSTALL_DIR}/dev/null"
 }
+
+# System chroot environment
+function chrootSys() {
+    sudo mknod -m 600 "${INSTALL_DIR}/dev/console" c 5 1
+    sudo mknod -m 666 "${INSTALL_DIR}/dev/null" c 1 3
+
+    sudo mount -o bind /dev "${INSTALL_DIR}/dev"
+    sudo mount -t devpts -o gid=5,mode=620 devpts "${INSTALL_DIR}/dev/pts"
+    sudo mount -t proc proc "${INSTALL_DIR}/proc"
+    sudo mount -t tmpfs tmpfs "${INSTALL_DIR}/run"
+    sudo mount -t sysfs sysfs "${INSTALL_DIR}/sys"
+
+    sudo chroot "${INSTALL_DIR}" "${HOST_TOOLS_DIR}/bin/env" -i\
+    HOME=/root TERM="${TERM}" PS1='\u:\w\$ '                   \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin                         \
+    ${HOST_TOOLS_DIR}/bin/bash -c "$@" +h
+
+    sync && sleep 1
+
+    sudo umount -l "${INSTALL_DIR}/sys"
+    sudo umount -l "${INSTALL_DIR}/run"
+    sudo umount -l "${INSTALL_DIR}/proc"
+    sudo umount -l "${INSTALL_DIR}/dev/pts"
+    sudo umount -l "${INSTALL_DIR}/dev"
+
+    sudo rm -rf "${INSTALL_DIR}/dev/console"
+    sudo rm -rf "${INSTALL_DIR}/dev/null"
+}
