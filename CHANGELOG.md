@@ -4,6 +4,7 @@
 
 **Fixed bugs:**
 
+- gcc specs changed to /tools [\#5](https://github.com/PandaLinux/base-64/issues/5)
 - cannot open shared object file [\#3](https://github.com/PandaLinux/base-64/issues/3)
 - coreutils compile error [\#2](https://github.com/PandaLinux/base-64/issues/2)
 - `configure.sh` throws gcc error [\#1](https://github.com/PandaLinux/base-64/issues/1)
