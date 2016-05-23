@@ -1,5 +1,12 @@
 # FAQ's
 
+- What is the mission of your project?
+
+    Our only goal at this time is to make a highly customized operating system with bare minimum tools. Our project aims
+    at building scripts that can be used by anyone to build their own distro.
+
+    This project has been inspired by [Linux from scratch](www.linuxfromscratch.org).
+
 - Which distro should I use to build `Panda Linux`?
 
     Well, you can use either `Debian Jessie` or `Ubuntu 14.04`. Currently, we have only tested our build using `Ubuntu 14.04`
@@ -9,3 +16,19 @@
 
     We are working on the the release but at the present moment everything is unsure. But you can enable notifications
     by clicking on the `Watch` option and stay up to date.
+
+- Can I change the global variables provided in the `variables.sh` file?
+
+    As of now, you should not change any global variables as the system is highly unstable and heavily under development.
+    Anything can change at anytime. We are planning to improve our `install.sh` file in a way that you can change some
+    of the variables.
+
+- I don't understand the commands written in the `build.sh` file. Where is the documentation for these commands?
+
+    There is no documentation as of now. But once we build a stable system, we'll start working on the documentation
+    and we'll try to make it as easy as possible.
+
+- What kind of users are you trying to target?
+
+    We want to build systems for all possible kinds of users. We want to target everybody. But this repository is for
+    people who have atleast a basic knowledge of bash.
