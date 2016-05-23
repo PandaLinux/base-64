@@ -111,6 +111,8 @@ pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
 echo empty
 echo warn "Creating backup..."
 # Backup the system: pigz uses multicore to improve compression speed
-sudo tar -jcPf "${PWD}/backup.tar.bz2" "${INSTALL_DIR}"
-echo success "Backup created at ${PWD}/backup.tar.bz2"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+requireRoot tar -jcPf "${DIR}/backup.tar.bz2" "${INSTALL_DIR}"
+requireRoot chown `whoami` "${DIR}/backup.tar.bz2"
+echo success "Backup created at ${DIR}/backup.tar.bz2"
 echo empty
