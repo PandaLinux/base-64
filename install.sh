@@ -6,6 +6,9 @@ set -e # Exit upon error
 source variables.sh
 source functions.sh
 
+# Path of current script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # Remove all the old files/folders
 echo warn "Removing old folders"
 [ -f backup.tar.bz2 ] && requireRoot rm -rf "${INSTALL_DIR}"
@@ -110,9 +113,8 @@ pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
 
 echo empty
 echo warn "Creating backup..."
-# Backup the system: pigz uses multicore to improve compression speed
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-requireRoot tar -jcPf "${DIR}/backup.tar.bz2" "${INSTALL_DIR}"
+# Backup the system
+requireRoot tar -jcpPf "${DIR}/backup.tar.bz2" "${INSTALL_DIR}"
 requireRoot chown `whoami` "${DIR}/backup.tar.bz2"
 echo success "Backup created at ${DIR}/backup.tar.bz2"
 echo empty
