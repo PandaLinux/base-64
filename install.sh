@@ -110,6 +110,8 @@ pushd "${CROSS_COMPILE_TOOLS_DIR}" && bash init.sh && popd
 pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
 # Build the system
 pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
+# Configure the system
+pushd "${CONFIGURE_SYSTEM_DIR}" && bash init.sh && popd
 
 echo empty
 echo warn "Creating backup..."

@@ -99,7 +99,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        chrootTmp "pushd /build-system/${i} && bash build.sh |& tee build.log popd"
+                        chrootTmp "source /.config && pushd /build-system/${i} && bash build.sh |& tee build.log popd"
 
                         if [ -e DONE ]; then
                             echo success "Building ---> ${i} completed"
