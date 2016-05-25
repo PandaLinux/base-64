@@ -18,7 +18,7 @@ for i in ${_list[@]}; do
                 else
                     echo empty
                     echo warn "Building ---> ${i}"
-                    chrootSys "source /.config && pushd /configure-system/${i} && bash build.sh |& tee build.log popd"
+                    chrootSys "source /.config && pushd /finalize-system/${i} && bash build.sh |& tee build.log popd"
 
                     if [ -e DONE ]; then
                         echo success "Building ---> ${i} completed"
