@@ -118,7 +118,7 @@ pushd "${FINALIZE_SYSTEM_DIR}" && bash init.sh && popd
 echo empty
 echo warn "Creating backup..."
 # Backup the system
-requireRoot tar -jcpPf "${DIR}/backup.tar.bz2" "${INSTALL_DIR}"
-requireRoot chown `whoami` "${DIR}/backup.tar.bz2"
+#requireRoot tar -jcpPf "${DIR}/backup.tar.bz2" "${INSTALL_DIR}"
+#requireRoot chown `whoami` "${DIR}/backup.tar.bz2"
 echo success "Backup created at ${DIR}/backup.tar.bz2"
 echo empty
