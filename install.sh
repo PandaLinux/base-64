@@ -112,6 +112,8 @@ pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
 pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
 # Configure the system
 pushd "${CONFIGURE_SYSTEM_DIR}" && bash init.sh && popd
+# Finalize the system
+pushd "${FINALIZE_SYSTEM_DIR}" && bash init.sh && popd
 
 echo empty
 echo warn "Creating backup..."
