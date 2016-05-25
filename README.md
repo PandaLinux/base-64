@@ -15,31 +15,12 @@ Currently, Panda Linux only supports `x86-64` architecture.
 
 ## Installation Instructions
 
-**The system is built in the `/tmp` directory, so it is advised to complete the build without restarting the system.**
-
-- First, install the prerequisite packages and configure your system to run the installer:
-
-```sh
-bash configure.sh
-```
-
-- Now, start your installation and follow the on screen instructions.
-
-```sh
-./install.sh
-```
-
-- Use the following credentials to login after installation
-
-```
-Username: root
-Password: root
-```
+Read the [documentation](docs/README.md) for more details.
 
 ## System Requirements
 
-- Minimum `10 GB` hard disk with `ext4` filesystem
-- Minimum `4 GB` RAM
+- Minimum `1 GB` hard disk with `ext4` filesystem
+- Minimum `2 GB` RAM
 - Currently only compatible with `AMD Raedon` and `Intel Graphics` chipsets.
 
 ## Bug tracker
