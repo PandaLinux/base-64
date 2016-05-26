@@ -29,18 +29,19 @@ function build() {
     xzcat ../"patch-${PKG_VERSION}.21.xz" | patch -Np1 -i -
 
     # Prepare for compilation
-    make "${MAKE_PARALLEL}" mrproper
+    make -j1 mrproper
     # Set default configuration
-    make "${MAKE_PARALLEL}" defconfig
+    make -j1 defconfig
     # Compile the kernel image and modules
-    make "${MAKE_PARALLEL}"
-    # Install the modules
-    make "${MAKE_PARALLEL}" modules_install
-    # Install the firmware
-    make "${MAKE_PARALLEL}" firmware_install
+    make -j1
 }
 
 function instal() {
+	# Install the modules
+    make -j1 modules_install
+    # Install the firmware
+    make -j1 firmware_install
+    
     # Install the kernel
     cp -v arch/x86_64/boot/bzImage "/boot/${VM_LINUZ}"
     # Install the map file
@@ -49,7 +50,8 @@ function instal() {
     cp -v .config "/boot/${CONFIG_BACKUP}"
 
     # Generate grub configuration file
-    grub-mkconfig -o /boot/grub/grub.cfg
+    mkdir -pv "/boot/grub" &&
+    grub-mkconfig -o "/boot/grub/grub.cfg"
 }
 
 function clean() {
@@ -59,6 +61,6 @@ function clean() {
 # Run the installation procedure
 time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;test;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/include/asm/a.out.h" ]; then
+if [ -f "/boot/${VM_LINUZ}" && -f "/boot/grub/grub.cfg" ]; then
     touch DONE
 fi
