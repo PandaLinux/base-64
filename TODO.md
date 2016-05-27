@@ -11,3 +11,4 @@
 - Create a `wget` filter for showing less output. This filter should be created for versions `1.15` and below. 
 For versions greater than `1.15`, add the flags `--show-progress --quiet`, these flags show less output on the
 console.
+- Use `mutex locks` while executing scripts to prevent multiple executions.

@@ -62,27 +62,6 @@ function configureSys() {
         requireRoot chmod +x install.sh
         echo empty
 
-    elif [[ $DISTRIB_NAME == "redhat" || $DISTRIB_NAME == "centos" || $DISTRIB_NAME == "Scientific" ]]; then
-        # Redhat/CentOS/SL
-
-        # TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script
-        echo norm "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
-        echo norm "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
-
-    elif [[ $DISTRIB_NAME == "fedora" ]]; then
-        # Fedora
-
-        # TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script
-        echo norm "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
-        echo norm "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
-
-    elif [[ $DISTRIB_NAME == "arch" ]]; then
-        # Arch Linux
-
-        # TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script
-        echo norm "${BOLD}TODO: Install debian/ubuntu image in a container using docker and then execute the rest of the script.${NORM}"
-        echo norm "${BOLD}TODO: Please feel free to create a docker image and PR us at https://github.com/PandaLinux/base-64.${NORM}"
-
     else
         # Unsupported system
 
@@ -99,6 +78,8 @@ function configureSys() {
 
         echo success "Your system is now configured!!"
         echo success "You can now run ${REV}./install.sh${NORM}${BOLD}${GREEN} to continue...${NORM}"
+
+        exit 0
     else
         echo error "Configuration failed! Fix your errors and try again later..."
         exit 1
