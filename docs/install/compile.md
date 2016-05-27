@@ -73,6 +73,15 @@ And, do the same if you have a swap drive. For eg:
 /dev/sda8     swap           swap     pri=1               0     0
 ```
 
+- You also need to edit the `boot/grub/grub.cfg` file.
+    - Find and replace `root=/dev/sdaxx` with `root=/dev/sdayy` Here `yy` is the number you copied `Panda Linux` to. For eg:
+
+    ```console
+    sudo vi boot/grub/grub.cfg
+    linux	/boot/vmlinuz-3.14.21-systemd root=/dev/sda10 ro
+    linux	/boot/vmlinuz-3.14.21-systemd root=/dev/sda10 ro single
+    ```
+
 - Update your grub information by running the following command
 
 ```console
