@@ -36,7 +36,6 @@ function configureSys() {
         # Set non interactive mode
         set -eo pipefail
         export DEBIAN_FRONTEND=noninteractive
-        echo empty
 
         # Make sure the package repository is up to date
         requireRoot apt-get update
