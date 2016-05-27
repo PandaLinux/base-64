@@ -74,7 +74,8 @@ And, do the same if you have a swap drive. For eg:
 ```
 
 - You also need to edit the `boot/grub/grub.cfg` file.
-    - Find and replace `root=/dev/sdaxx` with `root=/dev/sdayy` Here `yy` is the number you copied `Panda Linux` to. For eg:
+    - Find and replace `root=/dev/sdaxx` with `root=/dev/sdayy` Here `yy` is the number you copied `Panda Linux` to.
+    Do the same for `msdosxx` entry. For eg:
 
     ```console
     sudo vi boot/grub/grub.cfg
