@@ -8,7 +8,7 @@ source "${INSTALL_DIR}/variables.sh"
 source "${INSTALL_DIR}/functions.sh"
 
 if [ -f "${CONFIGURE_SYSTEM_DIR}/dhcpcd/DONE" ]; then
-    _list=(linux-kernel)
+    _list=(linux-kernel lsb)
 
     for i in ${_list[@]}; do
         case $i in

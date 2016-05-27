@@ -78,10 +78,10 @@ EOF
     cat > /etc/fstab << "EOF"
 # Begin /etc/fstab
 
-# file system  mount-point  type   options          dump  fsck
-#                                                         order
+# file system  mount-point  type   options             dump  fsck
+#                                                            order
 
-#/dev/sda     /             ext4     defaults            1     1
+#/dev/sda       /           ext4     defaults            1     1
 #/dev/<yyy>     swap        swap     pri=1               0     0
 proc           /proc        proc     nosuid,noexec,nodev 0     0
 sysfs          /sys         sysfs    nosuid,noexec,nodev 0     0

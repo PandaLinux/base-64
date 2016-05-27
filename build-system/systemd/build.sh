@@ -76,21 +76,6 @@ function instal() {
 
 function configure() {
     systemd-machine-id-setup
-
-    cat > /etc/os-release << "EOF"
-# Begin /etc/os-release
-
-NAME="Panda"
-VERSION="0.1.0"
-ID=panda
-ID_LIKE=ubuntu
-PRETTY_NAME="Panda Linux"
-VERSION_ID="0.1.0"
-HOME_URL="https://github.com/PandaLinux/base-64"
-BUG_REPORT_URL="https://github.com/PandaLinux/base-64/issues"
-
-# End /etc/os-release
-EOF
 }
 
 function clean() {
