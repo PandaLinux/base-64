@@ -2,7 +2,6 @@
 
 set +h		# disable hashall
 shopt -s -o pipefail
-set -e 		# Exit on error
 
 PKG_NAME="linux"
 PKG_VERSION="3.14"
@@ -29,19 +28,19 @@ function build() {
     xzcat ../"patch-${PKG_VERSION}.21.xz" | patch -Np1 -i -
 
     # Prepare for compilation
-    make -j1 mrproper
+    make "${MAKE_PARALLEL}" mrproper
     # Set default configuration
-    make -j1 defconfig
+    make "${MAKE_PARALLEL}" ARCH=x86_64 defconfig
     # Compile the kernel image and modules
-    make -j1
+    make "${MAKE_PARALLEL}" ARCH=x86_64
 }
 
 function instal() {
 	# Install the modules
-    make -j1 modules_install
+    make "${MAKE_PARALLEL}" ARCH=x86_64 modules_install
     # Install the firmware
-    make -j1 firmware_install
-    
+    make "${MAKE_PARALLEL}" ARCH=x86_64 firmware_install
+
     # Install the kernel
     cp -v arch/x86_64/boot/bzImage "/boot/${VM_LINUZ}"
     # Install the map file
@@ -61,6 +60,6 @@ function clean() {
 # Run the installation procedure
 time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;test;instal;popd;clean; }
 # Verify installation
-if [ -f "/boot/${VM_LINUZ}" && -f "/boot/grub/grub.cfg" ]; then
+if [ -f "/boot/${VM_LINUZ}" ] && [ -f "/boot/grub/grub.cfg" ]; then
     touch DONE
 fi
