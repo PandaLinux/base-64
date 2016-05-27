@@ -11,6 +11,7 @@
 
 **Closed issues:**
 
+- Linux kernel 3.14 stops without any errors [\#8](https://github.com/PandaLinux/base-64/issues/8)
 - Give users the right to make their own root name and password [\#4](https://github.com/PandaLinux/base-64/issues/4)
 
 
