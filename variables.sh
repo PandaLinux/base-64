@@ -31,6 +31,11 @@ VM_LINUZ="vmlinuz-3.14.21-systemd"
 SYSTEM_MAP="System.map-3.14.21"
 CONFIG_BACKUP="config-3.14.21"
 
+## User information
+PANDA_USER="baby-panda"
+PANDA_GROUP="baby-panda"
+PANDA_HOME="panda-linux-64"
+
 # Set fonts for Help.
 NORM=`tput sgr0`
 BOLD=`tput bold`

@@ -61,6 +61,14 @@ function configureSys() {
         requireRoot chmod +x install.sh
         echo empty
 
+        echo warn "Creating user ${PANDA_USER}..."
+        requireRoot groupadd "${PANDA_GROUP}"
+        requireRoot useradd -s /bin/bash -g "${PANDA_GROUP}" -d "/home/${PANDA_HOME}" "${PANDA_USER}"
+        requireRoot mkdir -p "/home/${PANDA_HOME}"
+        requireRoot chown ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
+        requireRoot passwd -d "${PANDA_USER}"
+        echo success "User successfully setup!"
+
     else
         # Unsupported system
 
@@ -76,7 +84,6 @@ function configureSys() {
         wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources" &&
 
         echo success "Your system is now configured!!"
-        echo success "You can now run ${REV}./install.sh${NORM}${BOLD}${GREEN} to continue...${NORM}"
 
         exit 0
     else
