@@ -38,11 +38,11 @@ function configureSys() {
         export DEBIAN_FRONTEND=noninteractive
 
         # Make sure the package repository is up to date
-        requireRoot apt-get update
+        requireRoot apt-get update -qq
         echo empty
 
         # Install prerequisites
-        requireRoot apt-get install --yes --force-yes bash binutils bison bzip2 build-essential coreutils diffutils \
+        requireRoot apt-get install -qq --yes --force-yes bash binutils bison bzip2 build-essential coreutils diffutils \
             findutils gawk glibc-2.19-1 grep gzip make ncurses-dev patch perl sed tar texinfo xz-utils
         echo empty
 
@@ -66,9 +66,9 @@ function configureSys() {
             requireRoot groupadd "${PANDA_GROUP}"
             requireRoot useradd -s /bin/bash -g "${PANDA_GROUP}" -d "/home/${PANDA_HOME}" "${PANDA_USER}"
             requireRoot mkdir -p "/home/${PANDA_HOME}"
-            requireRoot chown ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
             requireRoot passwd -d "${PANDA_USER}"
             echo success "User successfully setup!"
+            echo empty
         fi
 
     else
@@ -82,7 +82,13 @@ function configureSys() {
     if [ ! -f dummy.log ]; then
         # Download the required packages
         echo warn "wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources"
-        wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources" &&
+        wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
+        echo empty
+
+        # Copy all data to ${PANDA_HOME}
+        requireRoot cp -rfu ./* "/home/${PANDA_HOME}"
+        requireRoot chown -R ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
+        echo empty
 
         echo success "Your system is now configured!!"
 
