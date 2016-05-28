@@ -81,14 +81,8 @@ function chrootTmp() {
 
     sync && sleep 1
 
-    sudo umount -l "${INSTALL_DIR}/sys"
-    sudo umount -l "${INSTALL_DIR}/run"
-    sudo umount -l "${INSTALL_DIR}/proc"
-    sudo umount -l "${INSTALL_DIR}/dev/pts"
-    sudo umount -l "${INSTALL_DIR}/dev"
-
-    sudo rm -rf "${INSTALL_DIR}/dev/console"
-    sudo rm -rf "${INSTALL_DIR}/dev/null"
+    sudo umount -l ${INSTALL_DIR}/{sys,run,proc,dev/pts,dev}
+    sudo rm -rf ${INSTALL_DIR}/dev/{console,null}
 }
 
 # System chroot environment
@@ -109,12 +103,6 @@ function chrootSys() {
 
     sync && sleep 1
 
-    sudo umount -l "${INSTALL_DIR}/sys"
-    sudo umount -l "${INSTALL_DIR}/run"
-    sudo umount -l "${INSTALL_DIR}/proc"
-    sudo umount -l "${INSTALL_DIR}/dev/pts"
-    sudo umount -l "${INSTALL_DIR}/dev"
-
-    sudo rm -rf "${INSTALL_DIR}/dev/console"
-    sudo rm -rf "${INSTALL_DIR}/dev/null"
+    sudo umount -l ${INSTALL_DIR}/{sys,run,proc,dev/pts,dev}
+    sudo rm -rf ${INSTALL_DIR}/dev/{console,null}
 }
