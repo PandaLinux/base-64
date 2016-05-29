@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function build() {
-    cat >> "${CONFIG_FILE}" << EOF
+    cat >> ~/.bashrc << EOF
 export CC="${TARGET}-gcc ${BUILD64}"
 export CXX="${TARGET}-g++ ${BUILD64}"
 export AR="${TARGET}-ar"
@@ -10,6 +10,7 @@ export RANLIB="${TARGET}-ranlib"
 export LD="${TARGET}-ld"
 export STRIP="${TARGET}-strip"
 EOF
+
 }
 
 # Run the installation procedure

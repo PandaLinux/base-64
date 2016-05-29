@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
 source "${INSTALL_DIR}/variables.sh"
 source "${INSTALL_DIR}/functions.sh"
-source "${CONFIG_FILE}"
 
 if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
     _list=(build-variables gmp mpfr mpc isl cloog zlib binutils gcc ncurses bash bzip2 check coreutils diffutils file \
@@ -35,7 +33,4 @@ if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
                 popd;;
         esac
     done
-else
-    echo error "Installation failed..."
-    exit 1
 fi

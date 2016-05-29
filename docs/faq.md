@@ -32,3 +32,9 @@
 
     We want to build systems for all possible kinds of users. We want to target everybody. But this repository is for
     people who have atleast a basic knowledge of bash.
+
+- My installation failed but I have all the required dependencies and the previous packages have been built properly.
+ What should I do?
+
+    Just try to re-run the previous command. Sometimes the installation fails due to not having adequate resources
+    such as CPU, memory etc. If the issue still persists, open up an [issue](https:github.com/PandaLinux/base-64/issues).

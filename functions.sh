@@ -29,10 +29,10 @@ echo() {
 function requireRoot() {
     # Already root?
     if [[ `whoami` == 'root' ]]; then
-        echo bold "$*"
+        echo norm "$*"
         $*
     elif [[ -x /bin/sudo || -x /usr/bin/sudo ]]; then
-        echo bold "sudo $*"
+        echo norm "sudo $*"
         sudo $*
     else
         echo error "We require root privileges to install."

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -23,7 +22,6 @@ function help() {
 
 function prepare() {
     ln -sv "../../sources/$TARBALL" "$TARBALL"
-    source "${CONFIG_FILE}"
 }
 
 function unpack() {

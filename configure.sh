@@ -7,6 +7,7 @@ set -e # Stop the script upon errors
 
 source functions.sh
 source variables.sh
+source setup-user.sh
 
 function configureSys() {
     # Detect distribution name
@@ -43,8 +44,28 @@ function configureSys() {
 
         # Install prerequisites
         requireRoot apt-get install -qq --yes --force-yes bash binutils bison bzip2 build-essential coreutils diffutils \
-            findutils gawk glibc-2.19-1 grep gzip make ncurses-dev patch perl sed tar texinfo xz-utils
+            findutils gawk glibc-2.19-1 grep gzip make ncurses-dev openssl patch perl sed tar texinfo xz-utils
         echo empty
+
+        # Check wget version
+        wget_cur_ver=$(wget --version | head -n1 | cut -d" " -f3)
+
+        if [ "$(printf "1.16\n$wget_cur_ver" | sort -V | head -n1)" = "${wget_cur_ver}" ] && [ "${wget_cur_ver}" != "1.16" ]; then
+            echo warn "Setting up wget 1.16..."
+            # On Ubuntu 14.04 wget is 1.15 but we want 1.16.3
+            wget -c http://ftp.gnu.org/gnu/wget/wget-1.16.3.tar.gz
+            tar -xf wget-1.16.3.tar.gz
+            cd wget-1.16/
+            ./configure  --prefix=/usr/local \
+                         --sysconfdir=/etc
+            make
+            requireRoot make install
+            requireRoot ln -fsv /usr/local/bin/wget /usr/bin/wget
+            requireRoot rm -rf wget-1.16
+            cd ../
+            echo bold "Wget: v$(wget --version | head -n1 | cut -d" " -f3)"
+            echo success "Finished"
+        fi
 
         # Check version of the installed packages
         bash version-check.sh
@@ -61,16 +82,6 @@ function configureSys() {
         requireRoot chmod +x install.sh
         echo empty
 
-        if [ ! $(cat /etc/passwd | grep ${PANDA_USER}) ]; then
-            echo warn "Creating user ${PANDA_USER}..."
-            requireRoot groupadd "${PANDA_GROUP}"
-            requireRoot useradd -s /bin/bash -g "${PANDA_GROUP}" -d "/home/${PANDA_HOME}" "${PANDA_USER}"
-            requireRoot mkdir -p "/home/${PANDA_HOME}"
-            requireRoot passwd -d "${PANDA_USER}"
-            echo success "User successfully setup!"
-            echo empty
-        fi
-
     else
         # Unsupported system
         echo norm "${REV}Panda Linux cannot be compiled from your system.${NORM}"
@@ -80,18 +91,20 @@ function configureSys() {
     shopt -u nocasematch
 
     if [ ! -f dummy.log ]; then
-        # Download the required packages
-        echo warn "wget --continue --input-file=wget-list --directory-prefix=${PWD}/sources"
-        wget --continue --input-file=wget-list --directory-prefix="${PWD}/sources"
-        echo empty
+        # Setup User for installation
+        install-user && su - "${PANDA_USER}" -c "bash install-bash-files.sh"
 
-        # Copy all data to ${PANDA_HOME}
-        requireRoot cp -rfu ./* "/home/${PANDA_HOME}"
-        requireRoot chown -R ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
+        # Download the required packages
+        echo warn "Downloading packages..."
+        set +e
+        requireRoot wget --continue --input-file=wget-list --directory-prefix="/home/${PANDA_HOME}/sources" --quiet --show-progress
+        set -e
+        requireRoot chown -R "${PANDA_USER}":"${PANDA_GROUP}" "/home/${PANDA_HOME}/sources"
+        echo success "Finished downloading..."
         echo empty
 
         echo success "Your system is now configured!!"
-
+        echo empty
         exit 0
     else
         echo error "Configuration failed! Fix your errors and try again later..."
@@ -99,4 +112,4 @@ function configureSys() {
     fi
 }
 
-time { configureSys; }
+configureSys;

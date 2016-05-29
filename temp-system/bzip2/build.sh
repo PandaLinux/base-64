@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 
 PKG_NAME="bzip2"
@@ -19,7 +18,6 @@ function help() {
 
 function prepare() {
     ln -sv "../../sources/$TARBALL" "$TARBALL"
-    source "${CONFIG_FILE}"
 }
 
 function unpack() {

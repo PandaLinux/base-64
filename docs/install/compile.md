@@ -18,11 +18,33 @@ cd base-64
 bash configure.sh
 ```
 
+- While configuring your system, a new user will be created which will be
+used for building `Panda Linux`. Enter new password for this user when 
+prompted. *Note: If you encounter the error `bash: no job control in this shell`,
+ignore this error if the following test works for you. Otherwise report this
+[issue](https://github.com/PandaLinux/base-64/issues/new).*
+    - Test the new environment when you are automatically logged in to the
+    newly created user's environment.
+    ```console
+    echo $TARGET
+    ```
+    Expected output:
+    ```console
+    x86_64-panda-linux-gnu
+    ```
+    - If you see the above output, that means your user has been successfully
+    created. Now logout of the environment by typing `exit` and let the rest
+    of the script continue.
+
 - You will see the following if the configuration was successful
 
 ```console
 Your system is now configured!!
-You can now run ./install.sh to continue...
+```
+
+- Log into the newly created environment
+```console
+su - cub
 ```
 
 - Now comes the obvious part, start the installation.
