@@ -1,7 +1,12 @@
 # Change Log
 
-## [Unreleased](https://github.com/PandaLinux/base-64/tree/HEAD)
+## [v0.1.2](https://github.com/PandaLinux/base-64/tree/v0.1.2) (2016-05-28)
+[Full Changelog](https://github.com/PandaLinux/base-64/compare/v0.1.1...v0.1.2)
 
+## [v0.1.1](https://github.com/PandaLinux/base-64/tree/v0.1.1) (2016-05-27)
+[Full Changelog](https://github.com/PandaLinux/base-64/compare/v0.1.0...v0.1.1)
+
+## [v0.1.0](https://github.com/PandaLinux/base-64/tree/v0.1.0) (2016-05-27)
 **Fixed bugs:**
 
 - gcc specs changed to /tools [\#5](https://github.com/PandaLinux/base-64/issues/5)

@@ -94,5 +94,3 @@ pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
 #requireRoot chown `whoami` "${DIR}/backup.tar.bz2"
 #echo success "Backup created at ${DIR}/backup.tar.bz2"
 #echo empty
-
-#exit 1
