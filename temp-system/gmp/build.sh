@@ -27,10 +27,12 @@ function unpack() {
 
 function build() {
 	source ~/.bashrc
-    CC_FOR_BUILD=gcc \
-    ./configure --prefix=${HOST_TDIR}    \
-                --build=${HOST}          \
-                --host=${TARGET}         \
+
+    CXX=g++                             \
+    CC_FOR_BUILD=gcc                    \
+    ./configure --prefix=${HOST_TDIR}   \
+                --build=${HOST}         \
+                --host=${TARGET}        \
                 --enable-cxx
 
     make ${MAKE_PARALLEL}
