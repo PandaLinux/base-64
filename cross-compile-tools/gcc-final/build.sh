@@ -70,8 +70,8 @@ function build() {
                  --enable-checking=release        \
                  --enable-libstdcxx-time
 
-    make ${MAKE_PARALLEL} AS_FOR_TARGET=${TARGET}-as \
-                          LD_FOR_TARGET=${TARGET}-ld
+    make ${MAKE_PARALLEL} AS_FOR_TARGET="${TARGET}-as" \
+                          LD_FOR_TARGET="${TARGET}-ld"
 }
 
 function instal() {

@@ -59,7 +59,7 @@ function configureSys() {
             requireRoot make install
             requireRoot ln -fsv /usr/local/bin/wget /usr/bin/wget
             cd ../
-            requireRoot rm -rf wget-1.16.3
+            requireRoot rm -rf wget-1.16.3*
             echo empty
             echo bold "Wget: v$(wget --version | head -n1 | cut -d" " -f3)"
             echo success "Finished"
