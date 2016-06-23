@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/PandaLinux/base-64/tree/HEAD)
+
+[Full Changelog](https://github.com/PandaLinux/base-64/compare/v0.1.2...HEAD)
+
+**Implemented enhancements:**
+
+- Dedicated user for installation [\#6](https://github.com/PandaLinux/base-64/issues/6)
+
+**Fixed bugs:**
+
+- Tcl package stops without error [\#7](https://github.com/PandaLinux/base-64/issues/7)
+
 ## [v0.1.2](https://github.com/PandaLinux/base-64/tree/v0.1.2) (2016-05-28)
 [Full Changelog](https://github.com/PandaLinux/base-64/compare/v0.1.1...v0.1.2)
 
