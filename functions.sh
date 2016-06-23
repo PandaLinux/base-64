@@ -120,18 +120,31 @@ function setup-user() {
     fi
 
     echo warn "Creating user ${PANDA_USER}..."
-    requireRoot groupadd "${PANDA_GROUP}"
-    requireRoot useradd -s /bin/bash -g "${PANDA_GROUP}" -d "/home/${PANDA_HOME}" "${PANDA_USER}"
-    requireRoot mkdir -p "/home/${PANDA_HOME}"
+    requireRoot groupadd ${PANDA_GROUP}
+    requireRoot useradd -s /bin/bash -g ${PANDA_GROUP} -d /home/${PANDA_HOME} ${PANDA_USER}
+    requireRoot mkdir -p /home/${PANDA_HOME}
     echo empty
-    requireRoot passwd -d "${PANDA_USER}"
-    requireRoot usermod -aG sudo "${PANDA_USER}"
+
+    read -p "${YELLOW}Do you wan to set password for ${PANDA_USER}? [Y/n]:${NORM} " -n 1 -r
+    echo empty
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        requireRoot passwd ${PANDA_USER}
+    else
+        requireRoot passwd -d ${PANDA_USER}
+        echo warn "Add the following at the end of /etc/sudoers"
+        echo bold "${PANDA_USER}	ALL=(ALL) NOPASSWD: ALL"
+        echo empty
+        echo warn "This will remove the password prompts for the user ${PANDA_USER}"
+        echo empty
+    fi
+
+    requireRoot usermod -aG sudo ${PANDA_USER}
     echo success "User successfully setup!"
     echo empty
 
     # Copy all data to ${PANDA_HOME}
     echo warn "Moving data to '/home/${PANDA_HOME}'"
-    sudo cp -r ./* "/home/${PANDA_HOME}"
+    sudo cp -r ./* /home/${PANDA_HOME}
     requireRoot chown -R ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
     echo empty
 }
