@@ -52,13 +52,13 @@ function configureSys() {
             # On Ubuntu 14.04 wget is 1.15 but we want 1.16.3
             wget -c http://ftp.gnu.org/gnu/wget/wget-1.16.3.tar.gz
             tar -xf wget-1.16.3.tar.gz
-            cd wget-1.16/
+            cd wget-1.16.3/
             ./configure  --prefix=/usr/local \
                          --sysconfdir=/etc
             make
             requireRoot make install
             requireRoot ln -fsv /usr/local/bin/wget /usr/bin/wget
-            requireRoot rm -rf wget-1.16
+            requireRoot rm -rf wget-1.16.3
             cd ../
             echo bold "Wget: v$(wget --version | head -n1 | cut -d" " -f3)"
             echo success "Finished"
