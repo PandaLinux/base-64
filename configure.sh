@@ -36,7 +36,7 @@ function configureSys() {
         export DEBIAN_FRONTEND=noninteractive
 
         # Make sure the package repository is up to date
-#        requireRoot apt-get update -qq
+        requireRoot apt-get update -qq
         echo empty
 
         # Install prerequisites
@@ -94,7 +94,7 @@ function configureSys() {
         else
             # Download the required packages
             echo warn "Downloading packages..."
-            requireRoot wget --continue --input-file=wget-list --directory-prefix=${DIR}/sources --quiet --show-progress
+            requireRoot wget --continue --input-file=wget-list --directory-prefix=${DIR}/sources --quiet --show-progress || true
             echo success "Finished downloading..."
             echo empty
         fi

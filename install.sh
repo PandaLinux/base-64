@@ -27,6 +27,8 @@ be used by default.
                     TRUE    - Create
                     FALSE   - Skip
 
+    -c          Copies the system to the final destination
+
     -h          Display this help and exit
 
     -i          Sets the installation directory. Make sure you have read/write
@@ -48,7 +50,7 @@ EOF
 }
 
 # Parse options
-while getopts ":t:j:i:hb:rd:" opt; do
+while getopts ":t:j:i:hb:rc:" opt; do
     case ${opt} in
 
         b )
@@ -60,6 +62,10 @@ while getopts ":t:j:i:hb:rd:" opt; do
                 exit 1
             fi
             ;;
+
+		c)
+			sed -i "s#.*COPY_DIR=.*#COPY_DIR=${OPTARG}#" variables.sh
+			;;
 
         h )
             show_help;
@@ -174,33 +180,58 @@ fi
 #                               S T A R T   I N S T A L L A T I O N                                  #
 #----------------------------------------------------------------------------------------------------#
 
-echo empty
-echo success "Starting installation..."
-echo empty
+if [ ! -f ${DONE_DIR}/finalize-system/lsb ]; then
+	echo empty
+	echo success "Starting installation..."
+	echo empty
 
-# Copying data to the installation location
-echo warn "Copying data to ${INSTALL_DIR}. Please wait..."
-cp -ur ./* ${INSTALL_DIR}
-echo empty
+	# Copying data to the installation location
+	echo warn "Copying data to ${INSTALL_DIR}. Please wait..."
+	cp -ur ./* ${INSTALL_DIR}
+	echo empty
 
-echo warn "Building Cross compile tools..."
-pushd ${CROSS_COMPILE_DIR} && bash init.sh && popd
+	echo warn "Building Cross compile tools..."
+	pushd ${CROSS_COMPILE_DIR} && bash init.sh && popd
 
-echo empty
-echo warn "Constructing temporary system..."
-pushd ${TEMP_SYSTEM_DIR} && bash init.sh && popd
+	echo empty
+	echo warn "Constructing temporary system..."
+	pushd ${TEMP_SYSTEM_DIR} && bash init.sh && popd
 
-echo empty
-echo warn "Building the actual system..."
-pushd ${BUILD_SYSTEM_DIR} && bash init.sh && popd
+	echo empty
+	echo warn "Building the actual system..."
+	pushd ${BUILD_SYSTEM_DIR} && bash init.sh && popd
 
-echo empty
-echo warn "Configuring the system..."
-pushd ${CONFIGURE_SYSTEM_DIR} && bash init.sh && popd
+	echo empty
+	echo warn "Configuring the system..."
+	pushd ${CONFIGURE_SYSTEM_DIR} && bash init.sh && popd
 
-echo empty
-echo warn "Finalize the system..."
-pushd ${FINALIZE_SYSTEM_DIR} && bash init.sh && popd
+	echo empty
+	echo warn "Finalize the system..."
+	pushd ${FINALIZE_SYSTEM_DIR} && bash init.sh && popd
+fi
+
+if [ -f ${DONE_DIR}/finalize-system/lsb ]; then
+	echo empty
+	echo warn "Cleaning the system..."
+
+	requireRoot rm -rf ${INSTALL_DIR}/{build-system,configure-system,cross-compile-tools,docs,finalize-system,patches,sources,temp-system}
+	requireRoot rm -rf ${INSTALL_DIR}/{*.md,*.git*,*.sh,wget-list}
+	requireRoot rm -rf ${TOOLS_DIR} ${HOST_TDIR}
+	requireRoot rm -rf ${CROSS_DIR} ${HOST_CDIR}
+	checkCommand;
+
+	# Copy the files to the final destination
+	if [ ${COPY_DIR} != null ]; then
+		# Make sure the destination directory is empty
+		if [ ! "$(ls -A ${COPY_DIR})" ]; then
+			requireRoot cp -rfp ${INSTALL_DIR}/* ${COPY_DIR}
+			requireRoot rm -rf ${COPY_DIR}/{done,logs}
+		else
+			echo error "${COPY_DIR} is not empty. Please select another directory!"
+			exit 1
+		fi
+	fi
+fi
 
 # Creates backup of the system if -b is TRUE
 createBackup;
