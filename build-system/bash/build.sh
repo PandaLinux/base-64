@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,9 @@ PKG_VERSION="4.3"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH="${PKG_NAME}-${PKG_VERSION}-branch_update-5.patch"
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Bash package contains the Bourne-Again SHell."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,39 +19,40 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-branch_update-5.patch"
+    patch -Np1 -i ../${PATCH}
 
     ./configure --prefix=/usr           \
                 --bindir=/bin           \
                 --without-bash-malloc   \
                 --with-installed-readline
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
-    make "${MAKE_PARALLEL}" tests
+function runTest() {
+    make ${MAKE_PARALLEL} tests
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/bin/bash" ]; then
-    touch DONE
+if [ -f /bin/bash ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

@@ -11,11 +11,11 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
@@ -47,12 +47,12 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { clean;prepare;unpack;pushd "${SRC_DIR}";build;instal;popd;clean; }
+time { clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "/sbin/ifup" ]; then
-    touch DONE
+if [ -f /sbin/ifup ]; then
+    touch ${DONE_DIR_CONFIGURE_SYSTEM}/$(basename $(pwd))
 fi

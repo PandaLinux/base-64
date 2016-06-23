@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,7 @@ PKG_VERSION="2.0.1"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Kbd package contains key-table files and keyboard utilities."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,11 +17,11 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
@@ -31,25 +30,25 @@ function build() {
                 --disable-vlock             \
                 --enable-optional-progs
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
-    make "${MAKE_PARALLEL}" check
+function runTest() {
+    make ${MAKE_PARALLEL} check
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
     mv -v /usr/bin/{loadkeys,setfont} /bin
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/bin/setfont" ]; then
-    touch DONE
+if [ -f /bin/setfont ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

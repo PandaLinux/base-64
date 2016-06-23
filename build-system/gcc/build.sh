@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -11,7 +10,10 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
-function help() {
+PATCH1="${PKG_NAME}-${PKG_VERSION}-branch_update-1.patch"
+PATCH2="${PKG_NAME}-${PKG_VERSION}-pure64-1.patch"
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The GCC package contains the GNU compiler collection, which includes the C and C++ compilers."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -19,21 +21,23 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /patches/${PATCH1} ${PATCH1}
+    ln -sv /patches/${PATCH2} ${PATCH2}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-branch_update-1.patch"
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-pure64-1.patch"
+    patch -Np1 -i ../${PATCH1}
+    patch -Np1 -i ../${PATCH2}
 
     sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
-    mkdir   "${BUILD_DIR}"  &&
-    cd      "${BUILD_DIR}"  &&
+    mkdir   ${BUILD_DIR}  &&
+    cd      ${BUILD_DIR}  &&
 
     SED=sed CC="gcc -isystem /usr/include"  \
     CXX="g++ -isystem /usr/include"         \
@@ -50,19 +54,20 @@ function build() {
                  --enable-checking=release  \
                  --enable-libstdcxx-time
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
+function runTest() {
+	# TODO: Skip only those tests that are known to fail
     ulimit -s 32768
     set +e
-    make "${MAKE_PARALLEL}" -k check
+    make ${MAKE_PARALLEL} -k check
     set -e
     ../contrib/test_summary | grep -A7 Summ
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
     cp -v ../include/libiberty.h /usr/include
     ln -sv ../usr/bin/cpp /lib
     ln -sv gcc /usr/bin/cc
@@ -70,12 +75,12 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH1} ${PATCH2}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/bin/gcc" ]; then
-    touch DONE
+if [ -f /usr/bin/gcc ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

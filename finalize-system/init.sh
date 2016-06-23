@@ -1,27 +1,33 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
-source "${INSTALL_DIR}/variables.sh"
-source "${INSTALL_DIR}/functions.sh"
+source ${HOME}/variables.sh
+source ${HOME}/functions.sh
 
-if [ -f "${CONFIGURE_SYSTEM_DIR}/dhcpcd/DONE" ]; then
+verify-user;
+
+# Create log directory
+install -d ${LOGS_DIR}/finalize-system
+# Create DONE directory
+install -d ${DONE_DIR}/finalize-system
+
+if [ -f ${DONE_DIR}/configure-system/dhcpcd ]; then
     _list=(linux-kernel lsb)
 
     for i in ${_list[@]}; do
         case $i in
             * )
                 pushd ${i}
-                    if [ -e DONE ]; then
+                    if [ -f ${DONE_DIR}/finalize-system/${i} ]; then
                         echo success "${i} --> Already Built"
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        chrootSys "source /.config && pushd /finalize-system/${i} && bash build.sh |& tee build.log popd"
+                        chrootSys "source /.vars && pushd /finalize-system/${i} && bash build.sh |& tee ${LOGS_DIR_FINALIZE_SYSTEM} popd"
 
-                        if [ -e DONE ]; then
+                        if [ -f ${DONE_DIR}/finalize-system/${i} ]; then
                             echo success "Building ---> ${i} completed"
                         else
                             echo error "Building ---> ${i} failed"

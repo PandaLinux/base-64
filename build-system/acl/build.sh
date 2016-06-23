@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,7 @@ PKG_VERSION="2.2.52"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.src.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: ACL is a library for getting and setting POSIX Access Control Lists."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,11 +17,11 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
@@ -31,17 +30,17 @@ function build() {
     ./configure --prefix=/usr \
                 --libexecdir=/usr/lib
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
-    if [ -f "/usr/bin/cat" ];then
-        make "${MAKE_PARALLEL}" tests
+function runTest() {
+    if [ -f /usr/bin/cat ];then
+        make ${MAKE_PARALLEL} tests
     fi
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install install-dev install-lib
+    make ${MAKE_PARALLEL} install install-dev install-lib
 
     mv -v /usr/lib/libacl.so.* /lib
     ln -sfv ../../lib/libacl.so.1 /usr/lib/libacl.so
@@ -49,12 +48,12 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/lib/libacl.so" ]; then
-    touch DONE
+if [ -f /usr/lib/libacl.so ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

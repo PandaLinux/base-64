@@ -9,7 +9,7 @@ PKG_VERSION="0.12.2"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.lzma"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: ISL is a library for manipulating sets and relations of integer points bounded by linear"
     echo -e "constraints."
@@ -22,36 +22,32 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    LDFLAGS="-Wl,-rpath,${HOST_CROSS_TOOLS_DIR}/lib"    \
-    ./configure --prefix="${HOST_CROSS_TOOLS_DIR}"      \
-                --disable-static                        \
-                --with-gmp-prefix="${HOST_CROSS_TOOLS_DIR}"
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    LDFLAGS="-Wl,-rpath,${HOST_CDIR}/lib"      \
+    ./configure --prefix=${HOST_CDIR}          \
+                --disable-static               \
+                --with-gmp-prefix=${HOST_CDIR}
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_CROSS_TOOLS_DIR}/lib/libisl.so" ]; then
-    touch DONE
+if [ -f ${CROSS_DIR}/lib/libisl.so ]; then
+    touch ${DONE_DIR_CROSS_COMPILE_TOOLS}/$(basename $(pwd))
 fi

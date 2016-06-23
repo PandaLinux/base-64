@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,7 @@ PKG_VERSION="6.3.2"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The DHCPCD package provides a DHCP Client for network configuration."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,11 +17,11 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
@@ -32,11 +31,11 @@ function build() {
                 --dbdir=/var/lib/dhcpcd \
                 --libexecdir=/usr/lib/dhcpcd
 
-    make
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make install
+    make ${MAKE_PARALLEL} install
 }
 
 function configure() {
@@ -58,12 +57,12 @@ EOF
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/lib/libacl.so" ]; then
-    touch DONE
+if [ -f /usr/lib/libacl.so ]; then
+    touch ${DONE_DIR_CONFIGURE_SYSTEM}/$(basename $(pwd))
 fi

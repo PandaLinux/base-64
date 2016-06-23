@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,7 @@ PKG_VERSION="3.3.9"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Procps-ng package contains programs for monitoring processes."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,11 +17,11 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
@@ -31,19 +30,19 @@ function build() {
                 --libdir=/usr/lib   \
                 --disable-kill
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
+function runTest() {
     set +e
     sed -i -r 's|(pmap_initname)\\\$|\1|' testsuite/pmap.test/pmap.exp
-    make "${MAKE_PARALLEL}" check
+    make ${MAKE_PARALLEL} check
     set -e
 
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 
     mv -v /usr/bin/pidof /bin
     mv -v /usr/lib/libprocps.so.* /lib
@@ -51,12 +50,12 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/bin/top" ]; then
-    touch DONE
+if [ -f /usr/bin/top ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -31,6 +30,6 @@ EOF
 # Run the installation procedure
 time { build; }
 # Verify installation
-if [ -f "/etc/udev/rules.d/83-duplicate_devs.rules" ]; then
-    touch DONE
+if [ -f /etc/udev/rules.d/83-duplicate_devs.rules ]; then
+    touch ${DONE_DIR_CONFIGURE_SYSTEM}/$(basename $(pwd))
 fi

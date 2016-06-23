@@ -9,35 +9,36 @@
 # Path of current script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Set install directory
-INSTALL_DIR="/tmp/panda64"
-TOOLS_DIR="${INSTALL_DIR}/tools"
-CROSS_TOOLS_DIR="${INSTALL_DIR}/cross-tools"
-CONFIG_FILE="${INSTALL_DIR}/.config"
-
-CROSS_COMPILE_TOOLS_DIR="${INSTALL_DIR}/cross-compile-tools"
-TEMP_SYSTEM_DIR="${INSTALL_DIR}/temp-system"
-BUILD_SYSTEM_DIR="${INSTALL_DIR}/build-system"
-CONFIGURE_SYSTEM_DIR="${INSTALL_DIR}/configure-system"
-FINALIZE_SYSTEM_DIR="${INSTALL_DIR}/finalize-system"
-
-HOST_TOOLS_DIR="/tools"
-HOST_CROSS_TOOLS_DIR="/cross-tools"
-
-## Rest of the configurations
-HOST=$(echo ${MACHTYPE} | sed -e 's/-[^-]*/-cross/')
-TARGET="x86_64-panda-linux-gnu"
-TMP_PATH="/cross-tools/bin:/bin:/usr/bin"
-BUILD64="-m64"
-LC_ALL="POSIX"
-VM_LINUZ="vmlinuz-3.14.21-systemd"
-SYSTEM_MAP="System.map-3.14.21"
-CONFIG_BACKUP="config-3.14.21"
-
 ## User information
 PANDA_USER="cub"
 PANDA_GROUP="cub"
 PANDA_HOME="den"
+
+# Set install directory
+INSTALL_DIR=/tmp/panda64
+TOOLS_DIR=${INSTALL_DIR}/tools
+CROSS_DIR=${INSTALL_DIR}/cross-tools
+HOST_TDIR=/$(basename ${TOOLS_DIR})
+HOST_CDIR=/$(basename ${CROSS_DIR})
+LOGS_DIR=${INSTALL_DIR}/logs
+DONE_DIR=${INSTALL_DIR}/done
+
+# Package installation directories
+ROOT_DIR=/home/${PANDA_HOME}
+CROSS_COMPILE_DIR=${INSTALL_DIR}/cross-compile-tools
+TEMP_SYSTEM_DIR=${INSTALL_DIR}/temp-system
+BUILD_SYSTEM_DIR=${INSTALL_DIR}/build-system
+CONFIGURE_SYSTEM_DIR=${INSTALL_DIR}/configure-system
+FINALIZE_SYSTEM_DIR=${INSTALL_DIR}/finalize-system
+
+## Rest of the configurations
+PANDA_HOST=$(echo norm ${MACHTYPE} | sed -e 's/-[^-]*/-cross/')
+TARGET="x86_64-panda-linux-gnu"
+PATH="${HOST_CDIR}/bin:/bin:/usr/bin"
+BUILD64="-m64"
+LC_ALL="POSIX"
+VM_LINUZ="vmlinuz-3.14.21-systemd"
+SYSTEM_MAP="System.map-3.14.21"
 
 # Set fonts for Help.
 NORM=`tput sgr0`
@@ -46,3 +47,7 @@ REV=`tput smso`
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
 YELLOW=`tput setaf 3`
+
+MAKE_TESTS=TRUE
+MAKE_PARALLEL=-j4
+DO_BACKUP=FALSE

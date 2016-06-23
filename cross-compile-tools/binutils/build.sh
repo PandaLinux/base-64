@@ -10,7 +10,7 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Binutils package contains a linker, an assembler, and other tools for handling object files."
     echo -e ""
@@ -22,47 +22,43 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    mkdir   "${BUILD_DIR}"  &&
-    cd      "${BUILD_DIR}"  &&
+    mkdir   ${BUILD_DIR}  &&
+    cd      ${BUILD_DIR}  &&
 
     AR=ar AS=as \
-    ../configure --prefix="${HOST_CROSS_TOOLS_DIR}" \
-                 --host="${HOST}"                   \
-                 --target="${TARGET}"               \
-                 --with-sysroot="${INSTALL_DIR}"    \
-                 --with-lib-path="${HOST_TOOLS_DIR}/lib" \
+    ../configure --prefix=${HOST_CDIR}              \
+                 --host=${HOST}                     \
+                 --target=${TARGET}                 \
+                 --with-sysroot=${INSTALL_DIR}      \
+                 --with-lib-path=${HOST_TDIR}/lib   \
                  --disable-nls                      \
                  --disable-static                   \
                  --enable-64-bit-bfd                \
                  --disable-multilib                 \
                  --disable-werror
 
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_CROSS_TOOLS_DIR}/bin/${TARGET}-ld" ]; then
-    touch DONE
+if [ -f ${CROSS_DIR}/bin/${TARGET}-ld ]; then
+    touch ${DONE_DIR_CROSS_COMPILE_TOOLS}/$(basename $(pwd))
 fi

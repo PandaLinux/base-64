@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 #set -e 		# Exit on error
 
@@ -13,7 +12,7 @@ TARBALL_TZDATA="tzdata2014d.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Glibc package contains the main C library. This library provides the basic routines for"
     echo -e "allocating memory, searching directories, opening and closing files, reading and writing files, string"
@@ -23,24 +22,24 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
-    ln -sv "/sources/$TARBALL_TZDATA" "$TARBALL_TZDATA"
+    ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /sources/${TARBALL_TZDATA} ${TARBALL_TZDATA}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    LINKER=$(readelf -l ${HOST_TOOLS_DIR}/bin/bash | sed -n "s@.*interpret.*${HOST_TOOLS_DIR}\(.*\)]$@\1@p")
+    LINKER=$(readelf -l ${HOST_TDIR}/bin/bash | sed -n "s@.*interpret.*${HOST_TDIR}\(.*\)]$@\1@p")
     sed -i "s|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=${LINKER} -o|" \
-            scripts/test-installation.pl
+            scripts/runTest-installation.pl
     unset LINKER
 
     sed -i 's/\\$$(pwd)/`pwd`/' timezone/Makefile
 
-    mkdir -pv   "${BUILD_DIR}" &&
-    cd          "${BUILD_DIR}" &&
+    mkdir -pv   ${BUILD_DIR} &&
+    cd          ${BUILD_DIR} &&
 
     echo "slibdir=/lib" >> configparms
 
@@ -51,11 +50,11 @@ function build() {
                  --libdir=/usr/lib              \
                  --enable-obsolete-rpc
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
-    make "${MAKE_PARALLEL}" -k check 2>&1 |& tee ../../glibc-check-log; grep Error ../../glibc-check-log
+function runTest() {
+    make ${MAKE_PARALLEL} -k check 2>&1 |& tee ../../glibc-check-log; grep Error ../../glibc-check-log
 }
 
 function instal() {
@@ -64,7 +63,7 @@ function instal() {
     ln -sv ld-2.19.so /lib/ld-linux.so.2
 
     # Install the package, and remove unneeded files from /usr/include/rpcsvc
-    make "${MAKE_PARALLEL}" install &&
+    make ${MAKE_PARALLEL} install &&
     rm -v /usr/include/rpcsvc/*.x
 
     # Now we can remove this symlink. We also need to correct the /usr/bin/ldd script
@@ -108,21 +107,21 @@ rpc: files
 EOF
 
     # Install timezone data
-    tar -xf ../../"${TARBALL_TZDATA}"
+    tar -xf ../../${TARBALL_TZDATA}
 
     ZONEINFO=/usr/share/zoneinfo
-    mkdir -pv $ZONEINFO/{posix,right}
+    mkdir -pv ${ZONEINFO}/{posix,right}
 
     for tz in etcetera southamerica northamerica europe africa antarctica  \
               asia australasia backward pacificnew \
               systemv; do
-        zic -L /dev/null   -d $ZONEINFO       -y "sh yearistype.sh" ${tz}
-        zic -L /dev/null   -d $ZONEINFO/posix -y "sh yearistype.sh" ${tz}
-        zic -L leapseconds -d $ZONEINFO/right -y "sh yearistype.sh" ${tz}
+        zic -L /dev/null   -d ${ZONEINFO}       -y "sh yearistype.sh" ${tz}
+        zic -L /dev/null   -d ${ZONEINFO}/posix -y "sh yearistype.sh" ${tz}
+        zic -L leapseconds -d ${ZONEINFO}/right -y "sh yearistype.sh" ${tz}
     done
 
-    cp -v zone.tab iso3166.tab $ZONEINFO
-    zic -d $ZONEINFO -p America/New_York
+    cp -v zone.tab iso3166.tab ${ZONEINFO}
+    zic -d ${ZONEINFO} -p America/New_York
     unset ZONEINFO
 
     # Configure the dynamic loader
@@ -137,12 +136,12 @@ EOF
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}" "${TARBALL_TZDATA}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${TARBALL_TZDATA}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;configure;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;configure;popd;clean; }
 # Verify installation
-if [ -f "/usr/bin/ldd" ]; then
-    touch DONE
+if [ -f /usr/bin/ldd ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

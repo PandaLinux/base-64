@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
-set -e # Stop the script upon errors
-
 ## This is script configures the system and download all the necessary packages required
 ## for compiling the system from source.
 
 source functions.sh
 source variables.sh
-source setup-user.sh
 
 function configureSys() {
     # Detect distribution name
@@ -39,7 +36,7 @@ function configureSys() {
         export DEBIAN_FRONTEND=noninteractive
 
         # Make sure the package repository is up to date
-        requireRoot apt-get update -qq
+#        requireRoot apt-get update -qq
         echo empty
 
         # Install prerequisites
@@ -91,25 +88,41 @@ function configureSys() {
     shopt -u nocasematch
 
     if [ ! -f dummy.log ]; then
-        # Setup User for installation
-        install-user && su - "${PANDA_USER}" -c "bash install-bash-files.sh"
-
-        # Download the required packages
-        echo warn "Downloading packages..."
-        set +e
-        requireRoot wget --continue --input-file=wget-list --directory-prefix="/home/${PANDA_HOME}/sources" --quiet --show-progress
-        set -e
-        requireRoot chown -R "${PANDA_USER}":"${PANDA_GROUP}" "/home/${PANDA_HOME}/sources"
-        echo success "Finished downloading..."
-        echo empty
+        # Verify that all the packages have been downloaded
+        if [ $(du -b ${DIR}/sources | cut -f1) -eq 429212074 ]; then
+            echo success "Packages have already been downloaded. Skipping this step!"
+        else
+            # Download the required packages
+            echo warn "Downloading packages..."
+            requireRoot wget --continue --input-file=wget-list --directory-prefix=${DIR}/sources --quiet --show-progress
+            echo success "Finished downloading..."
+            echo empty
+        fi
 
         echo success "Your system is now configured!!"
         echo empty
-        exit 0
     else
         echo error "Configuration failed! Fix your errors and try again later..."
-        exit 1
+        exit 0
     fi
 }
 
+# Configure System
 configureSys;
+
+# Setup dedicated user
+setup-user;
+sudo su "${PANDA_USER}" -c 'echo "exec env -i HOME=${HOME} TERM=${TERM} PS1="\u:\w\$ " /bin/bash" > ~/.bash_profile'
+sudo su "${PANDA_USER}" -c 'echo "set +h" > ~/.bashrc'
+sudo su "${PANDA_USER}" -c 'echo "umask 022" >> ~/.bashrc'
+sudo su "${PANDA_USER}" -c 'echo "unset CFLAGS CXXFLAGS" >> ~/.bashrc'
+
+list=(INSTALL_DIR TOOLS_DIR CROSS_DIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
+      MAKE_PARALLEL LC_ALL VM_LINUZ SYSTEM_MAP DO_BACKUP HOST_TDIR HOST_CDIR ROOT_DIR   \
+      DONE_DIR)
+for i in ${list[@]}; do
+    sudo su "${PANDA_USER}" -c ". variables.sh && echo 'export $i=${!i}' >> ~/.bashrc"
+done
+
+echo success "Environment is now ready!!"
+echo empty

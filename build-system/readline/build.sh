@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,9 @@ PKG_VERSION="6.3"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH="${PKG_NAME}-${PKG_VERSION}-branch_update-4.patch"
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Readline package is a set of libraries that offers command-line editing and history"
     echo -e "capabilities."
@@ -19,28 +20,25 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-branch_update-4.patch"
+    patch -Np1 -i ../${PATCH}
 
     ./configure --prefix=/usr \
                 --libdir=/lib
 
-    make "${MAKE_PARALLEL}" SHLIB_LIBS=-lncurses
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL} SHLIB_LIBS=-lncurses
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" SHLIB_LIBS=-lncurses install
+    make ${MAKE_PARALLEL} SHLIB_LIBS=-lncurses install
     mv -v /lib/lib{readline,history}.a /usr/lib
     ln -svf ../../lib/$(readlink /lib/libreadline.so) /usr/lib/libreadline.so
     ln -svf ../../lib/$(readlink /lib/libhistory.so) /usr/lib/libhistory.so
@@ -48,12 +46,12 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/lib/libreadline.so" ]; then
-    touch DONE
+if [ -f /usr/lib/libreadline.so ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
+
 shopt -s -o pipefail
 set -e 		# Exit on error
 
 function build() {
-    # Change ownership of tools & cross-tools directory
-    chown -Rv 0:0 "${HOST_TOOLS_DIR}"
-    chown -Rv 0:0 "${HOST_CROSS_TOOLS_DIR}"
-
     # Create necessary directories
     mkdir -pv /{bin,boot,dev,{etc/,}opt,home,lib,mnt}
     mkdir -pv /{proc,media/{floppy,cdrom},run/shm,sbin,srv,sys}
@@ -23,15 +19,15 @@ function build() {
     mkdir -pv /usr/{,local/}share/man/man{1..8}
 
     # Creating Essential Symlinks
-    ln -sv ${HOST_TOOLS_DIR}/bin/{bash,cat,echo,grep,pwd,stty} /bin
-    ln -sv ${HOST_TOOLS_DIR}/bin/file /usr/bin
-    ln -sv ${HOST_TOOLS_DIR}/lib/libgcc_s.so{,.1} /usr/lib
-    ln -sv ${HOST_TOOLS_DIR}/lib/libstdc++.so{.6,} /usr/lib
-    sed -e "s${HOST_TOOLS_DIR}/usr/" "${HOST_TOOLS_DIR}/lib/libstdc++.la" > /usr/lib/libstdc++.la
+    ln -sv ${HOST_TDIR}/bin/{bash,cat,echo,grep,pwd,stty} /bin
+    ln -sv ${HOST_TDIR}/bin/file /usr/bin
+    ln -sv ${HOST_TDIR}/lib/libgcc_s.so{,.1} /usr/lib
+    ln -sv ${HOST_TDIR}/lib/libstdc++.so{.6,} /usr/lib
+    sed -e "s${HOST_TDIR}/usr/" "${HOST_TDIR}/lib/libstdc++.la" > /usr/lib/libstdc++.la
     ln -sv bash /bin/sh
 
     mkdir -pv /usr/lib64
-    ln -sv ${HOST_TOOLS_DIR}/lib/libstdc++.so{.6,} /usr/lib64
+    ln -sv ${HOST_TDIR}/lib/libstdc++.so{.6,} /usr/lib64
     ln -sv /proc/self/mounts /etc/mtab
 
     # Creating the passwd and group Files
@@ -73,6 +69,6 @@ EOF
 # Run the installation procedure
 time { build; }
 # Verify installation
-if [ -f "/bin/sh" ]; then
-    touch DONE
+if [ -f /bin/sh ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi
