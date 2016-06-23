@@ -9,7 +9,9 @@ PKG_VERSION="5.9"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH=${PKG_NAME}-${PKG_VERSION}-bash_fix-1.patch
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Ncurses package contains libraries for terminal-independent handling of character screens."
     echo -e ""
@@ -23,38 +25,35 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
+    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-bash_fix-1.patch"
+    patch -Np1 -i ../${PATCH}
 
-    ./configure --prefix="${HOST_CROSS_TOOLS_DIR}"  \
-                --without-debug                     \
+    ./configure --prefix=${HOST_CDIR}  \
+                --without-debug        \
                 --without-shared
-    make "${MAKE_PARALLEL}" -C include
-    make "${MAKE_PARALLEL}" -C progs tic
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL} -C include
+    make ${MAKE_PARALLEL} -C progs tic
 }
 
 function instal() {
-    install -v -m755 progs/tic "${HOST_CROSS_TOOLS_DIR}/bin"
+    install -v -m755 progs/tic ${HOST_CDIR}/bin
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_CROSS_TOOLS_DIR}/bin/tic" ]; then
-    touch DONE
+if [ -f ${CROSS_DIR}/bin/tic ]; then
+    touch ${DONE_DIR_CROSS_COMPILE_TOOLS}/$(basename $(pwd))
 fi

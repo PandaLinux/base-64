@@ -3,10 +3,21 @@
 shopt -s -o pipefail
 set -e 		# Exit on error
 
-source "${INSTALL_DIR}/variables.sh"
-source "${INSTALL_DIR}/functions.sh"
+source ${HOME}/variables.sh
+source ${HOME}/functions.sh
 
-if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
+verify-user;
+
+# Create log directory
+LOGS_DIR_TEMP_SYSTEM=${LOGS_DIR}/temp-system
+install -d ${LOGS_DIR_TEMP_SYSTEM}
+# Create DONE directory
+DONE_DIR_TEMP_SYSTEM=${DONE_DIR}/temp-system
+install -d ${DONE_DIR_TEMP_SYSTEM}
+
+export DONE_DIR_TEMP_SYSTEM
+
+if [ -f "${DONE_DIR}/cross-compile-tools/gcc-final" ]; then
     _list=(build-variables gmp mpfr mpc isl cloog zlib binutils gcc ncurses bash bzip2 check coreutils diffutils file \
            findutils gawk gettext grep gzip make patch sed tar texinfo util-linux vim xz-utils)
 
@@ -14,17 +25,18 @@ if [ -f "${CROSS_COMPILE_TOOLS_DIR}/gcc-final/DONE" ]; then
         case $i in
             * )
                 pushd ${i}
-                    if [ -e DONE ]; then
+                    if [ -f ${DONE_DIR_TEMP_SYSTEM}/${i} ]; then
                         echo success "${i} --> Already Built"
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        bash build.sh |& tee build.log
+                        bash build.sh |& tee ${LOGS_DIR_TEMP_SYSTEM}/${i}.log
 
-                        if [ -e DONE ]; then
+                        if [ -f ${DONE_DIR_TEMP_SYSTEM}/${i} ]; then
                             echo success "Building ---> ${i} completed"
                         else
                             echo error "Building ---> ${i} failed"
+                            echo error "See ${LOGS_DIR_TEMP_SYSTEM}/${i}.log for more details..."
                             exit 1
                         fi
 

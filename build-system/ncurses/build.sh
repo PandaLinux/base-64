@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,10 @@ PKG_VERSION="5.9"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH1="${PKG_NAME}-${PKG_VERSION}-branch_update-4.patch"
+PATCH2="${PKG_NAME}-${PKG_VERSION}-bash_fix-1.patch"
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Ncurses package contains libraries for terminal-independent handling of character screens."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,15 +20,18 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /patches/${PATCH1} ${PATCH1}
+    ln -sv /patches/${PATCH2} ${PATCH2}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-branch_update-4.patch"
+    patch -Np1 -i ../${PATCH1}
+    patch -Np1 -i ../${PATCH2}
 
     ./configure --prefix=/usr                \
                 --libdir=/lib                \
@@ -37,15 +42,11 @@ function build() {
                 --enable-pc-files            \
                 --with-default-terminfo-dir=/usr/share/terminfo
 
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 
     mv -v /lib/lib{panelw,menuw,formw,ncursesw,ncurses++w}.a /usr/lib
     ln -svf ../../lib/$(readlink /lib/libncursesw.so) /usr/lib/libncursesw.so
@@ -65,12 +66,12 @@ function instal() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH1} ${PATCH2}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/bin/tic" ]; then
-    touch DONE
+if [ -f /usr/bin/tic ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

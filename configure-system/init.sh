@@ -1,27 +1,33 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
-source "${INSTALL_DIR}/variables.sh"
-source "${INSTALL_DIR}/functions.sh"
+source ${HOME}/variables.sh
+source ${HOME}/functions.sh
 
-if [ -f "${BUILD_SYSTEM_DIR}/clean/DONE" ]; then
+verify-user;
+
+# Create log directory
+install -d ${LOGS_DIR}/configure-system
+# Create DONE directory
+install -d ${DONE_DIR}/configure-system
+
+if [ -f ${DONE_DIR}/build-system/clean ]; then
     _list=(clock symlinks misc network dhcpcd)
 
     for i in ${_list[@]}; do
         case $i in
             * )
                 pushd ${i}
-                    if [ -e DONE ]; then
+                    if [ -f ${DONE_DIR}/configure-system/${i} ]; then
                         echo success "${i} --> Already Built"
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        chrootSys "pushd /configure-system/${i} && bash build.sh |& tee build.log popd"
+                        chrootSys "source /.vars && pushd /configure-system/${i} && bash build.sh |& tee ${LOGS_DIR_CONFIGURE_SYSTEM} && popd"
 
-                        if [ -e DONE ]; then
+                        if [ -f ${DONE_DIR}/configure-system/${i} ]; then
                             echo success "Building ---> ${i} completed"
                         else
                             echo error "Building ---> ${i} failed"

@@ -17,6 +17,9 @@ echo() {
         bold )
             command echo "${BOLD}$2${NORM}";;
 
+        rev )
+            command echo "${REV}$2${NORM}";;
+
         norm )
             command echo "$2";;
 
@@ -52,57 +55,118 @@ popd() {
     command popd "$@" > /dev/null
 }
 
+# Verify command ended successfully
+function checkCommand() {
+	if [ $? -eq 0 ]; then
+		echo success "Finished"
+	else
+		echo error "Failed..."
+        exit 1
+	fi
+}
+
 # Override cp
 cp() {
     command cp "$@"
-    if [ $? -eq 0 ]; then
-        echo success "Finished copying..."
-    else
-        echo error "Copying failed..."
-        exit 1
-    fi
+    checkCommand;
 }
 
 # Temporary chroot environment
 function chrootTmp() {
-    sudo mknod -m 600 "${INSTALL_DIR}/dev/console" c 5 1
-    sudo mknod -m 666 "${INSTALL_DIR}/dev/null" c 1 3
+    sudo mount --bind /dev      ${INSTALL_DIR}/dev
+    sudo mount -t devpts devpts ${INSTALL_DIR}/dev/pts
+    sudo mount -t proc proc     ${INSTALL_DIR}/proc
+    sudo mount -t sysfs sysfs   ${INSTALL_DIR}/sys
+    sudo mount -t tmpfs tmpfs   ${INSTALL_DIR}/run
 
-    sudo mount -o bind /dev "${INSTALL_DIR}/dev"
-    sudo mount -t devpts -o gid=5,mode=620 devpts "${INSTALL_DIR}/dev/pts"
-    sudo mount -t proc proc "${INSTALL_DIR}/proc"
-    sudo mount -t tmpfs tmpfs "${INSTALL_DIR}/run"
-    sudo mount -t sysfs sysfs "${INSTALL_DIR}/sys"
-
-    sudo chroot "${INSTALL_DIR}" "${HOST_TOOLS_DIR}/bin/env" -i\
-    HOME=/root TERM="${TERM}" PS1='\u:\w\$ '                   \
-    PATH=/bin:/usr/bin:/sbin:/usr/sbin:${HOST_TOOLS_DIR}/bin   \
-    ${HOST_TOOLS_DIR}/bin/bash -c "$@" +h
+    sudo chroot ${INSTALL_DIR} ${HOST_TDIR}/bin/env -i  \
+    HOME=/root TERM=${TERM} PS1='\u:\w\$ '              \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin:${HOST_TDIR}/bin \
+    ${HOST_TDIR}/bin/bash -c "$@" +h
 
     sync && sleep 1
-
-    sudo umount -l ${INSTALL_DIR}/{sys,run,proc,dev/pts,dev}
-    sudo rm -rf ${INSTALL_DIR}/dev/{console,null}
+    sudo umount -l ${INSTALL_DIR}/{run,sys,proc,dev/pts,dev}
 }
 
 # System chroot environment
 function chrootSys() {
-    sudo mknod -m 600 "${INSTALL_DIR}/dev/console" c 5 1
-    sudo mknod -m 666 "${INSTALL_DIR}/dev/null" c 1 3
+    sudo mount --bind /dev      ${INSTALL_DIR}/dev
+    sudo mount -t devpts devpts ${INSTALL_DIR}/dev/pts
+    sudo mount -t proc proc     ${INSTALL_DIR}/proc
+    sudo mount -t sysfs sysfs   ${INSTALL_DIR}/sys
+    sudo mount -t tmpfs tmpfs   ${INSTALL_DIR}/run
 
-    sudo mount -o bind /dev "${INSTALL_DIR}/dev"
-    sudo mount -t devpts -o gid=5,mode=620 devpts "${INSTALL_DIR}/dev/pts"
-    sudo mount -t proc proc "${INSTALL_DIR}/proc"
-    sudo mount -t tmpfs tmpfs "${INSTALL_DIR}/run"
-    sudo mount -t sysfs sysfs "${INSTALL_DIR}/sys"
-
-    sudo chroot "${INSTALL_DIR}" "${HOST_TOOLS_DIR}/bin/env" -i\
-    HOME=/root TERM="${TERM}" PS1='\u:\w\$ '                   \
-    PATH=/bin:/usr/bin:/sbin:/usr/sbin                         \
-    ${HOST_TOOLS_DIR}/bin/bash -c "$@" +h
+    sudo chroot ${INSTALL_DIR} /usr/bin/env -i  \
+    HOME=/root TERM=${TERM} PS1='\u:\w\$ '      \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin          \
+    /bin/bash -c "$@" +h
 
     sync && sleep 1
+    sudo umount -l ${INSTALL_DIR}/{run,sys,proc,dev/pts,dev}
+}
 
-    sudo umount -l ${INSTALL_DIR}/{sys,run,proc,dev/pts,dev}
-    sudo rm -rf ${INSTALL_DIR}/dev/{console,null}
+# This function setups the user for good
+function setup-user() {
+    # Setup the user if not already done
+    if [ $(cat /etc/passwd | grep ${PANDA_USER}) ]; then
+        echo error "User ${PANDA_USER} already exists!"
+        echo warn "Continue if you wish to delete all previous data"
+
+        askConfirm;
+
+        echo warn "Deteing user ${PANDA_USER} and /home/${PANDA_HOME}"
+        requireRoot userdel ${PANDA_USER}
+        requireRoot rm -rf /home/${PANDA_HOME}
+    fi
+
+    echo warn "Creating user ${PANDA_USER}..."
+    requireRoot groupadd "${PANDA_GROUP}"
+    requireRoot useradd -s /bin/bash -g "${PANDA_GROUP}" -d "/home/${PANDA_HOME}" "${PANDA_USER}"
+    requireRoot mkdir -p "/home/${PANDA_HOME}"
+    echo empty
+    requireRoot passwd -d "${PANDA_USER}"
+    requireRoot usermod -aG sudo "${PANDA_USER}"
+    echo success "User successfully setup!"
+    echo empty
+
+    # Copy all data to ${PANDA_HOME}
+    echo warn "Moving data to '/home/${PANDA_HOME}'"
+    sudo cp -r ./* "/home/${PANDA_HOME}"
+    requireRoot chown -R ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
+    echo empty
+}
+
+# Verify that it is ${PANDA_USER}
+function verify-user() {
+    if [ ! `whoami` = ${PANDA_USER} ]; then
+        echo error "Only ${PANDA_USER} can execute this script."
+        exit 0
+    fi
+}
+
+# Ask for confirmation to begin
+function askConfirm() {
+    read -p "${YELLOW}Continue? [Y/n]:${NORM} " -n 1 -r
+    echo empty
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 0
+    fi
+    echo empty
+}
+
+# Creates backup
+function createBackup() {
+    if [ ${DO_BACKUP} = TRUE ]; then
+        echo empty
+        echo warn "Removing old backups..."
+        requireRoot rm -f ${DIR}/backup.tar.bz2
+        requireRoot rm -f ${INSTALL_DIR}/backup.tar.bz2
+
+        echo empty
+        echo warn "Creating new backup..."
+        requireRoot tar -jcpPf ${DIR}/backup.tar.bz2 ${INSTALL_DIR}
+        checkCommand;
+
+        requireRoot chown -R `whoami` ${DIR}/backup.tar.bz2
+    fi
 }

@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
-source "${INSTALL_DIR}/variables.sh"
-source "${INSTALL_DIR}/functions.sh"
-source "${CONFIG_FILE}"
+source ${HOME}/variables.sh
+source ${HOME}/functions.sh
 
-if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
-    echo norm "export PATH=/bin:/usr/bin:/sbin:/usr/sbin:${HOST_TOOLS_DIR}/bin" >> "${CONFIG_FILE}"
-    source "${CONFIG_FILE}"
+verify-user;
+
+# Create log directory
+LOGS_DIR_BUILD_SYSTEM=${LOGS_DIR}/build-system
+install -d ${LOGS_DIR_BUILD_SYSTEM}
+# Create DONE directory
+DONE_DIR_BUILD_SYSTEM=${DONE_DIR}/build-system
+install -d ${DONE_DIR_BUILD_SYSTEM}
+
+export DONE_DIR_BUILD_SYSTEM
+export LOGS_DIR_BUILD_SYSTEM=/logs/build-system
+
+if [ -f ${DONE_DIR}/temp-system/xz-utils ]; then
 
     _list=(virtual-kernel-fs prepare-env testsuite-tools perl-temp linux-headers man-pages glibc adjust-toolchain m4 \
            gmp mpfr mpc isl cloog zlib flex bison flex binutils gcc attr acl sed pkg-config-lite ncurses shadow      \
@@ -23,14 +31,14 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
         case $i in
             virtual-kernel-fs )
                 pushd ${i}
-                    if [ -e DONE ]; then
+                    if [ -f ${DONE_DIR_BUILD_SYSTEM}/${i} ]; then
                         echo success "${i} --> Already Built"
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        bash build.sh |& tee build.log
+                        bash build.sh
 
-                        if [ -e DONE ]; then
+                        if [ -f ${DONE_DIR_BUILD_SYSTEM}/${i} ]; then
                             echo success "Building ---> ${i} completed"
                         else
                             echo error "Building ---> ${i} failed"
@@ -42,7 +50,7 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                 popd;;
 
             testsuite-tools )
-                if [ "${MAKE_TESTS}" = TRUE ]; then
+                if [ ${MAKE_TESTS} = TRUE ]; then
                     pushd ${i}
                         _testsuite_list=(tcl expect dejagnu)
 
@@ -50,17 +58,18 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                             case $j in
                                 * )
                                     pushd ${j}
-                                        if [ -e DONE ]; then
+                                        if [ -f ${DONE_DIR_BUILD_SYSTEM}/${j} ]; then
                                             echo success "${j} --> Already Built"
                                         else
                                             echo empty
                                             echo warn "Building ---> ${j}"
-                                            chrootTmp "source /.config && pushd /build-system/testsuite-tools/${j} && bash build.sh |& tee build.log popd"
+                                            chrootTmp "source /.vars && pushd /build-system/testsuite-tools/${j} && bash build.sh |& tee ${LOGS_DIR_BUILD_SYSTEM}/${j}.log && popd"
 
-                                            if [ -e DONE ]; then
+                                            if [ -f ${DONE_DIR_BUILD_SYSTEM}/${j} ]; then
                                                 echo success "Building ---> ${j} completed"
                                             else
-                                                echo error "Building ---> ${i} failed"
+                                                echo error "Building ---> ${j} failed"
+                                                echo error "See ${LOGS_DIR_BUILD_SYSTEM}/${j}.log for more details..."
                                                 exit 1
                                             fi
 
@@ -74,14 +83,14 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
 
             clean )
                 pushd clean
-                    if [ -e DONE ]; then
+                    if [ -f ${DONE_DIR_BUILD_SYSTEM}/${i} ]; then
                         echo success "System already cleaned"
                     else
                         echo empty
                         echo warn "Cleaning system..."
-                        chrootSys "export HOST_TOOLS_DIR=${HOST_TOOLS_DIR} && pushd /build-system/clean && bash build.sh |& tee build.log popd"
+                        chrootSys "source /.vars && pushd /build-system/clean && bash build.sh |& tee ${LOGS_DIR_BUILD_SYSTEM}/${i}.log && popd"
 
-                        if [ -e DONE ]; then
+                        if [ -f ${DONE_DIR_BUILD_SYSTEM}/${i} ]; then
                             echo success "Cleaning completed"
                         else
                             echo error "Cleaning failed"
@@ -94,17 +103,18 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
 
             * )
                 pushd ${i}
-                    if [ -e DONE ]; then
+                    if [ -f ${DONE_DIR_BUILD_SYSTEM}/${i} ]; then
                         echo success "${i} --> Already Built"
                     else
                         echo empty
                         echo warn "Building ---> ${i}"
-                        chrootTmp "source /.config && pushd /build-system/${i} && bash build.sh |& tee build.log popd"
+                        chrootTmp "source /.vars && pushd /build-system/${i} && bash build.sh |& tee ${LOGS_DIR_BUILD_SYSTEM}/${i}.log && popd"
 
-                        if [ -e DONE ]; then
+                        if [ -f ${DONE_DIR_BUILD_SYSTEM}/${i} ]; then
                             echo success "Building ---> ${i} completed"
                         else
                             echo error "Building ---> ${i} failed"
+                            echo error "See ${LOGS_DIR_BUILD_SYSTEM}/${i}.log for more details..."
                             exit 1
                         fi
 
@@ -113,7 +123,4 @@ if [ -f "${TEMP_SYSTEM_DIR}/vim/DONE" ]; then
                 popd;;
         esac
     done
-else
-    echo error "Installation failed..."
-    exit 1
 fi

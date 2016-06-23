@@ -9,7 +9,7 @@ PKG_VERSION="4.4.2"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Findutils package contains programs to find files. These programs are provided to recursively"
     echo -e "search through a directory tree and to create, maintain, and search a database (often faster than the"
@@ -19,40 +19,36 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
     echo "gl_cv_func_wcwidth_works=yes" > config.cache
     echo "ac_cv_func_fnmatch_gnu=yes" >> config.cache
 
-    ./configure --prefix="${HOST_TOOLS_DIR}"    \
-                --build="${HOST}"               \
-                --host="${TARGET}"              \
+    ./configure --prefix=${HOST_TDIR}    \
+                --build=${HOST}          \
+                --host=${TARGET}         \
                 --cache-file=config.cache
 
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_TOOLS_DIR}/bin/find" ]; then
-    touch DONE
+if [ -f ${TOOLS_DIR}/bin/find ]; then
+    touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
 fi

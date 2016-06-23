@@ -9,7 +9,9 @@ PKG_VERSION="3.14"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH=patch-${PKG_VERSION}.21.xz
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Linux Kernel contains a make target that installs “sanitized” kernel headers."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -17,34 +19,35 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
+    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
     # Apply the linux sublevel patch
-    xzcat ../"patch-${PKG_VERSION}.21.xz" | patch -Np1 -i -
-    make "${MAKE_PARALLEL}" mrproper
+    xzcat ../${PATCH} | patch -Np1 -i -
+    make ${MAKE_PARALLEL} mrproper
 }
 
-function test() {
-    make "${MAKE_PARALLEL}" ARCH=x86_64 headers_check
+function runTest() {
+    make ${MAKE_PARALLEL} ARCH=x86_64 headers_check
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" ARCH=x86_64 INSTALL_HDR_PATH="${HOST_TOOLS_DIR}" headers_install
+    make ${MAKE_PARALLEL} ARCH=x86_64 INSTALL_HDR_PATH=${HOST_TDIR} headers_install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_TOOLS_DIR}/include/asm/a.out.h" ]; then
-    touch DONE
+if [ -f ${TOOLS_DIR}/include/asm/a.out.h ]; then
+    touch ${DONE_DIR_CROSS_COMPILE_TOOLS}/$(basename $(pwd))
 fi

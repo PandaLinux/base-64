@@ -10,7 +10,7 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Glibc package contains the main C library. This library provides the basic routines for"
     echo -e "allocating memory, searching directories, opening and closing files, reading and writing files, string"
@@ -20,49 +20,48 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    mkdir   "${BUILD_DIR}"  &&
-    cd      "${BUILD_DIR}"  &&
+    cp -v timezone/Makefile{,.orig}
+    sed 's/\\$$(pwd)/`pwd`/' timezone/Makefile.orig > timezone/Makefile
+
+    mkdir   ${BUILD_DIR}  &&
+    cd      ${BUILD_DIR}  &&
 
     echo "libc_cv_ssp=no" > config.cache &&
 
-    BUILD_CC="gcc" CC="${TARGET}-gcc ${BUILD64}"                \
-    AR="${TARGET}-ar" RANLIB="${TARGET}-ranlib"                 \
-    ../configure --prefix="${HOST_TOOLS_DIR}"                   \
-                 --host="${TARGET}"                             \
-                 --build="${HOST}"                              \
-                 --disable-profile                              \
-                 --enable-kernel=2.6.32                         \
-                 --with-binutils="${HOST_CROSS_TOOLS_DIR}/bin"  \
-                 --with-headers="${HOST_TOOLS_DIR}/include"     \
-                 --enable-obsolete-rpc                          \
+    BUILD_CC=gcc CC="${TARGET}-gcc ${BUILD64}"          \
+    AR=${TARGET}-ar RANLIB=${TARGET}-ranlib             \
+    ../configure --prefix=${HOST_TDIR}                  \
+                 --host=${TARGET}                       \
+                 --build=${HOST}                        \
+                 --disable-profile                      \
+                 --enable-kernel=2.6.32                 \
+                 --with-binutils=${HOST_CDIR}/bin       \
+                 --with-headers=${HOST_TDIR}/include    \
+                 --enable-obsolete-rpc                  \
                  --cache-file=config.cache
 
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_TOOLS_DIR}/bin/ldd" ]; then
-    touch DONE
+if [ -f ${TOOLS_DIR}/bin/ldd ]; then
+    touch ${DONE_DIR_CROSS_COMPILE_TOOLS}/$(basename $(pwd))
 fi

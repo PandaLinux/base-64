@@ -15,7 +15,7 @@ DIFFUTILS_MIN_REQ="2.8"
 FINDUTILS_MIN_REQ="4.1.20"
 GAWK_MIN_REQ="3.1.5"
 GCC_MIN_REQ="4.1.2"
-GCC_MAX_REQ="4.8.3"
+GCC_MAX_REQ="4.8.*"
 GLIBC_MIN_REQ="2.2.5"
 GLIBC_MAX_REQ="2.19"
 GREP_MIN_REQ="2.5"
@@ -55,10 +55,11 @@ XZ_CURR=$(xz --version | head -n1 | cut -d" " -f4)
 #                                       V E R I F Y   R E Q U I R E M E N T S
 #-----------------------------------------------------------------------------------------------------------------------
 
-_list=(BASH BINUTILS BISON BZIP2 COREUTILS DIFFUTILS FINDUTILS GAWK GCC GLIBC GREP GZIP MAKE NCURSES PATCH SED TAR \
+_list_min=(BASH BINUTILS BISON BZIP2 COREUTILS DIFFUTILS FINDUTILS GAWK GCC GLIBC GREP GZIP MAKE NCURSES PATCH SED TAR \
        TEXINFO XZ)
 
-for progs in ${_list[@]}; do
+# Checks for minimum requirements
+for progs in ${_list_min[@]}; do
     min="${progs}_MIN_REQ"
     cur="${progs}_CURR"
 
@@ -68,10 +69,23 @@ for progs in ${_list[@]}; do
     fi
 done
 
+_list_max=(GCC GLIBC)
+# Checks for maximum recommended requirements
+for progs in ${_list_max[@]}; do
+    max="${progs}_MAX_REQ"
+    cur="${progs}_CURR"
+
+    if [ "$(printf "${!cur}\n${!max}" | sort -V | head -n1)" = "${!max}" ] && [ "${!cur}" != "${!max}" ]; then
+        echo error "$progs Found: v${!cur}, Recommended: v${!max}"
+        exit 1
+    fi
+done
+
 echo norm 'int main(){}' | gcc -v -o /dev/null -x c - > dummy.log 2>&1
 
 if ! grep -q ' error' dummy.log; then
     rm dummy.log
+    echo success "Requirements verified!"
 else
     echo error "Compilation FAILED. If you like, you can also view dummy.log for more details."
     exit 0

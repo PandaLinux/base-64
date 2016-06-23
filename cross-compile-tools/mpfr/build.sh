@@ -9,7 +9,9 @@ PKG_VERSION="3.1.2"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH=${PKG_NAME}-${PKG_VERSION}-fixes-4.patch
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The MPFR library is a C library for multiple-precision floating-point computations with"
     echo -e "correct rounding."
@@ -18,38 +20,35 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
+    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-fixes-4.patch"
+    patch -Np1 -i ../${PATCH}
 
-    LDFLAGS="-Wl,-rpath,${HOST_CROSS_TOOLS_DIR}/lib"    \
-    ./configure --prefix="${HOST_CROSS_TOOLS_DIR}"      \
-                --disable-static                        \
-                --with-gmp="${HOST_CROSS_TOOLS_DIR}"
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    LDFLAGS="-Wl,-rpath,${HOST_CDIR}/lib"  \
+    ./configure --prefix=${HOST_CDIR}      \
+                --disable-static           \
+                --with-gmp=${HOST_CDIR}
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_CROSS_TOOLS_DIR}/lib/libmpfr.so" ]; then
-    touch DONE
+if [ -f ${CROSS_DIR}/lib/libmpfr.so ]; then
+    touch ${DONE_DIR_CROSS_COMPILE_TOOLS}/$(basename $(pwd))
 fi

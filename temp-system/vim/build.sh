@@ -9,7 +9,9 @@ PKG_VERSION="7.4"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}74"
 
-function help() {
+PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-7.patch
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Vim package contains a powerful text editor."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -17,15 +19,16 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "../../sources/$TARBALL" "$TARBALL"
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
+    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-branch_update-7.patch"
+    patch -Np1 -i ../${PATCH}
 
     cat > src/auto/config.cache << "EOF"
 vim_cv_getcwd_broken=no
@@ -36,31 +39,27 @@ vim_cv_toupper_broken=no
 vim_cv_tty_group=world
 EOF
 
-    printf '#define SYS_VIMRC_FILE "%s/etc/vimrc"' "${HOST_TOOLS_DIR}" >> src/feature.h
+    printf '#define SYS_VIMRC_FILE "%s/etc/vimrc"' "${HOST_TDIR}" >> src/feature.h
 
-    ./configure --prefix="${HOST_TOOLS_DIR}"    \
-                --build="${HOST}"               \
-                --host="${TARGET}"              \
-                --enable-gui=no                 \
-                --disable-gtktest               \
-                --disable-xim                   \
-                --disable-gpm                   \
-                --without-x                     \
-                --disable-netbeans              \
+    ./configure --prefix=${HOST_TDIR}    \
+                --build=${HOST}          \
+                --host=${TARGET}         \
+                --enable-gui=no          \
+                --disable-gtktest        \
+                --disable-xim            \
+                --disable-gpm            \
+                --without-x              \
+                --disable-netbeans       \
                 --with-tlib=ncurses
 
-    make "${MAKE_PARALLEL}"
-}
-
-function test() {
-    echo ""
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
-    ln -sv vim "${HOST_TOOLS_DIR}/bin/vi"
+    make ${MAKE_PARALLEL} install
+    ln -sv vim ${HOST_TDIR}/bin/vi
 
-    cat > "${HOST_TOOLS_DIR}/etc/vimrc" << "EOF"
+    cat > ${HOST_TDIR}/etc/vimrc << "EOF"
 " Begin
 
 set nocompatible
@@ -73,12 +72,12 @@ EOF
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f "${HOST_TOOLS_DIR}/bin/vi" ]; then
-    touch DONE
+if [ -f ${TOOLS_DIR}/bin/vi ]; then
+    touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
 fi

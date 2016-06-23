@@ -6,7 +6,6 @@ http://ftp.gnu.org/gnu/bash/bash-4.3.tar.gz
 ftp://alpha.gnu.org/gnu/bc/bc-1.06.95.tar.bz2
 http://ftp.gnu.org/gnu/binutils/binutils-2.24.tar.bz2
 http://ftp.gnu.org/gnu/bison/bison-3.0.2.tar.xz
-http://www.clfs.org/files/packages/3.0.0/SYSTEMD/boot-scripts-cross-lfs-3.0-20140710.tar.xz
 http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 http://sourceforge.net/projects/check/files/check/0.9.13/check-0.9.13.tar.gz
 http://www.clfs.org/files/clfs-network-scripts-20140224.tar.xz

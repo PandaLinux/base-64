@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -11,7 +10,7 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Binutils package contains a linker, an assembler, and other tools for handling object files."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -19,16 +18,16 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    mkdir   "${BUILD_DIR}"  &&
-    cd      "${BUILD_DIR}"  &&
+    mkdir   ${BUILD_DIR}  &&
+    cd      ${BUILD_DIR}  &&
 
     CC="gcc -isystem /usr/include"          \
     LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
@@ -38,28 +37,28 @@ function build() {
                  --disable-multilib         \
                  --enable-64-bit-bfd
 
-    make "${MAKE_PARALLEL}" tooldir=/usr
+    make ${MAKE_PARALLEL} tooldir=/usr
 }
 
-function test() {
+function runTest() {
     ln -sv /lib /lib64
-    make "${MAKE_PARALLEL}" check
+    make ${MAKE_PARALLEL} check
     rm -v /lib64
     rm -v /usr/lib64/libstd*so*
     rmdir -v /usr/lib64
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" tooldir=/usr install
+    make ${MAKE_PARALLEL} tooldir=/usr install
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/usr/bin/ld" ]; then
-    touch DONE
+if [ -f /usr/bin/ld ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

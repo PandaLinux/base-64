@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -10,7 +9,9 @@ PKG_VERSION="213"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-function help() {
+PATCH="${PKG_NAME}-${PKG_VERSION}-compat-1.patch"
+
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The systemd package is a system and service manager for Linux operating systems."
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,15 +19,16 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    patch -Np1 -i ../"${PKG_NAME}-${PKG_VERSION}-compat-1.patch"
+    patch -Np1 -i ../${PATCH}
 
     sed -i '/virt-install-hook /d' Makefile.in
     sed -i '/timesyncd.conf/d' src/timesync/timesyncd.conf.in
@@ -48,26 +50,26 @@ function build() {
                 --with-dbussystemservicedir=/usr/share/dbus-1/system-services   \
                 cc_cv_CFLAGS__flto=no
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
+function runTest() {
     set +e
-    sed -e "s:test/udev-test.pl::g" \
-        -e "s:test-bus-cleanup\$(EXEEXT) ::g" \
-        -e "s:test-bus-gvariant\$(EXEEXT) ::g" \
+    sed -e "s:runTest/udev-test.pl::g" \
+        -e "s:runTest-bus-cleanup\$(EXEEXT) ::g" \
+        -e "s:runTest-bus-gvariant\$(EXEEXT) ::g" \
         -i Makefile
-    make "${MAKE_PARALLEL}" check
+    make ${MAKE_PARALLEL} check
     set -e
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
+    make ${MAKE_PARALLEL} install
     mv -v /usr/lib/libnss_myhostname.so.2 /lib
     rm -rfv /usr/lib/rpm
 
     for tool in runlevel reboot shutdown poweroff halt telinit; do
-        ln -sfv ../bin/systemctl /sbin/$tool
+        ln -sfv ../bin/systemctl /sbin/${tool}
     done
     ln -sfv ../lib/systemd/systemd /sbin/init
 
@@ -79,12 +81,12 @@ function configure() {
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;configure;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;configure;popd;clean; }
 # Verify installation
-if [ -f "/sbin/init" ]; then
-    touch DONE
+if [ -f /sbin/init ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

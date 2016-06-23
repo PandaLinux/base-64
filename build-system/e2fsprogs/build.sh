@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
 set -e 		# Exit on error
 
@@ -11,7 +10,7 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
-function help() {
+function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The E2fsprogs package contains the utilities for handling the ext2 file system. It also supports"
     echo -e "the ext3 and ext4 journaling file systems."
@@ -20,16 +19,16 @@ function help() {
 }
 
 function prepare() {
-    ln -sv "/sources/$TARBALL" "$TARBALL"
+    ln -sv /sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {
-    tar xf "${TARBALL}"
+    tar xf ${TARBALL}
 }
 
 function build() {
-    mkdir -pv   "${BUILD_DIR}"  &&
-    cd          "${BUILD_DIR}"  &&
+    mkdir -pv   ${BUILD_DIR}  &&
+    cd          ${BUILD_DIR}  &&
 
     ../configure --prefix=/usr          \
                  --with-root-prefix=""  \
@@ -39,25 +38,25 @@ function build() {
                  --disable-fsck         \
                  --disable-uuidd
 
-    make "${MAKE_PARALLEL}"
+    make ${MAKE_PARALLEL}
 }
 
-function test() {
-    make "${MAKE_PARALLEL}" check
+function runTest() {
+    make ${MAKE_PARALLEL} check
 }
 
 function instal() {
-    make "${MAKE_PARALLEL}" install
-    make "${MAKE_PARALLEL}" install-libs
+    make ${MAKE_PARALLEL} install
+    make ${MAKE_PARALLEL} install-libs
 }
 
 function clean() {
-    rm -rf "${SRC_DIR}" "${TARBALL}"
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { help;clean;prepare;unpack;pushd "${SRC_DIR}";build;[[ "${MAKE_TESTS}" = TRUE ]] && test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;[[ ${MAKE_TESTS} = TRUE ]] && runTest;instal;popd;clean; }
 # Verify installation
-if [ -f "/sbin/e2fsck" ]; then
-    touch DONE
+if [ -f /sbin/e2fsck ]; then
+    touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi
