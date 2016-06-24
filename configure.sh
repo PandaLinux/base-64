@@ -35,6 +35,7 @@ function configureSys() {
         set -eo pipefail
         export DEBIAN_FRONTEND=noninteractive
 
+		echo warn "Updating your system"
         # Make sure the package repository is up to date
         requireRoot apt-get update -qq
         echo empty
@@ -65,6 +66,9 @@ function configureSys() {
             echo success "Finished"
         fi
 
+        echo success "Finished updating"
+        echo empty
+
         # Check version of the installed packages
         bash version-check.sh
         echo empty
@@ -90,7 +94,7 @@ function configureSys() {
 
     if [ ! -f dummy.log ]; then
         # Verify that all the packages have been downloaded
-        if [ $(du -b ${DIR}/sources | cut -f1) -eq 429212074 ]; then
+        if [ $(du -b ${DIR}/sources | cut -f1) -eq 436069803 ]; then
             echo success "Packages have already been downloaded. Skipping this step!"
         else
             # Download the required packages

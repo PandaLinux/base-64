@@ -27,16 +27,6 @@ used for building `Panda Linux`.
 Environment is now ready!!
 ```
 
-- Edit your `/etc/sudoers` file to remove password prompt for `${PANDA_USER}`
-```console
-sudo visudo
-```
-
-At the end of the file add the following line:
-```console
-cub	ALL=(ALL) NOPASSWD: ALL
-```
-
 - Log into the newly created environment
 ```console
 sudo su - cub
