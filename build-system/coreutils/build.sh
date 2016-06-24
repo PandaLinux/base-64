@@ -47,8 +47,12 @@ function instal() {
 
     mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date} /bin
     mv -v /usr/bin/{dd,df,echo,false,hostname,ln,ls,mkdir,mknod} /bin
-    mv -v /usr/bin/{mv,pwd,rm,rmdir,stty,true,uname} /bin
+    mv -v /usr/bin/{pwd,rm,rmdir,stty,true,uname} /bin
     mv -v /usr/bin/chroot /usr/sbin
+
+    # Workaround
+    cp -v /usr/bin/mv /bin
+    rm -v /usr/bin/mv
 }
 
 function clean() {
