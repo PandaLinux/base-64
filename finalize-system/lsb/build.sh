@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
-
-PKG_NAME="linux"
-PKG_VERSION="3.14"
-
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
-SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
+set -e
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"

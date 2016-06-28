@@ -1,4 +1,4 @@
-# Install Panda Linux from source
+# Install Panda Linux from source 
 
 - Download the repository from *Github*
 
@@ -37,9 +37,16 @@ sudo su - cub
 ./install.sh
 ```
 
+Now, just follow the on-screen instructions.
+
+**Note: By default, the installation directory is set to `/tmp/panda64`. It is mandatory to change this location to the partition where the actual system will reside such as `/dev/sdaXX`.**
+
+To change the installation location (you'll need to mount the partition to `/mnt/XXX`):
+```console
+./install.sh -i /mnt/panda
+```
+
 To see the help menu for installation:
 ```console
 ./install.sh -h
 ```
-
-Now, just follow the on-screen instructions.

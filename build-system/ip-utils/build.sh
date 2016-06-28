@@ -4,12 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="iputils"
-PKG_VERSION="s20121221"
+PKG_VERSION="s20150815"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH="${PKG_NAME}-${PKG_VERSION}-fixes-2.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-build-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -30,17 +30,18 @@ function unpack() {
 function build() {
     patch -Np1 -i ../${PATCH}
 
-    make ${MAKE_PARALLEL}                           \
-    IPV4_TARGETS="tracepath ping clockdiff rdisc"   \
-    IPV6_TARGETS="tracepath6 traceroute6"
+    make ${MAKE_PARALLEL} TARGETS="clockdiff ping rdisc tracepath tracepath6 traceroute6"
 }
 
 function instal() {
     install -v -m755 ping /bin
-    install -v -m755 clockdiff /usr/bin
-    install -v -m755 rdisc /usr/bin
-    install -v -m755 tracepath /usr/bin
-    install -v -m755 trace{path,route}6 /usr/bin
+	install -v -m755 clockdiff /usr/bin
+	install -v -m755 rdisc /usr/bin
+	install -v -m755 tracepath /usr/bin
+	install -v -m755 trace{path,route}6 /usr/bin
+	install -v -m644 doc/*.8 /usr/share/man/man8
+	ln -sv ping /bin/ping4
+	ln -sv ping /bin/ping6
 }
 
 function clean() {

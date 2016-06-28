@@ -8,6 +8,8 @@ source ${HOME}/functions.sh
 
 verify-user;
 
+echo warn "Constructing temporary system..."
+
 # Create log directory
 LOGS_DIR_TEMP_SYSTEM=${LOGS_DIR}/temp-system
 install -d ${LOGS_DIR_TEMP_SYSTEM}
@@ -18,7 +20,7 @@ install -d ${DONE_DIR_TEMP_SYSTEM}
 export DONE_DIR_TEMP_SYSTEM
 
 if [ -f "${DONE_DIR}/cross-compile-tools/gcc-final" ]; then
-    _list=(build-variables gmp mpfr mpc isl cloog zlib binutils gcc ncurses bash bzip2 check coreutils diffutils file \
+    _list=(build-variables gmp mpfr mpc isl zlib binutils gcc ncurses bash bzip2 check coreutils diffutils file \
            findutils gawk gettext grep gzip make patch sed tar texinfo util-linux vim xz-utils)
 
     for i in ${_list[@]}; do
@@ -46,3 +48,4 @@ if [ -f "${DONE_DIR}/cross-compile-tools/gcc-final" ]; then
         esac
     done
 fi
+echo empty

@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="dhcpcd"
-PKG_VERSION="6.3.2"
+PKG_VERSION="6.6.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -25,13 +25,15 @@ function unpack() {
 }
 
 function build() {
+	sed -i "s|-D_BSD_SOURCE|-D_GNU_SOURCE|" configure
+
     ./configure --prefix=/usr           \
                 --sbindir=/sbin         \
                 --sysconfdir=/etc       \
                 --dbdir=/var/lib/dhcpcd \
                 --libexecdir=/usr/lib/dhcpcd
 
-    make ${MAKE_PARALLEL}
+    make -j1
 }
 
 function instal() {

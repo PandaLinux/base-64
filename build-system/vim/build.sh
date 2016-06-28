@@ -9,7 +9,7 @@ PKG_VERSION="7.4"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}74"
 
-PATCH="${PKG_NAME}-${PKG_VERSION}-branch_update-7.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-7.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -42,7 +42,7 @@ function runTest() {
 }
 
 function instal() {
-    make ${MAKE_PARALLEL} install
+    make -j1 install
     ln -sv vim /usr/bin/vi
 
     cat > /etc/vimrc << "EOF"

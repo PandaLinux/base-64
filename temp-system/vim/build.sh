@@ -41,9 +41,9 @@ EOF
 
     printf '#define SYS_VIMRC_FILE "%s/etc/vimrc"' "${HOST_TDIR}" >> src/feature.h
 
-    ./configure --prefix=${HOST_TDIR}    \
-                --build=${HOST}          \
+    ./configure --build=${HOST}          \
                 --host=${TARGET}         \
+                --prefix=${HOST_TDIR}    \
                 --enable-gui=no          \
                 --disable-gtktest        \
                 --disable-xim            \
@@ -56,7 +56,7 @@ EOF
 }
 
 function instal() {
-    make ${MAKE_PARALLEL} install
+    make -j1 install
     ln -sv vim ${HOST_TDIR}/bin/vi
 
     cat > ${HOST_TDIR}/etc/vimrc << "EOF"

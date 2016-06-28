@@ -17,7 +17,7 @@ function showHelp() {
 }
 
 function prepare() {
-    ln -sv ../../sources/$TARBALL $TARBALL
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
 }
 
 function unpack() {

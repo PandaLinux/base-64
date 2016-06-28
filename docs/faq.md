@@ -38,3 +38,13 @@
 
     Logout and login again and try to re-run the previous command. Sometimes the installation fails due to not having adequate resources.
     such as CPU, memory etc. If the issue still persists, open up an [issue](https:github.com/PandaLinux/base-64/issues).
+    
+- How do I install `GCC 5+` on `Ubuntu` ?
+
+    ```console
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    sudo apt-get update
+    sudo apt-get install gcc-5 g++-5
+    
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+    ```

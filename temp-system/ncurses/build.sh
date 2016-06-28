@@ -4,12 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="ncurses"
-PKG_VERSION="5.9"
+PKG_VERSION="6.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH=${PKG_NAME}-${PKG_VERSION}-bash_fix-1.patch
+PATCH=${PKG_NAME}-${PKG_VERSION}-gcc-5.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -19,7 +19,7 @@ function showHelp() {
 }
 
 function prepare() {
-    ln -sv ../../sources/$TARBALL $TARBALL
+    ln -sv ../../sources/${TARBALL} ${TARBALL}
     ln -sv ../../patches/${PATCH} ${PATCH}
 }
 

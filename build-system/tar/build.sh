@@ -4,12 +4,10 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="tar"
-PKG_VERSION="1.27.1"
+PKG_VERSION="1.28"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
-
-PATCH="${PKG_NAME}-${PKG_VERSION}-manpage-1.patch"
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -20,7 +18,6 @@ function showHelp() {
 
 function prepare() {
     ln -sv /sources/${TARBALL} ${TARBALL}
-    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -28,8 +25,6 @@ function unpack() {
 }
 
 function build() {
-    patch -Np1 -i ../${PATCH}
-
     FORCE_UNSAFE_CONFIGURE=1    \
     ./configure --prefix=/usr   \
                 --bindir=/bin   \
@@ -44,11 +39,10 @@ function runTest() {
 
 function instal() {
     make ${MAKE_PARALLEL} install
-    perl tarman > /usr/share/man/man1/tar.1
 }
 
 function clean() {
-    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure

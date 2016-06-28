@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="perl"
-PKG_VERSION="5.20.0"
+PKG_VERSION="5.20.1"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -45,6 +45,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f ${HOST_TDIR}/bin/perl ]; then
+if [ -f /usr/bin/perl ]; then
     touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

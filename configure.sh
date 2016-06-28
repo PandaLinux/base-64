@@ -25,6 +25,7 @@ function configureSys() {
         done
     fi
 
+	echo empty
     echo warn "Detected system: ${BOLD}$DISTRIB_NAME${NORM}"
 
     shopt -s nocasematch
@@ -35,35 +36,35 @@ function configureSys() {
         set -eo pipefail
         export DEBIAN_FRONTEND=noninteractive
 
-		echo warn "Updating your system"
+		echo warn "Please wait while we update your system!"
         # Make sure the package repository is up to date
         requireRoot apt-get update -qq
-        echo empty
 
         # Install prerequisites
-        requireRoot apt-get install -qq --yes --force-yes bash binutils bison bzip2 build-essential coreutils diffutils \
-            findutils gawk glibc-2.19-1 grep gzip make ncurses-dev openssl patch perl sed tar texinfo xz-utils
-        echo empty
+        requireRoot apt-get install -qq --yes --force-yes bash binutils bison bzip2 build-essential coreutils   \
+            diffutils findutils gawk glibc-2.19-1 grep gzip make ncurses-dev openssl patch perl sed             \
+            squashfs-tools tar texinfo xz-utils
 
         # Check wget version
         wget_cur_ver=$(wget --version | head -n1 | cut -d" " -f3)
 
         if [ "$(printf "1.16\n$wget_cur_ver" | sort -V | head -n1)" = "${wget_cur_ver}" ] && [ "${wget_cur_ver}" != "1.16" ]; then
+            echo empty
             echo warn "Setting up wget 1.16..."
             # On Ubuntu 14.04 wget is 1.15 but we want 1.16.3
-            wget -c http://ftp.gnu.org/gnu/wget/wget-1.16.3.tar.gz
+            wget --continue http://ftp.gnu.org/gnu/wget/wget-1.16.3.tar.gz
             tar -xf wget-1.16.3.tar.gz
             cd wget-1.16.3/
             ./configure  --prefix=/usr/local \
                          --sysconfdir=/etc
             make
             requireRoot make install
-            requireRoot ln -fsv /usr/local/bin/wget /usr/bin/wget
+            requireRoot rm -f /usr/bin/wget
+            requireRoot ln -s /usr/local/bin/wget /usr/bin/wget
             cd ../
             requireRoot rm -rf wget-1.16.3*
             echo empty
             echo bold "Wget: v$(wget --version | head -n1 | cut -d" " -f3)"
-            echo success "Finished"
         fi
 
         echo success "Finished updating"
@@ -78,7 +79,7 @@ function configureSys() {
         requireRoot rm /bin/sh
         # Link `bash` to `sh`
         requireRoot ln -s /bin/bash /bin/sh
-        echo success "Fixed symlink."
+        echo success "Fixed it!"
 
         # Make `install.sh` executable by default
         requireRoot chmod +x install.sh
@@ -92,14 +93,26 @@ function configureSys() {
 
     shopt -u nocasematch
 
+    # Create sources/ folder if it doesn't exist
+    [ ! -d ${DIR}/sources ] && mkdir -p ${DIR}/sources
+
     if [ ! -f dummy.log ]; then
         # Verify that all the packages have been downloaded
-        if [ $(du -b ${DIR}/sources | cut -f1) -eq 436069803 ]; then
+        if md5sum --status -c ${DIR}/md5sums; then
             echo success "Packages have already been downloaded. Skipping this step!"
         else
             # Download the required packages
             echo warn "Downloading packages..."
-            requireRoot wget --continue --input-file=wget-list --directory-prefix=${DIR}/sources --quiet --show-progress || true
+            wget --continue                         \
+                 --input-file=wget-list             \
+                 --directory-prefix=${DIR}/sources  \
+                 --quiet                            \
+                 --show-progress                    \
+                 --no-check-certificate             ||
+                 true
+
+			# Update the md5sums file
+			find ${DIR}/sources -type f -exec md5sum {} \; | sort -k 2 > ${DIR}/md5sums
             echo success "Finished downloading..."
             echo empty
         fi
@@ -117,17 +130,6 @@ configureSys;
 
 # Setup dedicated user
 setup-user;
-sudo su "${PANDA_USER}" -c 'echo "exec env -i HOME=${HOME} TERM=${TERM} PS1="\u:\w\$ " /bin/bash" > ~/.bash_profile'
-sudo su "${PANDA_USER}" -c 'echo "set +h" > ~/.bashrc'
-sudo su "${PANDA_USER}" -c 'echo "umask 022" >> ~/.bashrc'
-sudo su "${PANDA_USER}" -c 'echo "unset CFLAGS CXXFLAGS" >> ~/.bashrc'
-
-list=(INSTALL_DIR TOOLS_DIR CROSS_DIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
-      MAKE_PARALLEL LC_ALL VM_LINUZ SYSTEM_MAP DO_BACKUP HOST_TDIR HOST_CDIR ROOT_DIR   \
-      DONE_DIR)
-for i in ${list[@]}; do
-    sudo su "${PANDA_USER}" -c ". variables.sh && echo 'export $i=${!i}' >> ~/.bashrc"
-done
 
 echo success "Environment is now ready!!"
 echo empty

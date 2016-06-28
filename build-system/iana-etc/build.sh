@@ -9,7 +9,7 @@ PKG_VERSION="2.30"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH="${PKG_NAME}-${PKG_VERSION}-numbers_update-20140202-2.patch.xz"
+PATCH=${PKG_NAME}-${PKG_VERSION}-numbers_update-20140202-2.patch.xz
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"

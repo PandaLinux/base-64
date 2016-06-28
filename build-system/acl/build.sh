@@ -25,6 +25,9 @@ function unpack() {
 }
 
 function build() {
+	sed -i -e "/TABS-1;/a if (x > (TABS-1)) x = (TABS-1);" \
+        libacl/__acl_to_any_text.c
+
     sed -i -e 's|/@pkg_name@|&-@pkg_version@|' include/builddefs.in
     sed -i "s:| sed.*::g" test/{sbits-restore,cp,misc}.test
     ./configure --prefix=/usr \
@@ -40,11 +43,13 @@ function runTest() {
 }
 
 function instal() {
-    make ${MAKE_PARALLEL} install install-dev install-lib
+	if [ ! -f /usr/bin/cat ];then
+        make ${MAKE_PARALLEL} install install-dev install-lib
 
-    mv -v /usr/lib/libacl.so.* /lib
-    ln -sfv ../../lib/libacl.so.1 /usr/lib/libacl.so
-    chmod 755 -v /lib/libacl.so.1.1.0
+        mv -v /usr/lib/libacl.so.* /lib
+        ln -sfv ../../lib/libacl.so.1 /usr/lib/libacl.so
+        chmod 755 -v /lib/libacl.so.1.1.0
+    fi
 }
 
 function clean() {

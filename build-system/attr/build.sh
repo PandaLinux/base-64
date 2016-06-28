@@ -25,6 +25,7 @@ function unpack() {
 }
 
 function build() {
+	sed -i -e "/SUBDIRS/s|man2||" man/Makefile
     sed -i -e 's|/@pkg_name@|&-@pkg_version@|' include/builddefs.in
     ./configure --prefix=/usr
 

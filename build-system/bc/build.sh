@@ -9,6 +9,8 @@ PKG_VERSION="1.06.95"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
+PATCH=${PKG_NAME}-${PKG_VERSION}-memory_leak-1.patch
+
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Bc package contains an arbitrary precision numeric processing language."
@@ -18,6 +20,7 @@ function showHelp() {
 
 function prepare() {
     ln -sv /sources/${TARBALL} ${TARBALL}
+    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {

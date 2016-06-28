@@ -14,6 +14,9 @@ function showHelp() {
 
 function build() {
     mkdir -pv ${INSTALL_DIR}/{dev,proc,run,sys}
+
+    sudo chown -Rv 0:0 ${TOOLS_DIR}
+    sudo chown -Rv 0:0 ${CROSS_DIR}
 }
 
 function saveVariables() {

@@ -4,9 +4,9 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gettext"
-PKG_VERSION="0.19.1"
+PKG_VERSION="0.19.6"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {

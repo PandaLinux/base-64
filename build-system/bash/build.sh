@@ -9,7 +9,7 @@ PKG_VERSION="4.3"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH="${PKG_NAME}-${PKG_VERSION}-branch_update-5.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-5.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -31,7 +31,6 @@ function build() {
     patch -Np1 -i ../${PATCH}
 
     ./configure --prefix=/usr           \
-                --bindir=/bin           \
                 --without-bash-malloc   \
                 --with-installed-readline
 
@@ -44,6 +43,7 @@ function runTest() {
 
 function instal() {
     make ${MAKE_PARALLEL} install
+    mv -v /usr/bin/bash /bin
 }
 
 function clean() {

@@ -4,13 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="coreutils"
-PKG_VERSION="8.22"
+PKG_VERSION="8.23"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH1="${PKG_NAME}-${PKG_VERSION}-uname-1.patch"
-PATCH2="${PKG_NAME}-${PKG_VERSION}-noman-1.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-uname-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -21,8 +20,7 @@ function showHelp() {
 
 function prepare() {
     ln -sv /sources/${TARBALL} ${TARBALL}
-    ln -sv /patches/${PATCH1} ${PATCH1}
-    ln -sv /patches/${PATCH2} ${PATCH2}
+    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -30,8 +28,7 @@ function unpack() {
 }
 
 function build() {
-    patch -Np1 -i ../${PATCH1}
-    patch -Np1 -i ../${PATCH2}
+    patch -Np1 -i ../${PATCH}
 
     FORCE_UNSAFE_CONFIGURE=1                            \
     ./configure --prefix=/usr                           \
@@ -47,7 +44,7 @@ function instal() {
 
     mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date} /bin
     mv -v /usr/bin/{dd,df,echo,false,hostname,ln,ls,mkdir,mknod} /bin
-    mv -v /usr/bin/{pwd,rm,rmdir,stty,true,uname} /bin
+    mv -v /usr/bin/{pwd,rm,rmdir,sleep,stty,true,uname} /bin
     mv -v /usr/bin/chroot /usr/sbin
 
     # Workaround
@@ -56,7 +53,7 @@ function instal() {
 }
 
 function clean() {
-    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH1} ${PATCH2}
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure

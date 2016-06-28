@@ -4,9 +4,9 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="tcl"
-PKG_VERSION="8.6.1"
+PKG_VERSION="8.6.4"
 
-TARBALL="${PKG_NAME}${PKG_VERSION}-src.tar.gz"
+TARBALL="${PKG_NAME}-core${PKG_VERSION}-src.tar.gz"
 SRC_DIR="${PKG_NAME}${PKG_VERSION}"
 
 function help() {
@@ -25,7 +25,6 @@ function unpack() {
 }
 
 function build() {
-    sed -i s/500/5000/ generic/regc_nfa.c
     cd unix
     ./configure --prefix=${HOST_TDIR}
 

@@ -29,6 +29,7 @@ function build() {
     ./configure --prefix=${HOST_CDIR}   \
                 --enable-cxx            \
                 --disable-static
+
     make ${MAKE_PARALLEL}
 }
 

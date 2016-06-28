@@ -8,6 +8,9 @@ source ${HOME}/functions.sh
 
 verify-user;
 
+echo empty
+echo warn "Building Cross compile tools..."
+
 # Create log directory
 LOGS_DIR_CROSS_COMPILE_TOOLS=${LOGS_DIR}/cross-compile-tools
 install -d ${LOGS_DIR_CROSS_COMPILE_TOOLS}
@@ -17,7 +20,7 @@ install -d ${DONE_DIR_CROSS_COMPILE_TOOLS}
 
 export DONE_DIR_CROSS_COMPILE_TOOLS
 
-_list=(file linux-headers m4 ncurses pkg-config-lite gmp mpfr mpc isl cloog binutils gcc-static glibc gcc-final)
+_list=(file linux-headers m4 ncurses pkg-config-lite gmp mpfr mpc isl binutils gcc-static glibc gcc-final)
 
 for i in ${_list[@]}; do
     case $i in
@@ -43,3 +46,5 @@ for i in ${_list[@]}; do
             popd;;
     esac
 done
+
+echo empty

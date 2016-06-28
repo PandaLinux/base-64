@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="grub"
-PKG_VERSION="2.00"
+PKG_VERSION="2.02~beta2"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -25,44 +25,20 @@ function unpack() {
 }
 
 function build() {
-    sed -i -e '/gets is a/d' grub-core/gnulib/stdio.in.h
-    ./configure --prefix=/usr       \
-                --sysconfdir=/etc   \
-                --disable-werror
+	unset CFLAGS CXXFLAGS
+
+	./configure --prefix=/usr           \
+				--sbindir=/sbin         \
+				--sysconfdir=/etc       \
+				--disable-grub-emu-usb  \
+				--disable-efiemu        \
+				--disable-werror
 
     make ${MAKE_PARALLEL}
 }
 
 function instal() {
     make ${MAKE_PARALLEL} install
-
-    install -m755 -dv /etc/default
-    cat > /etc/default/grub << "EOF"
-# Begin /etc/default/grub
-
-GRUB_DEFAULT=0
-#GRUB_SAVEDEFAULT=true
-GRUB_HIDDEN_TIMEOUT=
-GRUB_HIDDEN_TIMEOUT_QUIET=false
-GRUB_TIMEOUT=10
-GRUB_DISTRIBUTOR=Panda-Linux
-
-GRUB_CMDLINE_LINUX=""
-GRUB_CMDLINE_LINUX_DEFAULT=""
-
-#GRUB_TERMINAL=console
-#GRUB_GFXMODE=640x480
-#GRUB_GFXPAYLOAD_LINUX=keep
-
-#GRUB_DISABLE_LINUX_UUID=true
-#GRUB_DISABLE_LINUX_RECOVERY=true
-
-#GRUB_INIT_TUNE="480 440 1"
-
-#GRUB_DISABLE_OS_PROBER=true
-
-# End /etc/default/grub
-EOF
 }
 
 function clean() {
@@ -72,6 +48,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f /usr/sbin/grub-install ]; then
+if [ -f /sbin/grub-install ]; then
     touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

@@ -26,9 +26,9 @@ function unpack() {
 }
 
 function build() {
-    ./configure --prefix=${HOST_TDIR}    \
-    --with-tcl=${HOST_TDIR}/lib          \
-    --with-tclinclude=${HOST_TDIR}/include
+    ./configure --prefix=${HOST_TDIR}       \
+                --with-tcl=${HOST_TDIR}/lib \
+                --with-tclinclude=${HOST_TDIR}/include
 
     make ${MAKE_PARALLEL}
 }

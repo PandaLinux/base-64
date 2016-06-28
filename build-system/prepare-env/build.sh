@@ -62,7 +62,6 @@ systemd-journal:x:28:
 mail:x:30:
 wheel:x:39:
 nogroup:x:65533:
-users:x:1000:
 EOF
 }
 

@@ -4,12 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="mpfr"
-PKG_VERSION="3.1.2"
+PKG_VERSION="3.1.3"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH="${PKG_NAME}-${PKG_VERSION}-fixes-4.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-fixes-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"

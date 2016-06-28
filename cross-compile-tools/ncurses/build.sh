@@ -4,12 +4,10 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="ncurses"
-PKG_VERSION="5.9"
+PKG_VERSION="6.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
-
-PATCH=${PKG_NAME}-${PKG_VERSION}-bash_fix-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -26,7 +24,6 @@ function showHelp() {
 
 function prepare() {
     ln -sv ../../sources/${TARBALL} ${TARBALL}
-    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -34,11 +31,10 @@ function unpack() {
 }
 
 function build() {
-    patch -Np1 -i ../${PATCH}
+	AWK=gawk                            \
+    ./configure --prefix=${HOST_CDIR}   \
+                --without-debug
 
-    ./configure --prefix=${HOST_CDIR}  \
-                --without-debug        \
-                --without-shared
     make ${MAKE_PARALLEL} -C include
     make ${MAKE_PARALLEL} -C progs tic
 }
@@ -48,7 +44,7 @@ function instal() {
 }
 
 function clean() {
-    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
+    rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure

@@ -32,9 +32,7 @@ function build() {
 
 function runTest() {
     if [ -f /usr/bin/bison ];then
-        set +e
-        make ${MAKE_PARALLEL} check
-        set -e
+        make ${MAKE_PARALLEL} check || true
     fi
 }
 

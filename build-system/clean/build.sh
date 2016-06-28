@@ -6,8 +6,8 @@ set -e
 function clean() {
     rm -rfv /tmp/*
 
-    ${HOST_TDIR}/bin/find /{,usr/}{bin,lib,sbin} -type f \
-        -exec ${HOST_TDIR}/bin/strip --strip-debug '{}' ';'
+    ${HOST_TDIR}/bin/find /{,usr/}{bin,sbin} -type f \
+        -exec ${HOST_TDIR}/bin/strip --strip-all '{}' ';'
 }
 
 # Run the installation procedure

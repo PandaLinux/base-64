@@ -4,9 +4,9 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="isl"
-PKG_VERSION="0.12.2"
+PKG_VERSION="0.15"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.lzma"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {
@@ -34,6 +34,7 @@ function build() {
     ./configure --prefix=${HOST_CDIR}          \
                 --disable-static               \
                 --with-gmp-prefix=${HOST_CDIR}
+
     make ${MAKE_PARALLEL}
 }
 

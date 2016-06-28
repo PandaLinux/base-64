@@ -32,7 +32,7 @@ function build() {
 }
 
 function runTest() {
-    make ${MAKE_PARALLEL} check VERBOSE=yes
+    make ${MAKE_PARALLEL} check VERBOSE=yes || true
 }
 
 function instal() {

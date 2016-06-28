@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="e2fsprogs"
-PKG_VERSION="1.42.9"
+PKG_VERSION="1.42.13"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -31,6 +31,7 @@ function build() {
     cd          ${BUILD_DIR}  &&
 
     ../configure --prefix=/usr          \
+                --bindir=/bin           \
                  --with-root-prefix=""  \
                  --enable-elf-shlibs    \
                  --disable-libblkid     \

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-set +h		# disable hashall
 shopt -s -o pipefail
+set -e
 
 PKG_NAME="linux"
-PKG_VERSION="3.14"
+PKG_VERSION="4.1"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH="patch-${PKG_VERSION}.21.xz"
+PATCH=patch-${PKG_VERSION}.7.xz
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -30,6 +30,8 @@ function unpack() {
 function build() {
     xzcat ../${PATCH} | patch -Np1 -i -
 
+	# Cleanup the kernel source tree
+	make ${MAKE_PARALLEL} distclean
     # Prepare for compilation
     make ${MAKE_PARALLEL} mrproper
     # Set default configuration
@@ -48,8 +50,6 @@ function instal() {
     cp -v arch/x86_64/boot/bzImage /boot/${VM_LINUZ}
     # Install the map file
     cp -v System.map /boot/${SYSTEM_MAP}
-    # Backup kernel configuration file
-    cp -v .config /boot/${CONFIG_BACKUP}
 
     # Generate grub configuration file
     mkdir -pv /boot/grub &&
@@ -61,7 +61,7 @@ function clean() {
 }
 
 # Run the installation procedure
-time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;test;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
 if [ -f /boot/${VM_LINUZ} ] && [ -f /boot/grub/grub.cfg ]; then
     touch ${DONE_DIR_FINALIZE_SYSTEM}/$(basename $(pwd))

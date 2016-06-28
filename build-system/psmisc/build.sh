@@ -32,6 +32,8 @@ function build() {
 
 function instal() {
     make ${MAKE_PARALLEL} install
+    mv -v /usr/bin/fuser /bin
+	mv -v /usr/bin/killall /bin
 }
 
 function clean() {
@@ -41,6 +43,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f /usr/bin/fuser ]; then
+if [ -f /bin/fuser ]; then
     touch ${DONE_DIR_BUILD_SYSTEM}/$(basename $(pwd))
 fi

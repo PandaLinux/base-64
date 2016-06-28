@@ -4,13 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="ncurses"
-PKG_VERSION="5.9"
+PKG_VERSION="6.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH1="${PKG_NAME}-${PKG_VERSION}-branch_update-4.patch"
-PATCH2="${PKG_NAME}-${PKG_VERSION}-bash_fix-1.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-gcc-5.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -21,8 +20,7 @@ function showHelp() {
 
 function prepare() {
     ln -sv /sources/${TARBALL} ${TARBALL}
-    ln -sv /patches/${PATCH1} ${PATCH1}
-    ln -sv /patches/${PATCH2} ${PATCH2}
+    ln -sv /patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -30,17 +28,13 @@ function unpack() {
 }
 
 function build() {
-    patch -Np1 -i ../${PATCH1}
-    patch -Np1 -i ../${PATCH2}
+    patch -Np1 -i ../${PATCH}
 
     ./configure --prefix=/usr                \
-                --libdir=/lib                \
                 --with-shared                \
                 --without-debug              \
                 --enable-widec               \
-                --with-manpage-format=normal \
-                --enable-pc-files            \
-                --with-default-terminfo-dir=/usr/share/terminfo
+                --enable-pc-files
 
     make ${MAKE_PARALLEL}
 }
@@ -48,25 +42,19 @@ function build() {
 function instal() {
     make ${MAKE_PARALLEL} install
 
-    mv -v /lib/lib{panelw,menuw,formw,ncursesw,ncurses++w}.a /usr/lib
-    ln -svf ../../lib/$(readlink /lib/libncursesw.so) /usr/lib/libncursesw.so
-    ln -svf ../../lib/$(readlink /lib/libmenuw.so) /usr/lib/libmenuw.so
-    ln -svf ../../lib/$(readlink /lib/libpanelw.so) /usr/lib/libpanelw.so
-    ln -svf ../../lib/$(readlink /lib/libformw.so) /usr/lib/libformw.so
-    rm -v /lib/lib{ncursesw,menuw,panelw,formw}.so
+    mv -v /usr/lib/libncursesw.so.* /lib
+	ln -svf ../../lib/$(readlink /usr/lib/libncursesw.so) /usr/lib/libncursesw.so
 
-    for lib in curses ncurses form panel menu ; do
-        echo "INPUT(-l${lib}w)" > /usr/lib/lib${lib}.so
+	for lib in ncurses form panel menu ; do
+		echo "INPUT(-l${lib}w)" > /usr/lib/lib${lib}.so
         ln -sfv lib${lib}w.a /usr/lib/lib${lib}.a
-    done
-    ln -sfv libncursesw.so /usr/lib/libcursesw.so
-    ln -sfv libncursesw.a /usr/lib/libcursesw.a
-    ln -sfv libncurses++w.a /usr/lib/libncurses++.a
-    ln -sfv ncursesw5-config /usr/bin/ncurses5-config
+	done
+	ln -sfv libncurses++w.a /usr/lib/libncurses++.a
+	ln -sfv ncursesw6-config /usr/bin/ncurses6-config
 }
 
 function clean() {
-    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH1} ${PATCH2}
+    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
 }
 
 # Run the installation procedure

@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="util-linux"
-PKG_VERSION="2.24.2"
+PKG_VERSION="2.25.2"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -30,7 +30,8 @@ function build() {
                 --build=${HOST}               \
                 --host=${TARGET}              \
                 --disable-makeinstall-chown   \
-                --disable-makeinstall-setuid
+                --disable-makeinstall-setuid  \
+                --without-python
 
     make ${MAKE_PARALLEL}
 }

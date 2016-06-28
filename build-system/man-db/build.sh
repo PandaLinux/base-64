@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="man-db"
-PKG_VERSION="2.6.7.1"
+PKG_VERSION="2.7.2"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -37,11 +37,12 @@ function build() {
 }
 
 function runTest() {
-    make ${MAKE_PARALLEL} check
+    make ${MAKE_PARALLEL} check || true
 }
 
 function instal() {
     make ${MAKE_PARALLEL} install
+    sed -i "s:man root:root root:g" /usr/lib/tmpfiles.d/man-db.conf
 }
 
 function clean() {

@@ -32,14 +32,13 @@ function build() {
 }
 
 function runTest() {
-    set +e
-    make ${MAKE_PARALLEL} check
-    set -e
+    make ${MAKE_PARALLEL} check || true
 }
 
 function instal() {
     make ${MAKE_PARALLEL} install
-    mv -v /bin/z{egrep,cmp,diff,fgrep,force,grep,less,more,new} /usr/bin
+    mv -v /bin/{gzexe,uncompress} /usr/bin
+	mv -v /bin/z{egrep,cmp,diff,fgrep,force,grep,less,more,new} /usr/bin
 }
 
 function clean() {

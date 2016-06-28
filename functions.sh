@@ -32,10 +32,8 @@ echo() {
 function requireRoot() {
     # Already root?
     if [[ `whoami` == 'root' ]]; then
-        echo norm "$*"
         $*
     elif [[ -x /bin/sudo || -x /usr/bin/sudo ]]; then
-        echo norm "sudo $*"
         sudo $*
     else
         echo error "We require root privileges to install."
@@ -58,9 +56,9 @@ popd() {
 # Verify command ended successfully
 function checkCommand() {
 	if [ $? -eq 0 ]; then
-		echo success "Finished"
+		echo success "Finished!"
 	else
-		echo error "Failed..."
+		[ $# -gt 0 ] && echo error "$@" || echo error "Failed!"
         exit 1
 	fi
 }
@@ -114,7 +112,7 @@ function setup-user() {
 
         askConfirm;
 
-        echo warn "Deteing user ${PANDA_USER} and /home/${PANDA_HOME}"
+        echo warn "Deleting user ${PANDA_USER} and /home/${PANDA_HOME}"
         requireRoot userdel ${PANDA_USER}
         requireRoot rm -rf /home/${PANDA_HOME}
     fi
@@ -125,13 +123,15 @@ function setup-user() {
     requireRoot mkdir -p /home/${PANDA_HOME}
     echo empty
 
-    read -p "${YELLOW}Do you wan to set password for ${PANDA_USER}? [Y/n]:${NORM} " -n 1 -r
+    read -p "${YELLOW}Do you want to set password for ${PANDA_USER}? [Y/n]:${NORM} " -n 1 -r
     echo empty
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         requireRoot passwd ${PANDA_USER}
     else
-        requireRoot passwd -d ${PANDA_USER}
+        requireRoot passwd -d ${PANDA_USER} > /dev/null
+        echo empty
         echo warn "Add the following at the end of /etc/sudoers"
+        echo empty
         echo bold "${PANDA_USER}	ALL=(ALL) NOPASSWD: ALL"
         echo empty
         echo warn "This will remove the password prompts for the user ${PANDA_USER}"
@@ -139,22 +139,39 @@ function setup-user() {
     fi
 
     requireRoot usermod -aG sudo ${PANDA_USER}
-    echo success "User successfully setup!"
-    echo empty
 
     # Copy all data to ${PANDA_HOME}
-    echo warn "Moving data to '/home/${PANDA_HOME}'"
-    sudo cp -r ./* /home/${PANDA_HOME}
-    requireRoot chown -R ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
+    echo warn "Copying data to '/home/${PANDA_HOME}'"
+    requireRoot cp -r ./* /home/${PANDA_HOME}
+	requireRoot chown -R ${PANDA_USER}:${PANDA_GROUP} /home/${PANDA_HOME}
     echo empty
+
+    echo success "User has been successfully setup!"
 }
 
 # Verify that it is ${PANDA_USER}
 function verify-user() {
     if [ ! `whoami` = ${PANDA_USER} ]; then
         echo error "Only ${PANDA_USER} can execute this script."
-        exit 0
+        exit 1
     fi
+}
+
+function setup-env() {
+	echo norm "exec env -i HOME=${HOME} TERM=${TERM} PS1='\u:\w\$ ' /bin/bash" >  ~/.bash_profile
+	echo norm "set +h" > ~/.bashrc
+	echo norm "umask 022" >> ~/.bashrc
+	echo norm "unset CFLAGS CXXFLAGS" >> ~/.bashrc
+
+	# This sets up key mapping so the delete key works:
+	cp /etc/inputrc ~/.inputrc > /dev/null
+
+	list=(INSTALL_DIR TOOLS_DIR CROSS_DIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
+          MAKE_PARALLEL LC_ALL VM_LINUZ SYSTEM_MAP DO_BACKUP HOST_TDIR HOST_CDIR ROOT_DIR   \
+          DONE_DIR)
+	for i in ${list[@]}; do
+		echo norm "export $i=${!i}" >> ~/.bashrc
+	done
 }
 
 # Ask for confirmation to begin
@@ -182,4 +199,15 @@ function createBackup() {
 
         requireRoot chown -R `whoami` ${DIR}/backup.tar.bz2
     fi
+}
+
+function testBootOrChroot() {
+	# Continue if building on and for the same arch
+	if [ $(uname -m) != 'x86_64' ]; then
+		echo empty
+		echo warn "Testing the system!"
+		${TOOLS_DIR}/lib/libc.so.6 > /dev/null && ${TOOLS_DIR}/bin/gcc --version > /dev/null
+		checkCommand "Please submit this issue on our Github account!";
+		# TODO: Add the script to prepare the system for booting procedure
+	fi
 }

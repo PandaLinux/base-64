@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="kbd"
-PKG_VERSION="2.0.1"
+PKG_VERSION="2.0.3"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -25,7 +25,7 @@ function unpack() {
 }
 
 function build() {
-    PKG_CONFIG_PATH="/tools/lib/pkgconfig"  \
+    PKG_CONFIG_PATH="${HOST_TDIR}/lib/pkgconfig"  \
     ./configure --prefix=/usr               \
                 --disable-vlock             \
                 --enable-optional-progs

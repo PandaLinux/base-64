@@ -30,6 +30,7 @@ function build() {
 
     make ${MAKE_PARALLEL} -f Makefile-libbz2_so
     make ${MAKE_PARALLEL} clean
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {

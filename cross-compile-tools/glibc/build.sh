@@ -4,10 +4,11 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="glibc"
-PKG_VERSION="2.19"
+PKG_VERSION="2.22"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
+
 BUILD_DIR="${PKG_NAME}-build"
 
 function showHelp() {
@@ -28,25 +29,18 @@ function unpack() {
 }
 
 function build() {
-    cp -v timezone/Makefile{,.orig}
-    sed 's/\\$$(pwd)/`pwd`/' timezone/Makefile.orig > timezone/Makefile
-
     mkdir   ${BUILD_DIR}  &&
     cd      ${BUILD_DIR}  &&
 
-    echo "libc_cv_ssp=no" > config.cache &&
-
     BUILD_CC=gcc CC="${TARGET}-gcc ${BUILD64}"          \
-    AR=${TARGET}-ar RANLIB=${TARGET}-ranlib             \
+    AR="${TARGET}-ar" RANLIB="${TARGET}-ranlib"         \
     ../configure --prefix=${HOST_TDIR}                  \
                  --host=${TARGET}                       \
                  --build=${HOST}                        \
-                 --disable-profile                      \
                  --enable-kernel=2.6.32                 \
                  --with-binutils=${HOST_CDIR}/bin       \
                  --with-headers=${HOST_TDIR}/include    \
-                 --enable-obsolete-rpc                  \
-                 --cache-file=config.cache
+                 --enable-obsolete-rpc
 
     make ${MAKE_PARALLEL}
 }

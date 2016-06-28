@@ -15,9 +15,9 @@ DIFFUTILS_MIN_REQ="2.8"
 FINDUTILS_MIN_REQ="4.1.20"
 GAWK_MIN_REQ="3.1.5"
 GCC_MIN_REQ="4.1.2"
-GCC_MAX_REQ="4.8.*"
+GCC_MAX_REQ="5.3.0"
 GLIBC_MIN_REQ="2.2.5"
-GLIBC_MAX_REQ="2.19"
+GLIBC_MAX_REQ="2.22"
 GREP_MIN_REQ="2.5"
 GZIP_MIN_REQ="1.2.4"
 MAKE_MIN_REQ="3.80"
@@ -85,7 +85,7 @@ echo norm 'int main(){}' | gcc -v -o /dev/null -x c - > dummy.log 2>&1
 
 if ! grep -q ' error' dummy.log; then
     rm dummy.log
-    echo success "Requirements verified!"
+    echo success "Your host meets all our requirements!"
 else
     echo error "Compilation FAILED. If you like, you can also view dummy.log for more details."
     exit 0

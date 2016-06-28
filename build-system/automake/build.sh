@@ -3,7 +3,7 @@
 shopt -s -o pipefail
 
 PKG_NAME="automake"
-PKG_VERSION="1.14.1"
+PKG_VERSION="1.15"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"

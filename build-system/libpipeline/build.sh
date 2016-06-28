@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="libpipeline"
-PKG_VERSION="1.3.0"
+PKG_VERSION="1.4.1"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -27,7 +27,7 @@ function unpack() {
 }
 
 function build() {
-    PKG_CONFIG_PATH=/tools/lib/pkgconfig \
+    PKG_CONFIG_PATH="${HOST_TDIR}/lib/pkgconfig" \
     ./configure --prefix=/usr
 
     make ${MAKE_PARALLEL}

@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="perl"
-PKG_VERSION="5.20.0"
+PKG_VERSION="5.20.1"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -41,9 +41,7 @@ function build() {
 }
 
 function runTest() {
-    set +e
-    make ${MAKE_PARALLEL} runTest
-    set -e
+    make ${MAKE_PARALLEL} test || true
 }
 
 function instal() {

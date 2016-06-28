@@ -4,12 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="linux"
-PKG_VERSION="3.14"
+PKG_VERSION="4.1"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH=patch-${PKG_VERSION}.21.xz
+PATCH=patch-${PKG_VERSION}.7.xz
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -20,7 +20,7 @@ function showHelp() {
 
 function prepare() {
     ln -sv ../../sources/${TARBALL} ${TARBALL}
-    ln -sv ../../patches/${PATCH}
+    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -28,8 +28,9 @@ function unpack() {
 }
 
 function build() {
-    xzcat ../patch-${PKG_VERSION}.21.xz | patch -Np1 -i -
+    xzcat ../${PATCH} | patch -Np1 -i -
 
+	make ${MAKE_PARALLEL} distclean
     make ${MAKE_PARALLEL} mrproper
 }
 

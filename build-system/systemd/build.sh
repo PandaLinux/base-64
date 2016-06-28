@@ -9,7 +9,7 @@ PKG_VERSION="213"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH="${PKG_NAME}-${PKG_VERSION}-compat-1.patch"
+PATCH=${PKG_NAME}-${PKG_VERSION}-compat-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -54,13 +54,11 @@ function build() {
 }
 
 function runTest() {
-    set +e
     sed -e "s:runTest/udev-test.pl::g" \
         -e "s:runTest-bus-cleanup\$(EXEEXT) ::g" \
         -e "s:runTest-bus-gvariant\$(EXEEXT) ::g" \
         -i Makefile
-    make ${MAKE_PARALLEL} check
-    set -e
+    make ${MAKE_PARALLEL} check || true
 }
 
 function instal() {
@@ -78,6 +76,18 @@ function instal() {
 
 function configure() {
     systemd-machine-id-setup
+
+    cat > /etc/os-release << "EOF"
+# Begin /etc/os-release
+
+NAME=Panda Linux
+ID=panda
+
+PRETTY_NAME=Panda Linux
+ANSI_COLOR=0;33
+
+# End /etc/os-release
+EOF
 }
 
 function clean() {

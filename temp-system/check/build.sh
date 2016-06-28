@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="check"
-PKG_VERSION="0.9.13"
+PKG_VERSION="0.10.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -26,7 +26,7 @@ function unpack() {
 
 function build() {
     ./configure --prefix=${HOST_TDIR} \
-                --build=${HOST}            \
+                --build=${HOST}       \
                 --host=${TARGET}
 
     make ${MAKE_PARALLEL}

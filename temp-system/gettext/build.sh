@@ -4,9 +4,9 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gettext"
-PKG_VERSION="0.19.1"
+PKG_VERSION="0.19.6"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {
@@ -28,15 +28,15 @@ function unpack() {
 
 function build() {
     cd gettext-tools
-    echo "gl_cv_func_wcwidth_works=yes" > config.cache
 
+	EMACS="no"                           \
     ./configure --prefix=${HOST_TDIR}    \
                 --build=${HOST}          \
                 --host=${TARGET}         \
                 --disable-shared         \
-                --cache-file=config.cache
 
     make ${MAKE_PARALLEL} -C gnulib-lib
+    make ${MAKE_PARALLEL} -C intl pluralx.c
     make ${MAKE_PARALLEL} -C src msgfmt msgmerge xgettext
 }
 

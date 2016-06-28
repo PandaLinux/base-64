@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 shopt -s -o pipefail
-#set -e 		# Exit on error
+set -e 		# Exit on error
 
 PKG_NAME="glibc"
-PKG_VERSION="2.19"
+PKG_VERSION="2.22"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
-TARBALL_TZDATA="tzdata2014d.tar.gz"
+TARBALL_TZDATA="tzdata2015g.tar.gz"
 
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
@@ -31,47 +31,38 @@ function unpack() {
 }
 
 function build() {
-    LINKER=$(readelf -l ${HOST_TDIR}/bin/bash | sed -n "s@.*interpret.*${HOST_TDIR}\(.*\)]$@\1@p")
+    LINKER=$(readelf -l ${HOST_TDIR}/bin/bash | sed -n "s|.*interpret.*${HOST_TDIR}\(.*\)]$|\1|p")
     sed -i "s|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=${LINKER} -o|" \
-            scripts/runTest-installation.pl
+            scripts/test-installation.pl
     unset LINKER
 
-    sed -i 's/\\$$(pwd)/`pwd`/' timezone/Makefile
+    sed -i '/RTLDLIST/d' sysdeps/unix/sysv/linux/*/ldd-rewrite.sed
 
     mkdir -pv   ${BUILD_DIR} &&
     cd          ${BUILD_DIR} &&
 
-    echo "slibdir=/lib" >> configparms
+    echo "libc_cv_slibdir=/lib" >> config.cache
 
     ../configure --prefix=/usr                  \
-                 --disable-profile              \
                  --enable-kernel=2.6.32         \
                  --libexecdir=/usr/lib/glibc    \
                  --libdir=/usr/lib              \
-                 --enable-obsolete-rpc
+                 --enable-obsolete-rpc          \
+                 --cache-file=config.cache
 
     make ${MAKE_PARALLEL}
 }
 
 function runTest() {
-    make ${MAKE_PARALLEL} -k check 2>&1 |& tee ../../glibc-check-log; grep Error ../../glibc-check-log
+     TIMEOUTFACTOR=16 make ${MAKE_PARALLEL} -k check || true
 }
 
 function instal() {
     touch /etc/ld.so.conf
-    # Create a symlink to the real loader
-    ln -sv ld-2.19.so /lib/ld-linux.so.2
 
     # Install the package, and remove unneeded files from /usr/include/rpcsvc
     make ${MAKE_PARALLEL} install &&
     rm -v /usr/include/rpcsvc/*.x
-
-    # Now we can remove this symlink. We also need to correct the /usr/bin/ldd script
-    rm -v /lib/ld-linux.so.2
-    sed -i.bak '/RTLDLIST/s%/ld-linux.so.2 /lib64%%' /usr/bin/ldd
-
-    # Check the script to make sure the sed worked correctly, then delete the backup
-    rm -v /usr/bin/ldd.bak
 
     # Install the configuration file and runtime directory for nscd
     cp -v ../nscd/nscd.conf /etc/nscd.conf
@@ -120,7 +111,7 @@ EOF
         zic -L leapseconds -d ${ZONEINFO}/right -y "sh yearistype.sh" ${tz}
     done
 
-    cp -v zone.tab iso3166.tab ${ZONEINFO}
+    cp -v zone.tab zone1970.tab iso3166.tab ${ZONEINFO}
     zic -d ${ZONEINFO} -p America/New_York
     unset ZONEINFO
 
@@ -129,7 +120,6 @@ EOF
 # Begin /etc/ld.so.conf
 
 /usr/local/lib
-/opt/lib
 
 # End /etc/ld.so.conf
 EOF
