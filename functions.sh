@@ -211,3 +211,15 @@ function testBootOrChroot() {
 		# TODO: Add the script to prepare the system for booting procedure
 	fi
 }
+
+# Cleans up the newly created system
+function cleanup() {
+	echo empty
+	echo warn "Cleaning the system..."
+
+	requireRoot rm -rf ${INSTALL_DIR}/{build-system,configure-system,cross-compile-tools,docs,finalize-system,patches,sources,temp-system}
+	requireRoot rm -rf ${INSTALL_DIR}/{*.md,*.git*,*.sh,wget-list,md5sums}
+	requireRoot rm -rf ${TOOLS_DIR} ${HOST_TDIR}
+	requireRoot rm -rf ${CROSS_DIR} ${HOST_CDIR}
+	checkCommand;
+}

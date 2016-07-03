@@ -16,7 +16,7 @@ install -d ${LOGS_DIR}/finalize-system
 install -d ${DONE_DIR}/finalize-system
 
 if [ -f ${DONE_DIR}/configure-system/dhcpcd ]; then
-    _list=(bash-startup-files bash-completion configure-user dpkg sudo busybox cpio linux-kernel lsb initramfs)
+    _list=(bash-startup-files bash-completion configure-user dpkg sudo cpio which nano linux-kernel lsb initramfs)
 
     for i in ${_list[@]}; do
         case $i in
@@ -40,5 +40,7 @@ if [ -f ${DONE_DIR}/configure-system/dhcpcd ]; then
         esac
     done
 fi
+
+[ -f ${DONE_DIR}/$(basename $(pwd))/initramfs ] && touch ${INSTALL_DIR}/.done
 
 echo empty

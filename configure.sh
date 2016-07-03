@@ -93,9 +93,6 @@ function configureSys() {
 
     shopt -u nocasematch
 
-    # Create sources/ folder if it doesn't exist
-    [ ! -d ${DIR}/sources ] && mkdir -p ${DIR}/sources
-
     if [ ! -f dummy.log ]; then
         # Verify that all the packages have been downloaded
         if md5sum --status -c ${DIR}/md5sums; then

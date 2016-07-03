@@ -4,3 +4,4 @@ sources/
 tmp/
 *log*
 *.tar.*
+md5sums

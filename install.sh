@@ -30,10 +30,6 @@ be used by default.
                     TRUE    - Create
                     FALSE   - Skip
 
-    -c          Cleans the system. Defaults to FALSE
-                    TRUE    - Removes the git files except /done and /logs
-                    FALSE   - Skip
-
     -h          Display this help and exit
 
     -i          Sets the installation directory.
@@ -52,7 +48,7 @@ EOF
 }
 
 # Parse options
-while getopts ":t:j:i:hb:rc:m:" opt; do
+while getopts ":t:j:i:hb:rm:" opt; do
     case ${opt} in
 
         b )
@@ -64,15 +60,6 @@ while getopts ":t:j:i:hb:rc:m:" opt; do
                 exit 1
             fi
             ;;
-
-		c)
-			if [ ${OPTARG} = TRUE ] || [ ${OPTARG} = FALSE ]; then
-				sed -i "s#.*DO_CLEANUP=.*#DO_CLEANUP=${OPTARG}#" variables.sh
-			else
-				echo error "Invalid argument. -c only takes either 'TRUE' or 'FALSE'."
-				exit 1
-			fi
-			;;
 
         h )
             show_help;
@@ -218,7 +205,7 @@ fi
 #                               S T A R T   I N S T A L L A T I O N                                  #
 #----------------------------------------------------------------------------------------------------#
 
-if [ ! -f ${DONE_DIR}/finalize-system/initramfs ]; then
+if [ ! -f ${INSTALL_DIR}/.done ]; then
 	echo empty
 	echo success "Starting installation..."
 	echo empty
@@ -246,16 +233,8 @@ if [ ! -f ${DONE_DIR}/finalize-system/initramfs ]; then
 	pushd ${FINALIZE_SYSTEM_DIR} && bash init.sh && popd
 
 else
-	if [ ${DO_CLEANUP} = TRUE ]; then
-		echo empty
-		echo warn "Cleaning the system..."
-
-		requireRoot rm -rf ${INSTALL_DIR}/{build-system,configure-system,cross-compile-tools,docs,finalize-system,patches,sources,temp-system}
-		requireRoot rm -rf ${INSTALL_DIR}/{*.md,*.git*,*.sh,wget-list}
-		requireRoot rm -rf ${TOOLS_DIR} ${HOST_TDIR}
-		requireRoot rm -rf ${CROSS_DIR} ${HOST_CDIR}
-		checkCommand;
-	fi
+	echo success "Installation Finished!"
+	echo empty
 fi
 
 # Creates backup of the system if -b is TRUE
