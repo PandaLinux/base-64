@@ -16,7 +16,7 @@ install -d ${LOGS_DIR}/finalize-system
 install -d ${DONE_DIR}/finalize-system
 
 if [ -f ${DONE_DIR}/configure-system/dhcpcd ]; then
-    _list=(bash-startup-files bash-completion configure-user dpkg sudo cpio which nano linux-kernel lsb initramfs)
+    _list=(bash-startup-files bash-completion configure-user dpkg sudo cpio which nano wget linux-kernel lsb initramfs)
 
     for i in ${_list[@]}; do
         case $i in
