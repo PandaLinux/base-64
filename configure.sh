@@ -109,7 +109,7 @@ function configureSys() {
                  true
 
 			# Update the md5sums file
-			find ${DIR}/sources -type f -exec md5sum {} \; | sort -k 2 > ${DIR}/md5sums
+			find sources -type f -exec md5sum {} \; | sort -k 2 > md5sums
             echo success "Finished downloading..."
             echo empty
         fi
