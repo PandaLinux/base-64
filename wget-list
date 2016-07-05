@@ -12,6 +12,7 @@ http://sourceforge.net/projects/check/files/check/0.10.0/check-0.10.0.tar.gz
 http://clfs.org/files/clfs-network-scripts-20140224.tar.xz
 http://ftp.gnu.org/gnu/coreutils/coreutils-8.23.tar.xz
 ftp://ftp.gnu.org/pub/gnu/cpio/cpio-2.11.tar.bz2
+ftp://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.23/cvs-1.11.23.tar.bz2
 http://dbus.freedesktop.org/releases/dbus/dbus-1.9.0.tar.gz
 http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.5.3.tar.gz
 http://roy.marples.name/downloads/dhcpcd/dhcpcd-6.6.0.tar.bz2

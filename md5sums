@@ -13,6 +13,7 @@ e025414bc6cd79579cc7a32a45d3ae1c  sources/busybox-1.20.2.tar.bz2
 831308d5e80bdaa3f494dc218ee43f78  sources/clfs-network-scripts-20140224.tar.xz
 abed135279f87ad6762ce57ff6d89c41  sources/coreutils-8.23.tar.xz
 20fc912915c629e809f80b96b2e75d7d  sources/cpio-2.11.tar.bz2
+0213ea514e231559d6ff8f80a34117f0  sources/cvs-1.11.23.tar.bz2
 ec6895a4d5c0637b01f0d0e7689e2b36  sources/dbus-1.9.0.tar.gz
 5bda2cdb1af51a80aecce58d6e42bd2f  sources/dejagnu-1.5.3.tar.gz
 c2c4972ea3f0118c01fc03a026fce641  sources/dhcpcd-6.6.0.tar.bz2
