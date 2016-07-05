@@ -108,8 +108,6 @@ function configureSys() {
                  --no-check-certificate             ||
                  true
 
-			# Update the md5sums file
-			find sources -type f -exec md5sum {} \; | sort -k 2 > md5sums
             echo success "Finished downloading..."
             echo empty
         fi
