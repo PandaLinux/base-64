@@ -113,14 +113,12 @@ function setup-user() {
         askConfirm;
 
         echo warn "Deleting user ${PANDA_USER} and /home/${PANDA_HOME}"
-        requireRoot userdel ${PANDA_USER}
-        requireRoot rm -rf /home/${PANDA_HOME}
+        requireRoot userdel -r ${PANDA_USER}
     fi
 
     echo warn "Creating user ${PANDA_USER}..."
     requireRoot groupadd ${PANDA_GROUP}
-    requireRoot useradd -s /bin/bash -g ${PANDA_GROUP} -d /home/${PANDA_HOME} ${PANDA_USER}
-    requireRoot mkdir -p /home/${PANDA_HOME}
+    requireRoot useradd -m -d /home/${PANDA_HOME} -s /bin/bash -g ${PANDA_GROUP} ${PANDA_USER}
     echo empty
 
     read -p "${YELLOW}Do you want to set password for ${PANDA_USER}? [Y/n]:${NORM} " -n 1 -r
