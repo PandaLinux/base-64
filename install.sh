@@ -167,7 +167,7 @@ echo norm "${BOLD}Logs Directory:${NORM}            ${LOGS_DIR}"
 echo empty
 
 # Validate path provided by the user
-# Make sure a filesystem is mounted on this provided path
+# Make sure a filesystem is mounted on the path provided
 if [ ! "$(cat /proc/mounts | grep -w ${INSTALL_DIR} | cut -d' ' -f1)" ]; then
 	echo empty
 	echo error "Invalid installation path."

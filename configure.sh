@@ -42,7 +42,7 @@ function configureSys() {
 
         # Install prerequisites
         requireRoot apt-get install -qq --yes --force-yes bash binutils bison bzip2 build-essential coreutils   \
-            diffutils findutils gawk glibc-2.19-1 grep gzip make ncurses-dev openssl patch perl sed             \
+            diffutils findutils gawk grep gzip make ncurses-dev openssl patch perl sed             \
             squashfs-tools tar texinfo xz-utils
 
         # Check wget version
