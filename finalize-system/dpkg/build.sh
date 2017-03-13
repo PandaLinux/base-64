@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e
 
 PKG_NAME="dpkg"
-PKG_VERSION="1.18.7"
+PKG_VERSION="1.18.18"
 
 TARBALL="${PKG_NAME}_${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -26,18 +26,24 @@ function unpack() {
 }
 
 function build() {
-	export USE_ARCH=64                          &&
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}"    \
-	./configure --prefix=/usr                   \
-				--sysconfdir=/etc               \
+    export USE_ARCH=64                          &&
+    CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}"    \
+    ./configure --prefix=/usr                   \
+                --sysconfdir=/etc               \
                 --libdir=/usr/lib               \
+                --sbindir=/usr/bin              \
+                --disable-start-stop-daemon     \
+                --disable-install-info          \
                 --localstatedir=/var            &&
-	make ${MAKE_PARALLEL} PERL_LIBDIR=$(perl -V:sitelib | cut -d\' -f2)
+    make ${MAKE_PARALLEL} PERL_LIBDIR=$(perl -V:sitelib | cut -d\' -f2)
 }
 
 function instal() {
-	make ${MAKE_PARALLEL} PERL_LIBDIR=$(perl -V:sitelib | cut -d\' -f2) install &&
-	unset USE_ARCH
+    make ${MAKE_PARALLEL} PERL_LIBDIR=$(perl -V:sitelib | cut -d\' -f2) install &&
+    unset USE_ARCH
+
+    install -d "/var/${PKG_NAME}"/updates/  &&
+    touch "/var/lib/${PKG_NAME}/"{status,available}
 }
 
 function clean() {

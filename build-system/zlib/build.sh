@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="zlib"
-PKG_VERSION="1.2.8"
+PKG_VERSION="1.2.11"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -28,7 +28,7 @@ function build() {
     CC="gcc -isystem /usr/include"          \
     CXX="g++ -isystem /usr/include"         \
     LDFLAGS="-Wl,-rpath-link,/usr/lib:/lib" \
-    ./configure --prefix=/usr
+    ./configure --prefix=/usr --enable-static=no
 
     make ${MAKE_PARALLEL}
 }

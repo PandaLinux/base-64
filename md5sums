@@ -18,7 +18,7 @@ ec6895a4d5c0637b01f0d0e7689e2b36  sources/dbus-1.9.0.tar.gz
 5bda2cdb1af51a80aecce58d6e42bd2f  sources/dejagnu-1.5.3.tar.gz
 c2c4972ea3f0118c01fc03a026fce641  sources/dhcpcd-6.6.0.tar.bz2
 99180208ec2a82ce71f55b0d7389f1b3  sources/diffutils-3.3.tar.xz
-073dbf2129a54b0fc627464bf8af4a1b  sources/dpkg_1.18.7.tar.xz
+f68cee943aa275a326c0d7e263ee4242  sources/dpkg_1.18.18.tar.xz
 ce8e4821f5f53d4ebff4195038e38673  sources/e2fsprogs-1.42.13.tar.xz
 80649a0350ff9620fc2da9562d9f2a6a  sources/eudev-1.7.tar.gz
 dd7dab7a5fea97d2a6a43f511449b7cd  sources/expat-2.1.0.tar.gz
@@ -35,7 +35,7 @@ e51e02bf552a0a1fbbdc948fb2f5e83c  sources/glibc-2.22.tar.xz
 c1f1db32fb6598d6a93e6e88796a8632  sources/gperf-3.0.4.tar.gz
 e1015e951a49a82b02e38891026ef5df  sources/grep-2.22.tar.xz
 cc825fa64bc7306a885f2fb2268d3ec5  sources/groff-1.22.3.tar.gz
-a1043102fbc7bcedbf53e7ee3d17ab91  sources/grub-2.00.tar.xz
+a1043102fbc7bcedbf53e7ee3d17ab91  sources/grub-2.02~beta2.tar.xz
 be62932eade308a364ea4bbc91295930  sources/grub-2.02~beta2.tar.xz
 da981f86677d58a106496e68de6f8995  sources/gzip-1.6.tar.xz
 3ba3afb1d1b261383d247f46cb135ee8  sources/iana-etc-2.30.tar.bz2
@@ -80,4 +80,4 @@ cab3d7be354000f629bc601238b629b3  sources/util-linux-2.25.2.tar.xz
 95be0501a466e515422cde4af46b2744  sources/which-2.20.tar.gz
 af4813fe3952362451201ced6fbce379  sources/XML-Parser-2.44.tar.gz
 e26772b69940085c0632589ab1d52e64  sources/xz-5.2.2.tar.xz
-28f1205d8dd2001f26fec1e8c2cebe37  sources/zlib-1.2.8.tar.xz
+1c9f62f0778697a09d36121ead88e08e  sources/zlib-1.2.8.tar.xz
