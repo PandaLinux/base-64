@@ -9,6 +9,8 @@ PKG_VERSION="6.0"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
+PATCH=${PKG_NAME}-${PKG_VERSION}-gcc-5.patch
+
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Ncurses package contains libraries for terminal-independent handling of character screens."
@@ -18,6 +20,7 @@ function showHelp() {
 
 function prepare() {
     ln -sv ../../sources/${TARBALL} ${TARBALL}
+	ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -25,6 +28,8 @@ function unpack() {
 }
 
 function build() {
+	patch -Np1 -i ../${PATCH}
+
     ./configure --prefix=${HOST_TDIR}    \
                 --with-shared            \
                 --build=${HOST}          \
