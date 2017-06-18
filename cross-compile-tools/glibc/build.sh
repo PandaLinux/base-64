@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="glibc"
-PKG_VERSION="2.22"
+PKG_VERSION="2.25"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -37,7 +37,7 @@ function build() {
     ../configure --prefix=${HOST_TDIR}                  \
                  --host=${TARGET}                       \
                  --build=${HOST}                        \
-                 --enable-kernel=2.6.32                 \
+                 --enable-kernel=3.12.0                 \
                  --with-binutils=${HOST_CDIR}/bin       \
                  --with-headers=${HOST_TDIR}/include    \
                  --enable-obsolete-rpc
