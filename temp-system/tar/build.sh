@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="tar"
-PKG_VERSION="1.28"
+PKG_VERSION="1.29"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
