@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gmp"
-PKG_VERSION="6.0.0"
+PKG_VERSION="6.1.2"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}a.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
