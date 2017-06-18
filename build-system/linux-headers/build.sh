@@ -4,12 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="linux"
-PKG_VERSION="4.1"
+PKG_VERSION="4.9.21"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH=patch-${PKG_VERSION}.7.xz
+PATCH=patch-${PKG_VERSION}.21.xz
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
