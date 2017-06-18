@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="diffutils"
-PKG_VERSION="3.3"
+PKG_VERSION="3.5"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -25,6 +25,8 @@ function unpack() {
 }
 
 function build() {
+	sed -i '233,237 s/max)/max) \\/' lib/intprops.h
+
     ./configure --prefix=${HOST_TDIR}    \
                 --build=${HOST}          \
                 --host=${TARGET}
