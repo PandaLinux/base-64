@@ -4,12 +4,12 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="vim"
-PKG_VERSION="7.4"
+PKG_VERSION="8.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}74"
 
-PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-7.patch
+PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -37,6 +37,7 @@ vim_cv_stat_ignores_slash=no
 vim_cv_terminfo=yes
 vim_cv_toupper_broken=no
 vim_cv_tty_group=world
+vim_cv_tgent=zero
 EOF
 
     printf '#define SYS_VIMRC_FILE "%s/etc/vimrc"' "${HOST_TDIR}" >> src/feature.h
