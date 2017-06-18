@@ -6,7 +6,7 @@ set -e 		# Exit on error
 PKG_NAME="gmp"
 PKG_VERSION="6.1.2"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}a.tar.xz"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {
