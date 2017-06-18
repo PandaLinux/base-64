@@ -4,12 +4,10 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="coreutils"
-PKG_VERSION="8.23"
+PKG_VERSION="8.27"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
-
-PATCH=${PKG_NAME}-${PKG_VERSION}-noman-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -28,19 +26,14 @@ function unpack() {
 }
 
 function build() {
-    cat > config.cache << EOF
-fu_cv_sys_stat_statfs2_bsize=yes
-gl_cv_func_working_mkstemp=yes
-EOF
-
-    patch -Np1 -i ../${PATCH}
-
     ./configure --prefix=${HOST_TDIR}             \
                 --build=${HOST}                   \
                 --host=${TARGET}                  \
                 --enable-install-program=hostname \
                 --cache-file=config.cache
 
+	sed -i -e 's/^man1_MANS/#man1_MANS/' Makefile
+				
     make ${MAKE_PARALLEL}
 }
 
