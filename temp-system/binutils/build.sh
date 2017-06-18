@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="binutils"
-PKG_VERSION="2.25.1"
+PKG_VERSION="2.28"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -40,6 +40,7 @@ function build() {
                  --disable-multilib                 \
                  --enable-gold=yes                  \
                  --enable-plugins                   \
+				 --with-system-zlib 				\
                  --enable-threads
 
     make ${MAKE_PARALLEL}
