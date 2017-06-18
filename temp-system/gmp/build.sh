@@ -28,6 +28,7 @@ function unpack() {
 function build() {
 	source ~/.bashrc
 
+	CXX=g++                             \
     CC_FOR_BUILD=gcc                    \
     ./configure --prefix=${HOST_TDIR}   \
                 --build=${HOST}         \
