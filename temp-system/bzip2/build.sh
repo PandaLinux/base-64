@@ -26,7 +26,7 @@ function unpack() {
 
 function build() {
     cp -v Makefile{,.orig}
-    sed -e 's@^\(all:.*\) test@\1@g' Makefile.orig > Makefile
+    sed -e '/^all/s/ test$//' Makefile.orig > Makefile
 
     make CC="${CC}" AR="${AR}" RANLIB="${RANLIB}"
 }
