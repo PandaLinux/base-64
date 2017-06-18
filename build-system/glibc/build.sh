@@ -4,10 +4,10 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="glibc"
-PKG_VERSION="2.22"
+PKG_VERSION="2.25"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
-TARBALL_TZDATA="tzdata2015g.tar.gz"
+TARBALL_TZDATA="tzdata2017b.tar.gz"
 
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
@@ -31,7 +31,7 @@ function unpack() {
 }
 
 function build() {
-    LINKER=$(readelf -l ${HOST_TDIR}/bin/bash | sed -n "s|.*interpret.*${HOST_TDIR}\(.*\)]$|\1|p")
+    LINKER=$(readelf -l ${HOST_TDIR}/bin/bash | sed -n "s@.*interpret.*${HOST_TDIR}\(.*\)]$@\1@p")
     sed -i "s|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=${LINKER} -o|" \
             scripts/test-installation.pl
     unset LINKER
@@ -43,11 +43,12 @@ function build() {
 
     echo "libc_cv_slibdir=/lib" >> config.cache
 
-    ../configure --prefix=/usr                  \
-                 --enable-kernel=2.6.32         \
-                 --libexecdir=/usr/lib/glibc    \
-                 --libdir=/usr/lib              \
-                 --enable-obsolete-rpc          \
+    ../configure --prefix=/usr                   \
+                 --enable-kernel=3.12.0          \
+                 --libexecdir=/usr/lib/glibc     \
+                 --libdir=/usr/lib               \
+                 --enable-obsolete-rpc           \
+				 --enable-stack-protector=strong \
                  --cache-file=config.cache
 
     make ${MAKE_PARALLEL}
