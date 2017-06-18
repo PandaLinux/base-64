@@ -71,15 +71,3 @@ http://search.cpan.org/CPAN/authors/id/T/TO/TODDR/XML-Parser-2.44.tar.gz
 http://tukaani.org/xz/xz-5.2.3.tar.xz
 http://zlib.net/zlib-1.2.11.tar.xz
 http://ftp.gnu.org/gnu/grub/grub-2.00.tar.xz
-http://patches.clfs.org/dev/automake-1.15-perl_5_26-1.patch
-http://patches.clfs.org/dev/bash-4.4-branch_update-1.patch
-http://patches.clfs.org/dev/coreutils-8.27-uname-1.patch
-http://patches.clfs.org/dev/iana-etc-2.30-numbers_update-20140202-2.patch.xz
-http://patches.clfs.org/dev/intltool-0.51.0-perl-5.22-compatibility.patch
-http://patches.clfs.org/dev/mpfr-3.1.5-fixes-1.patch
-http://patches.clfs.org/dev/ncurses-6.0-bash_fix-1.patch
-http://patches.clfs.org/dev/readline-7.0-branch_update-1.patch
-http://patches.clfs.org/dev/sysvinit-2.88dsf-tools_updates-1.patch
-http://patches.clfs.org/dev/vim-8.0-branch_update-1.patch
-http://patches.clfs.org/dev/gcc-7.1.0-pure64-1.patch
-http://patches.clfs.org/dev/gcc-7.1.0-pure64_specs-1.patch
