@@ -35,7 +35,21 @@ function build() {
 root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:/bin:/bin/false
 daemon:x:2:6:/sbin:/bin/false
+adm:x:3:16:adm:/var/adm:/bin/false
+lp:x:10:9:lp:/var/spool/lp:/bin/false
 messagebus:x:27:27:D-Bus Message Daemon User:/dev/null:/bin/false
+mail:x:30:30:mail:/var/mail:/bin/false
+news:x:31:31:news:/var/spool/news:/bin/false
+operator:x:50:0:operator:/root:/bin/bash
+postmaster:x:51:30:postmaster:/var/spool/mail:/bin/false
+systemd-bus-proxy:x:71:72:systemd Bus Proxy:/:/bin/false
+systemd-journal-gateway:x:73:73:systemd Journal Gateway:/:/bin/false
+systemd-journal-remote:x:74:74:systemd Journal Remote:/:/bin/false
+systemd-journal-upload:x:75:75:systemd Journal Upload:/:/bin/false
+systemd-network:x:76:76:systemd Network Management:/:/bin/false
+systemd-resolve:x:77:77:systemd Resolver:/:/bin/false
+systemd-timesync:x:78:78:systemd Time Synchronization:/:/bin/false
+systemd-coredump:x:79:79:systemd Core Dumper:/:/bin/false
 nobody:x:65534:65533:Unprivileged User:/dev/null:/bin/false
 EOF
 
@@ -57,11 +71,24 @@ utmp:x:13:
 usb:x:14:
 cdrom:x:15:
 adm:x:16:
-messagebus:x:27:
-systemd-journal:x:28:
+console:x:17:
+cdrw:x:18:
 mail:x:30:
-wheel:x:39:
+news:x:31:news
+messagebus:x:27:
 nogroup:x:65533:
+systemd-bus-proxy:x:72:
+systemd-journal:x:28:
+systemd-journal-gateway:x:73:
+systemd-journal-remote:x:74:
+systemd-journal-upload:x:75:
+systemd-network:x:76:
+systemd-resolve:x:77:
+systemd-timesync:x:78:
+systemd-coredump:x:79:
+wheel:x:39:
+users:x:1000:
+nobody:x:65533:
 EOF
 }
 
