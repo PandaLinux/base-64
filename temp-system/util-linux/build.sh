@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="util-linux"
-PKG_VERSION="2.25.2"
+PKG_VERSION="2.29.2"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -31,8 +31,12 @@ function build() {
                 --host=${TARGET}              \
                 --disable-makeinstall-chown   \
                 --disable-makeinstall-setuid  \
+				--disable-nologin			  \
                 --without-python
 
+	sed -i 's/-lncursesw -ltinfo/-lncurses/' Makefile
+	sed -i 's/LIBNCURSESW/LIBNCURSES/' config.h
+				
     make ${MAKE_PARALLEL}
 }
 
