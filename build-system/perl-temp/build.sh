@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="perl"
-PKG_VERSION="5.20.1"
+PKG_VERSION="5.26.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -28,7 +28,7 @@ function build() {
     sed -i "s@/usr/include@${HOST_TDIR}/include@g" ext/Errno/Errno_pm.PL
 
     ./configure.gnu --prefix=${HOST_TDIR} \
-                    -Dcc=gcc
+                    -Dcc="gcc"
 
     make ${MAKE_PARALLEL}
 }
