@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gcc"
-PKG_VERSION="5.3.0"
+PKG_VERSION="7.1.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -60,8 +60,7 @@ function build() {
                  --with-mpc=${HOST_CDIR}          \
                  --with-mpfr=${HOST_CDIR}         \
                  --with-gmp=${HOST_CDIR}          \
-                 --with-isl=${HOST_CDIR}          \
-                 --with-system-zlib
+                 --with-isl=${HOST_CDIR}
 
     make ${MAKE_PARALLEL} AS_FOR_TARGET="${TARGET}-as" \
                           LD_FOR_TARGET="${TARGET}-ld"
