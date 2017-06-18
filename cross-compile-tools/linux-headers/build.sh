@@ -9,7 +9,7 @@ PKG_VERSION="4.9"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-PATCH=patch-${PKG_VERSION}.7.xz
+PATCH=patch-${PKG_VERSION}.21.xz
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
