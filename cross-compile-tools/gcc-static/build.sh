@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gcc"
-PKG_VERSION="5.3.0"
+PKG_VERSION="7.1.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -74,9 +74,8 @@ function build() {
                  --disable-libstdc++-v3             \
                  --disable-threads                  \
                  --disable-multilib                 \
-                 --with-system-zlib                 \
                  --enable-languages=c               \
-                 --with-glibc-version=2.22
+                 --with-glibc-version=2.25
 
     make ${MAKE_PARALLEL} all-gcc all-target-libgcc
 }
