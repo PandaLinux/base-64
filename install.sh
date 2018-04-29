@@ -71,12 +71,10 @@ while getopts ":t:j:i:hb:rm:" opt; do
             # Make sure a filesystem is mounted on this provided path
             if [ "$(cat /proc/mounts | grep -w ${OPTARG} | cut -d" " -f1)" ]; then
                 sed -i "s#.*INSTALL_DIR=.*#INSTALL_DIR=${OPTARG}#" variables.sh
-                sed -i "s#.*TOOLS_DIR=.*#TOOLS_DIR=${OPTARG}/tools#" variables.sh
                 sed -i "s#.*DONE_DIR=.*#DONE_DIR=${OPTARG}/done#" variables.sh
                 sed -i "s#.*LOGS_DIR=.*#LOGS_DIR=${OPTARG}/logs#" variables.sh
 
                 sed -i "s#.*INSTALL_DIR=.*#export INSTALL_DIR=${OPTARG}#" ~/.bashrc
-                sed -i "s#.*TOOLS_DIR=.*#export TOOLS_DIR=${OPTARG}/tools#" ~/.bashrc
                 sed -i "s#.*DONE_DIR=.*#export DONE_DIR=${OPTARG}/done#" ~/.bashrc
                 sed -i "s#.*LOGS_DIR=.*#export LOGS_DIR=${OPTARG}/logs#" ~/.bashrc
 			else
@@ -103,7 +101,6 @@ while getopts ":t:j:i:hb:rm:" opt; do
             sed -i "s#.*INSTALL_DIR=.*#INSTALL_DIR=/tmp/panda64#" variables.sh
             sed -i "s#.*MAKE_PARALLEL=.*#MAKE_PARALLEL=-j$(cat /proc/cpuinfo | grep processor | wc -l)#" variables.sh
             sed -i "s#.*MAKE_TESTS=.*#MAKE_TESTS=TRUE#" variables.sh
-            sed -i "s#.*TOOLS_DIR=.*#TOOLS_DIR=/tmp/panda64/tools#" variables.sh
             sed -i "s#.*DONE_DIR=.*#DONE_DIR=/tmp/panda64/done#" variables.sh
             sed -i "s#.*LOGS_DIR=.*#LOGS_DIR=/tmp/panda64/logs#" variables.sh
 
@@ -111,7 +108,6 @@ while getopts ":t:j:i:hb:rm:" opt; do
             sed -i "s#.*INSTALL_DIR=.*#export INSTALL_DIR=/tmp/panda64#" ~/.bashrc
             sed -i "s#.*MAKE_PARALLEL=.*#export MAKE_PARALLEL=-j$(cat /proc/cpuinfo | grep processor | wc -l)#" ~/.bashrc
             sed -i "s#.*MAKE_TESTS=.*#export MAKE_TESTS=TRUE#" ~/.bashrc
-            sed -i "s#.*TOOLS_DIR=.*#export TOOLS_DIR=/tmp/panda64/tools#" ~/.bashrc
             sed -i "s#.*DONE_DIR=.*#export DONE_DIR=/tmp/panda64/done#" ~/.bashrc
             sed -i "s#.*LOGS_DIR=.*#export LOGS_DIR=/tmp/panda64/logs#" ~/.bashrc
             ;;
@@ -151,7 +147,7 @@ echo norm "${BOLD}Host:${NORM}                      ${PANDA_HOST}"
 echo norm "${BOLD}Target:${NORM}                    ${TARGET}"
 echo norm "${BOLD}Path:${NORM}                      ${PATH}"
 echo empty
-echo norm "${BOLD}Tools Directory:${NORM}           ${TOOLS_DIR}"
+echo norm "${BOLD}Tools Directory:${NORM}           /tools"
 echo empty
 echo norm "${BOLD}Done Directory:${NORM}            ${DONE_DIR}"
 echo norm "${BOLD}Logs Directory:${NORM}            ${LOGS_DIR}"
@@ -179,15 +175,15 @@ if [ ! -d ${INSTALL_DIR}/dev ]; then
 	requireRoot chown -R `whoami` ${INSTALL_DIR}
     # Create necessary directories and symlinks
     echo warn "Creating necessary folders..."
-    install -d ${TOOLS_DIR}
+    install -d ${INSTALL_DIR}/tools
     install -d ${LOGS_DIR}
     install -d ${DONE_DIR}
 
-    if [ $(readlink ${HOST_TDIR}) ]; then
-        requireRoot rm ${HOST_TDIR}
+    if [ $(readlink ${INSTALL_DIR}/tools) ]; then
+        requireRoot rm ${INSTALL_DIR}/tools
     fi
 
-    requireRoot ln -s ${TOOLS_DIR} /
+    requireRoot ln -s ${INSTALL_DIR}/tools /
 fi
 
 #----------------------------------------------------------------------------------------------------#
