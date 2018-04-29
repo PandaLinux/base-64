@@ -7,7 +7,7 @@ PKG_NAME="vim"
 PKG_VERSION="8.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
-SRC_DIR="${PKG_NAME}74"
+SRC_DIR="${PKG_NAME}80"
 
 PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-1.patch
 
