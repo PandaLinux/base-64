@@ -176,8 +176,8 @@ if [ ! -d ${INSTALL_DIR}/dev ]; then
     # Create necessary directories and symlinks
     echo warn "Creating necessary folders..."
     
-    if [ $(readlink ${INSTALL_DIR}/tools) ]; then
-        requireRoot rm ${INSTALL_DIR}/tools
+    if [ $(readlink /tools) ]; then
+        requireRoot rm /tools
     fi
     
     install -d ${INSTALL_DIR}/tools
