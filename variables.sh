@@ -29,7 +29,7 @@ FINALIZE_SYSTEM_DIR=${INSTALL_DIR}/finalize-system
 ## Rest of the configurations
 PANDA_HOST=$(echo ${MACHTYPE} | sed -e 's/-[^-]*/-panda/')
 TARGET="x86_64-panda-linux-gnu"
-PATH=/tools/bin:/bin:/usr/bin"
+PATH="/tools/bin:/bin:/usr/bin"
 BUILD64="-m64"
 LC_ALL="POSIX"
 VM_LINUZ="vmlinuz-4.15.3-systemd"
