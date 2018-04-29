@@ -31,7 +31,7 @@ function unpack() {
 }
 
 function build() {
-    LINKER=$(readelf -l ${HOST_TDIR}/bin/bash | sed -n "s@.*interpret.*${HOST_TDIR}\(.*\)]$@\1@p")
+    LINKER= $(readelf -l ${HOST_TDIR}/bin/bash | sed -n 's@.*interpret.*"${HOST_TDIR}"\(.*\)]$@\1@p')
     sed -i "s|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=${LINKER} -o|" \
             scripts/test-installation.pl
     unset LINKER
