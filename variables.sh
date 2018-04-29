@@ -17,15 +17,12 @@ PANDA_HOME="den"
 # Set install directory
 INSTALL_DIR=/tmp/panda64
 TOOLS_DIR=${INSTALL_DIR}/tools
-CROSS_DIR=${INSTALL_DIR}/cross-tools
 HOST_TDIR=/$(basename ${TOOLS_DIR})
-HOST_CDIR=/$(basename ${CROSS_DIR})
 LOGS_DIR=${INSTALL_DIR}/logs
 DONE_DIR=${INSTALL_DIR}/done
 
 # Package installation directories
 ROOT_DIR=/home/${PANDA_HOME}
-CROSS_COMPILE_DIR=${INSTALL_DIR}/cross-compile-tools
 TEMP_SYSTEM_DIR=${INSTALL_DIR}/temp-system
 BUILD_SYSTEM_DIR=${INSTALL_DIR}/build-system
 CONFIGURE_SYSTEM_DIR=${INSTALL_DIR}/configure-system
