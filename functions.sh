@@ -77,10 +77,10 @@ function chrootTmp() {
     sudo mount -t sysfs sysfs   ${INSTALL_DIR}/sys
     sudo mount -t tmpfs tmpfs   ${INSTALL_DIR}/run
 
-    sudo chroot ${INSTALL_DIR} ${HOST_TDIR}/bin/env -i  \
+    sudo chroot ${INSTALL_DIR} /tools/bin/env -i  \
     HOME=/root TERM=${TERM} PS1='\u:\w\$ '              \
-    PATH=/bin:/usr/bin:/sbin:/usr/sbin:${HOST_TDIR}/bin \
-    ${HOST_TDIR}/bin/bash -c "$@" +h
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin \
+    /tools/bin/bash -c "$@" +h
 
     sync && sleep 1
     sudo umount -l ${INSTALL_DIR}/{run,sys,proc,dev/pts,dev}
@@ -164,7 +164,7 @@ function setup-env() {
 	# This sets up key mapping so the delete key works:
 	cp /etc/inputrc ~/.inputrc > /dev/null
 
-	list=(INSTALL_DIR TOOLS_DIR HOST_TDIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
+	list=(INSTALL_DIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
           MAKE_PARALLEL LC_ALL VM_LINUZ SYSTEM_MAP DO_BACKUP ROOT_DIR   \
           DONE_DIR)
 	for i in ${list[@]}; do
@@ -204,7 +204,7 @@ function testBootOrChroot() {
 	if [ $(uname -m) != 'x86_64' ]; then
 		echo empty
 		echo warn "Testing the system!"
-		${TOOLS_DIR}/lib/libc.so.6 > /dev/null && ${TOOLS_DIR}/bin/gcc --version > /dev/null
+		/tools/lib/libc.so.6 > /dev/null && /tools/bin/gcc --version > /dev/null
 		checkCommand "Please submit this issue on our Github account!";
 		# TODO: Add the script to prepare the system for booting procedure
 	fi
@@ -217,6 +217,6 @@ function cleanup() {
 
 	requireRoot rm -rf ${INSTALL_DIR}/{build-system,configure-system,cross-compile-tools,docs,finalize-system,patches,sources,temp-system}
 	requireRoot rm -rf ${INSTALL_DIR}/{*.md,*.git*,*.sh,wget-list,md5sums}
-	requireRoot rm -rf ${TOOLS_DIR} ${HOST_TDIR}
+	requireRoot rm -rf ${INSTALL_DIR}/tools
 	checkCommand;
 }
