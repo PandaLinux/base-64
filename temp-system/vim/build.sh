@@ -9,8 +9,6 @@ PKG_VERSION="8.0"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}80"
 
-PATCH=${PKG_NAME}-${PKG_VERSION}-branch_update-1.patch
-
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e "Description: The Vim package contains a powerful text editor."
@@ -20,7 +18,6 @@ function showHelp() {
 
 function prepare() {
     ln -sv ../../sources/${TARBALL} ${TARBALL}
-    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
@@ -28,8 +25,6 @@ function unpack() {
 }
 
 function build() {
-    patch -Np1 -i ../${PATCH}
-
     cat > src/auto/config.cache << "EOF"
 vim_cv_getcwd_broken=no
 vim_cv_memmove_handles_overlap=yes
