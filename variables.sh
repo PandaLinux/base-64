@@ -16,8 +16,6 @@ PANDA_HOME="den"
 
 # Set install directory
 INSTALL_DIR=/tmp/panda64
-TOOLS_DIR=${INSTALL_DIR}/tools
-HOST_TDIR=/$(basename ${TOOLS_DIR})
 LOGS_DIR=${INSTALL_DIR}/logs
 DONE_DIR=${INSTALL_DIR}/done
 
@@ -31,7 +29,7 @@ FINALIZE_SYSTEM_DIR=${INSTALL_DIR}/finalize-system
 ## Rest of the configurations
 PANDA_HOST=$(echo ${MACHTYPE} | sed -e 's/-[^-]*/-panda/')
 TARGET="x86_64-panda-linux-gnu"
-PATH="${HOST_TDIR}/bin:/bin:/usr/bin"
+PATH=/tools/bin:/bin:/usr/bin"
 BUILD64="-m64"
 LC_ALL="POSIX"
 VM_LINUZ="vmlinuz-4.15.3-systemd"
@@ -46,6 +44,6 @@ GREEN=`tput setaf 2`
 YELLOW=`tput setaf 3`
 
 MAKE_TESTS=TRUE
-MAKE_PARALLEL=-j4
+MAKE_PARALLEL=-j1
 DO_BACKUP=FALSE
 MIN_SPACE_REQ=6291456
