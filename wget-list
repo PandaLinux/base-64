@@ -39,7 +39,7 @@ http://clfs.org/files/packages/git/iputils-s20150815.tar.xz
 http://isl.gforge.inria.fr/isl-0.17.1.tar.xz
 http://www.kernel.org/pub/linux/utils/kbd/kbd-2.0.4.tar.xz
 http://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-24.tar.xz
-http://www.greenwoodsoftware.com/less/less-491.tar.gz
+http://www.greenwoodsoftware.com/less/less-530.tar.gz
 http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.25.tar.xz
 http://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.4.1.tar.gz
 http://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz
@@ -48,7 +48,7 @@ http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz
 http://ftp.gnu.org/gnu/make/make-4.2.1.tar.bz2
 http://clfs.org/files/packages/git/man-db-2.7.6.1.tar.xz
 http://www.kernel.org/pub/linux/docs/man-pages/man-pages-4.09.tar.xz
-http://www.multiprecision.org/mpc/download/mpc-1.0.3.tar.gz
+https://ftp.gnu.org/gnu/mpc/mpc-1.1.0.tar.gz
 http://www.mpfr.org/mpfr-3.1.5/mpfr-3.1.5.tar.xz
 http://ftp.gnu.org/gnu/ncurses/ncurses-6.0.tar.gz
 http://ftp.gnu.org/gnu/patch/patch-2.7.5.tar.xz
