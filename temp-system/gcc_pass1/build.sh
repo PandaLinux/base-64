@@ -4,13 +4,11 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gcc"
-PKG_VERSION="7.1.0"
+PKG_VERSION="7.3.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
-
-PATCH=${PKG_NAME}-${PKG_VERSION}-pure64_specs-1.patch
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -21,22 +19,32 @@ function showHelp() {
 
 function prepare() {
     ln -sv ../../sources/${TARBALL} ${TARBALL}
-    ln -sv ../../patches/${PATCH} ${PATCH}
 }
 
 function unpack() {
     tar xf ${TARBALL}
+    tar -xf ../../sources/mpfr-4.0.1.tar.xz && mv -v mpfr-4.0.1 mpfr
+    tar -xf ../../sources/gmp-6.1.2.tar.xz && mv -v gmp-6.1.2 gmp
+    tar -xf ../../sources/mpc-1.1.0.tar.gz && mv -v mpc-1.1.0 mpc
 }
 
 function build() {
-    patch -Np1 -i ../${PATCH}
-
-    printf '\n#undef STANDARD_STARTFILE_PREFIX_1\n#define STANDARD_STARTFILE_PREFIX_1 "%s/lib/"\n' "${HOST_TDIR}" >> gcc/config/linux.h
-    printf '\n#undef STANDARD_STARTFILE_PREFIX_2\n#define STANDARD_STARTFILE_PREFIX_2 ""\n' >> gcc/config/linux.h
-
-    cp -v gcc/Makefile.in{,.orig}
-	sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
-
+    for file in gcc/config/{linux,i386/linux{,64}}.h
+do
+  cp -uv $file{,.orig}
+  sed -e 's@/lib\(64\)\?\(32\)\?/ld@"${HOST_TDIR}"&@g' \
+      -e 's@/usr@"${HOST_TDIR}"@g' $file.orig > $file
+  echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "${HOST_TDIR}/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+  touch $file.orig
+done
+    
+    sed -e '/m64=/s/lib64/lib/' \
+        -i.orig gcc/config/i386/t-linux64
+    
     mkdir   ${BUILD_DIR}  &&
     cd      ${BUILD_DIR}  &&
 
@@ -51,9 +59,32 @@ function build() {
                  --with-native-system-header-dir=${HOST_TDIR}/include \
                  --disable-libssp                    \
                  --enable-install-libiberty
+		 
+		 
+    ../configure                                       \
+    --target=${TARGET}                              \
+    --prefix=${HOST_TDIR}                                \
+    --with-glibc-version=2.11                      \
+    --with-sysroot=${INSTALL_DIR}                            \
+    --with-newlib                                  \
+    --without-headers                              \
+    --with-local-prefix=${HOST_TDIR}                     \
+    --with-native-system-header-dir=${HOST_TDIR}/include \
+    --disable-nls                                  \
+    --disable-shared                               \
+    --disable-multilib                             \
+    --disable-decimal-float                        \
+    --disable-threads                              \
+    --disable-libatomic                            \
+    --disable-libgomp                              \
+    --disable-libmpx                               \
+    --disable-libquadmath                          \
+    --disable-libssp                               \
+    --disable-libvtv                               \
+    --disable-libstdcxx                            \
+    --enable-languages=c,c++
 
-    make ${MAKE_PARALLEL} AS_FOR_TARGET="${AS}" \
-                          LD_FOR_TARGET="${LD}"
+    make ${MAKE_PARALLEL}
 }
 
 function instal() {
@@ -61,7 +92,7 @@ function instal() {
 }
 
 function clean() {
-    rm -rf ${SRC_DIR} ${TARBALL} ${PATCH}
+    rm -rf ${SRC_DIR} ${TARBALL} mpfr gmp mpc
 }
 
 # Run the installation procedure
