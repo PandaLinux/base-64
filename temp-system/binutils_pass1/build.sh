@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="binutils"
-PKG_VERSION="2.28"
+PKG_VERSION="2.30"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -28,22 +28,17 @@ function unpack() {
 function build() {
     mkdir   ${BUILD_DIR}  &&
     cd      ${BUILD_DIR}  &&
-
-    ../configure --prefix=${HOST_TDIR}              \
-                 --build=${HOST}                    \
-                 --host=${TARGET}                   \
-                 --target=${TARGET}                 \
-                 --with-lib-path=${HOST_TDIR}/lib   \
-                 --disable-nls                      \
-                 --enable-shared                    \
-                 --enable-64-bit-bfd                \
-                 --disable-multilib                 \
-                 --enable-gold=yes                  \
-                 --enable-plugins                   \
-				 --with-system-zlib 				\
-                 --enable-threads
+		 
+    ../configure --prefix=${HOST_TDIR}            \
+             --with-sysroot=${INSTALL_DIR}        \
+             --with-lib-path=${HOST_TDIR}/lib \
+             --target=${TARGET}          \
+             --disable-nls              \
+             --disable-werror
 
     make ${MAKE_PARALLEL}
+    
+    mkdir -v ${HOST_TDIR}/lib && ln -sv lib ${HOST_TDIR}/lib64 ;;
 }
 
 function instal() {
