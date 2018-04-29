@@ -8,7 +8,7 @@ e54590ec68d6c1239f67b5b44e92022c  sources/libpipeline-1.4.1.tar.gz
 5d89d64d94bcfefa9ce8f59f4b81bdcb  sources/parted-3.1.tar.xz
 dd7694f28ccc6e6bfb326b1790adb5e9  sources/uname_hack-20080713.tar.bz2
 fa572afd6da969e25c1455f728750ec4  sources/hfsutils-3.2.6.tar.gz
-63c40c2068fcbb7e1d5c1d281115d973  sources/util-linux-2.29.2.tar.xz
+e0d8a25853f88cd15ff557e5d8cb4ea7  sources/util-linux-2.32.tar.xz
 a1802fec550baaeecff6c381629653ef  sources/tar-1.29.tar.xz
 935c0fd6eb208288262b385fa656f1bf  sources/psmisc-22.21.tar.gz
 60fb79cab777e3f71ca43d298adacbd5  sources/xz-5.2.3.tar.xz
