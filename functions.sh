@@ -164,8 +164,8 @@ function setup-env() {
 	# This sets up key mapping so the delete key works:
 	cp /etc/inputrc ~/.inputrc > /dev/null
 
-	list=(INSTALL_DIR TOOLS_DIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
-          MAKE_PARALLEL LC_ALL VM_LINUZ SYSTEM_MAP DO_BACKUP HOST_TDIR ROOT_DIR   \
+	list=(INSTALL_DIR TOOLS_DIR HOST_TDIR TARGET PATH PANDA_HOST BUILD64 MAKE_TESTS         \
+          MAKE_PARALLEL LC_ALL VM_LINUZ SYSTEM_MAP DO_BACKUP ROOT_DIR   \
           DONE_DIR)
 	for i in ${list[@]}; do
 		echo norm "export $i=${!i}" >> ~/.bashrc
