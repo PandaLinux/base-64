@@ -31,11 +31,11 @@ FINALIZE_SYSTEM_DIR=${INSTALL_DIR}/finalize-system
 ## Rest of the configurations
 PANDA_HOST=$(echo ${MACHTYPE} | sed -e 's/-[^-]*/-cross/')
 TARGET="x86_64-panda-linux-gnu"
-PATH="${HOST_CDIR}/bin:/bin:/usr/bin"
+PATH="${HOST_TDIR}/bin:/bin:/usr/bin"
 BUILD64="-m64"
 LC_ALL="POSIX"
-VM_LINUZ="vmlinuz-4.1.7-systemd"
-SYSTEM_MAP="System.map-4.1.7"
+VM_LINUZ="vmlinuz-4.15.3-systemd"
+SYSTEM_MAP="System.map-4.15.3"
 
 # Set fonts for Help.
 NORM=`tput sgr0`
