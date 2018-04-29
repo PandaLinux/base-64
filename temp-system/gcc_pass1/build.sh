@@ -6,7 +6,7 @@ set -e 		# Exit on error
 PKG_NAME="gcc"
 PKG_VERSION="7.3.0"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
 
@@ -23,9 +23,9 @@ function prepare() {
 
 function unpack() {
     tar xf ${TARBALL}
-    tar -xf ../../sources/mpfr-4.0.1.tar.xz && mv -v mpfr-4.0.1 mpfr
-    tar -xf ../../sources/gmp-6.1.2.tar.xz && mv -v gmp-6.1.2 gmp
-    tar -xf ../../sources/mpc-1.1.0.tar.gz && mv -v mpc-1.1.0 mpc
+    tar -xf ../../sources/mpfr-4.0.1.tar.xz && mv mpfr-4.0.1 ${SRC_DIR}/mpfr
+    tar -xf ../../sources/gmp-6.1.2.tar.xz && mv gmp-6.1.2 ${SRC_DIR}/gmp
+    tar -xf ../../sources/mpc-1.1.0.tar.gz && mv mpc-1.1.0 ${SRC_DIR}/mpc
 }
 
 function build() {
@@ -98,6 +98,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f ${TOOLS_DIR}/bin/gcc ]; then
+if [ -f ${TOOLS_DIR}/bin/${TARGET}-gcc ]; then
     touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
 fi
