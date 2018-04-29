@@ -4,7 +4,7 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="util-linux"
-PKG_VERSION="2.29.2"
+PKG_VERSION="2.32"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
@@ -26,9 +26,17 @@ function unpack() {
 }
 
 function build() {
-    ./configure --enable-write \
-    ADJTIME_PATH=/var/lib/hwclock/adjtime
-
+    ./configure --disable-chfn-chsh  \
+            --disable-login      \
+            --disable-nologin    \
+            --disable-su         \
+            --disable-setpriv    \
+            --disable-runuser    \
+            --disable-pylibmount \
+            --disable-static     \
+            --without-python     \
+            --without-systemd    \
+            --without-systemdsystemunitdir
     make ${MAKE_PARALLEL}
 }
 
