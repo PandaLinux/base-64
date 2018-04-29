@@ -6,7 +6,7 @@ set -e 		# Exit on error
 PKG_NAME="perl"
 PKG_VERSION="5.26.0"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {
