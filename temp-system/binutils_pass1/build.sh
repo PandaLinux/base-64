@@ -38,7 +38,7 @@ function build() {
 
     make ${MAKE_PARALLEL}
     
-    mkdir -v ${HOST_TDIR}/lib && ln -sv lib ${HOST_TDIR}/lib64 ;;
+    mkdir -v ${HOST_TDIR}/lib && ln -sv lib ${HOST_TDIR}/lib64
 }
 
 function instal() {
