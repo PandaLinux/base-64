@@ -65,7 +65,7 @@ http://ftp.gnu.org/gnu/tar/tar-1.29.tar.xz
 http://downloads.sourceforge.net/tcl/tcl-core8.6.4-src.tar.gz
 http://ftp.gnu.org/gnu/texinfo/texinfo-6.3.tar.xz
 http://www.iana.org/time-zones/repository/releases/tzdata2017b.tar.gz
-http://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-2.29.2.tar.xz
+https://www.kernel.org/pub/linux/utils/util-linux/v2.32/util-linux-2.32.tar.xz
 ftp://ftp.vim.org/pub/vim/unix/vim-8.0.tar.bz2
 http://search.cpan.org/CPAN/authors/id/T/TO/TODDR/XML-Parser-2.44.tar.gz
 http://tukaani.org/xz/xz-5.2.3.tar.xz
