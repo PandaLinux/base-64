@@ -19,9 +19,7 @@ install -d ${DONE_DIR_TEMP_SYSTEM}
 
 export DONE_DIR_TEMP_SYSTEM
 
-if [ -f "${DONE_DIR}/cross-compile-tools/gcc-final" ]; then
-    _list=(build-variables gmp mpfr mpc isl zlib binutils gcc ncurses bash bzip2 check coreutils diffutils file \
-           findutils gawk gettext grep gzip make patch sed tar texinfo util-linux vim xz-utils)
+_list=(binutils_pass1 gcc_pass1)
 
     for i in ${_list[@]}; do
         case $i in
@@ -47,5 +45,4 @@ if [ -f "${DONE_DIR}/cross-compile-tools/gcc-final" ]; then
                 popd;;
         esac
     done
-fi
 echo empty
