@@ -32,12 +32,12 @@ function build() {
     for file in gcc/config/{linux,i386/linux{,64}}.h
 do
   cp -uv $file{,.orig}
-  sed -e 's@/lib\(64\)\?\(32\)\?/ld@"${HOST_TDIR}"&@g' \
-      -e 's@/usr@"${HOST_TDIR}"@g' $file.orig > $file
+  sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
+      -e 's@/usr@/tools@g' $file.orig > $file
   echo '
 #undef STANDARD_STARTFILE_PREFIX_1
 #undef STANDARD_STARTFILE_PREFIX_2
-#define STANDARD_STARTFILE_PREFIX_1 "${HOST_TDIR}/lib/"
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
 #define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
   touch $file.orig
 done
@@ -48,28 +48,15 @@ done
     mkdir   ${BUILD_DIR}  &&
     cd      ${BUILD_DIR}  &&
 
-    ../configure --prefix=${HOST_TDIR}               \
-                 --build=${HOST}                     \
-                 --host=${TARGET}                    \
-                 --target=${TARGET}                  \
-                 --with-local-prefix=${HOST_TDIR}    \
-                 --disable-multilib                  \
-                 --enable-languages=c,c++            \
-                 --with-system-zlib                  \
-                 --with-native-system-header-dir=${HOST_TDIR}/include \
-                 --disable-libssp                    \
-                 --enable-install-libiberty
-		 
-		 
     ../configure                                       \
     --target=${TARGET}                              \
-    --prefix=${HOST_TDIR}                                \
+    --prefix=/tools                                \
     --with-glibc-version=2.11                      \
     --with-sysroot=${INSTALL_DIR}                            \
     --with-newlib                                  \
     --without-headers                              \
-    --with-local-prefix=${HOST_TDIR}                     \
-    --with-native-system-header-dir=${HOST_TDIR}/include \
+    --with-local-prefix=/tools                     \
+    --with-native-system-header-dir=/tools/include \
     --disable-nls                                  \
     --disable-shared                               \
     --disable-multilib                             \
@@ -98,6 +85,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f ${TOOLS_DIR}/bin/${TARGET}-gcc ]; then
+if [ -f /tools/bin/${TARGET}-gcc ]; then
     touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
 fi
