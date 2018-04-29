@@ -175,13 +175,14 @@ if [ ! -d ${INSTALL_DIR}/dev ]; then
 	requireRoot chown -R `whoami` ${INSTALL_DIR}
     # Create necessary directories and symlinks
     echo warn "Creating necessary folders..."
-    install -d ${INSTALL_DIR}/tools
-    install -d ${LOGS_DIR}
-    install -d ${DONE_DIR}
-
+    
     if [ $(readlink ${INSTALL_DIR}/tools) ]; then
         requireRoot rm ${INSTALL_DIR}/tools
     fi
+    
+    install -d ${INSTALL_DIR}/tools
+    install -d ${LOGS_DIR}
+    install -d ${DONE_DIR}    
 
     requireRoot ln -s ${INSTALL_DIR}/tools /
 fi
