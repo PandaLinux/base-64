@@ -29,16 +29,16 @@ function build() {
     mkdir   ${BUILD_DIR}  &&
     cd      ${BUILD_DIR}  &&
 		 
-    ../configure --prefix=${HOST_TDIR}            \
+    ../configure --prefix=/tools            \
              --with-sysroot=${INSTALL_DIR}        \
-             --with-lib-path=${HOST_TDIR}/lib \
+             --with-lib-path=/tools/lib \
              --target=${TARGET}          \
              --disable-nls              \
              --disable-werror
 
     make ${MAKE_PARALLEL}
     
-    mkdir -v ${HOST_TDIR}/lib && ln -sv lib ${HOST_TDIR}/lib64
+    mkdir -v /tools/lib && ln -sv lib /tools/lib64
 }
 
 function instal() {
@@ -52,6 +52,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f ${TOOLS_DIR}/bin/${TARGET}-ld ]; then
+if [ -f /tools/bin/${TARGET}-ld ]; then
     touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
 fi
