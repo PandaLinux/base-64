@@ -39,7 +39,7 @@ function clean() {
 }
 
 # Run the installation procedure
-time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;runTest;instal;popd;clean; }
+time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
 if [ -f /tools/include/asm/a.out.h ]; then
     touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
