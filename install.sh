@@ -171,13 +171,13 @@ fi
 askConfirm;
 
 if [ ! -d ${INSTALL_DIR}/dev ]; then
-	# Get ${INSTALL_DIR} permissions
-	requireRoot chown -R `whoami` ${INSTALL_DIR}
+    # Get ${INSTALL_DIR} permissions
+    requireRoot chown -R `whoami` ${INSTALL_DIR}
     # Create necessary directories and symlinks
     echo warn "Creating necessary folders..."
     
     if [ $(readlink /tools) ]; then
-        requireRoot rm /tools
+        requireRoot rm -rf /tools
     fi
     
     install -d ${INSTALL_DIR}/tools
