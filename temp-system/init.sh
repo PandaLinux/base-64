@@ -19,7 +19,7 @@ install -d ${DONE_DIR_TEMP_SYSTEM}
 
 export DONE_DIR_TEMP_SYSTEM
 
-_list=(binutils_pass1 gcc_pass1)
+_list=(binutils_pass1 gcc_pass1 linux_headers)
 
     for i in ${_list[@]}; do
         case $i in
