@@ -69,21 +69,13 @@ while getopts ":t:j:i:hb:rm:" opt; do
         i )
             # Validate path provided by the user
             # Make sure a filesystem is mounted on this provided path
-            if [ "$(cat /proc/mounts | grep -w ${OPTARG} | cut -d" " -f1)" ]; then
-                sed -i "s#.*INSTALL_DIR=.*#INSTALL_DIR=${OPTARG}#" variables.sh
-                sed -i "s#.*DONE_DIR=.*#DONE_DIR=${OPTARG}/done#" variables.sh
-                sed -i "s#.*LOGS_DIR=.*#LOGS_DIR=${OPTARG}/logs#" variables.sh
+            sed -i "s#.*INSTALL_DIR=.*#INSTALL_DIR=${OPTARG}#" variables.sh
+            sed -i "s#.*DONE_DIR=.*#DONE_DIR=${OPTARG}/done#" variables.sh
+            sed -i "s#.*LOGS_DIR=.*#LOGS_DIR=${OPTARG}/logs#" variables.sh
 
-                sed -i "s#.*INSTALL_DIR=.*#export INSTALL_DIR=${OPTARG}#" ~/.bashrc
-                sed -i "s#.*DONE_DIR=.*#export DONE_DIR=${OPTARG}/done#" ~/.bashrc
-                sed -i "s#.*LOGS_DIR=.*#export LOGS_DIR=${OPTARG}/logs#" ~/.bashrc
-			else
-				echo empty
-				echo error "Invalid installation path."
-				echo error "Please read the documentation properly and fix the errors!"
-				echo empty
-				exit 1
-            fi
+            sed -i "s#.*INSTALL_DIR=.*#export INSTALL_DIR=${OPTARG}#" ~/.bashrc
+            sed -i "s#.*DONE_DIR=.*#export DONE_DIR=${OPTARG}/done#" ~/.bashrc
+            sed -i "s#.*LOGS_DIR=.*#export LOGS_DIR=${OPTARG}/logs#" ~/.bashrc
             ;;
 
         j )
@@ -155,13 +147,7 @@ echo empty
 
 # Validate path provided by the user
 # Make sure a filesystem is mounted on the path provided
-if [ ! "$(cat /proc/mounts | grep -w ${INSTALL_DIR} | cut -d' ' -f1)" ]; then
-	echo empty
-	echo error "Invalid installation path."
-	echo error "Please read the documentation properly and fix the errors!"
-	echo empty
-	exit 1
-elif [ "$(df --output=target,size ${INSTALL_DIR} | awk ' NR==2 { print $2 } ')" -lt ${MIN_SPACE_REQ} ]; then
+if [ "$(df --output=target,size ${INSTALL_DIR} | awk ' NR==2 { print $2 } ')" -lt ${MIN_SPACE_REQ} ]; then
 	echo empty
 	echo error "Minimum 6GB is required to continue!"
 	echo empty
