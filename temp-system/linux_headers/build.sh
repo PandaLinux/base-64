@@ -11,7 +11,7 @@ SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
-    echo -e "Description: The Linux Kernel contains a make target that installs ìsanitizedî kernel headers."
+    echo -e "Description: The Linux Kernel contains a make target that installs ‚Äúsanitized‚Äù kernel headers."
     echo -e "--------------------------------------------------------------------------------------------------------------"
     echo -e ""
 }
@@ -31,7 +31,7 @@ function build() {
 
 function instal() {
     make ${MAKE_PARALLEL} INSTALL_HDR_PATH=dest headers_install
-    cp -rv dest/include/* ${HOST_TDIR}/include
+    cp -rv dest/include/* /tools/include
 }
 
 function clean() {
@@ -41,6 +41,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;runTest;instal;popd;clean; }
 # Verify installation
-if [ -f /usr/include/asm/a.out.h ]; then
+if [ -f /tools/include/asm/a.out.h ]; then
     touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
 fi
