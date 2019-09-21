@@ -1,0 +1,11 @@
+stages:
+- name: compile
+  steps:
+  - runScriptConfig:
+      image: gcc:latest
+      shellScript: |-
+        bash configure.sh
+        sudo su - cub
+        ./install.sh
+timeout: 60
+notification: {}
