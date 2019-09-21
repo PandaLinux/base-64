@@ -2,7 +2,7 @@ stages:
 - name: compile
   steps:
   - runScriptConfig:
-      image: gcc:latest
+      image: ubuntu:xenial
       shellScript: |-
         bash configure.sh
         sudo su - cub
