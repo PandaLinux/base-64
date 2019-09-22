@@ -3,9 +3,11 @@
 shopt -s -o pipefail
 set -e 		# Exit on error
 
+source "$SRC"/variables.sh
+
 echo warn "Constructing temporary system..."
 
-_list=(binutils_pass1 gcc_pass1 linux_headers glibc libstdc++ binutils_pass2 gcc_pass2 tcl)
+_list=(binutils_pass1 gcc_pass1 linux_headers glibc libstdc++ binutils_pass2 gcc_pass2 tcl expect)
 
     for i in "${_list[@]}"; do
         case $i in
