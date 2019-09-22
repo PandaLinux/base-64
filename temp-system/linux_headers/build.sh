@@ -20,7 +20,7 @@ function showHelp() {
 
 function prepare() {
   echo -e "Downloading $TARBALL from $LINK"
-  wget "$WGET_OPTIONS" "$LINK" -O "$TARBALL"
+  wget "$LINK" -O "$TARBALL"
 }
 
 function unpack() {

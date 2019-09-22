@@ -21,7 +21,7 @@ function showHelp() {
 
 function prepare() {
   echo -e "Downloading $TARBALL from $LINK"
-  wget "$WGET_OPTIONS" "$LINK" -O "$TARBALL"
+  wget "$LINK" -O "$TARBALL"
 }
 
 function unpack() {
@@ -79,6 +79,7 @@ function instal() {
 }
 
 function verify() {
+  echo -e "Running tests for $PKG_NAME"
   echo 'int main(){}' >verify.c
   cc verify.c
   VERIFY=$(readelf -l a.out | grep ': /tools')

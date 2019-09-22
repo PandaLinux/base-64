@@ -20,7 +20,6 @@ ENV SYSTEM_MAP="System.map-5.2.8"
 ENV MAKE_TESTS=TRUE
 ENV MAKE_PARALLEL=-j8
 ENV DO_BACKUP=FALSE
-ENV WGET_OPTIONS="--tries=3 --continue --progress=dot:giga"
 
 RUN apk add --no-cache --virtual .deps \
     bash binutils bison bzip2 \
