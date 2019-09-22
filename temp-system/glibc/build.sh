@@ -48,11 +48,15 @@ function instal() {
   make "${MAKE_PARALLEL}" install
 }
 
-function test() {
-  echo -e "Running tests for $PKG_NAME"
-  echo 'int main(){}' >verify.c
+function verify(){
+  echo 'int main(){}' > verify.c
   "$TARGET"-gcc verify.c
-  readelf -l a.out | grep ': /tools'
+  VERIFY=$(readelf -l a.out | grep ': /tools')
+  echo "$VERIFY"
+  if [ -z "$VERIFY" ]; then
+    echo error "$TARGET-gcc is not installed properly, exiting..."
+    exit 1
+  fi
 }
 
 function clean() {
@@ -69,7 +73,7 @@ time {
   pushd ${SRC_DIR}
   build
   instal
-  test
+  verify
   popd
   clean
 }

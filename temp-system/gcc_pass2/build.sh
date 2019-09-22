@@ -31,6 +31,8 @@ function unpack() {
 
 function build() {
   echo -e "Configuring $PKG_NAME"
+  cat gcc/limitx.h gcc/glimits.h gcc/limity.h >$(dirname $("$TARGET"-gcc -print-libgcc-file-name))/include-fixed/limits.h
+
   for file in gcc/config/{linux,i386/linux{,64}}.h; do
     cp -uv $file{,.orig}
     sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
@@ -53,27 +55,19 @@ function build() {
   ./contrib/download_prerequisites &&
     mkdir ${BUILD_DIR} &&
     cd ${BUILD_DIR} &&
-    ../configure \
-      --target="${TARGET}" \
+    CC="$TARGET"-gcc \
+      CXX="$TARGET"-g++ \
+      AR="$TARGET"-ar \
+      RANLIB="$TARGET"-ranlib \
+      ../configure \
       --prefix=/tools \
-      --with-glibc-version=2.11 \
-      --with-sysroot="${INSTALL_DIR}" \
-      --with-newlib \
-      --without-headers \
       --with-local-prefix=/tools \
       --with-native-system-header-dir=/tools/include \
-      --disable-nls \
-      --disable-shared \
+      --enable-languages=c,c++ \
+      --disable-libstdcxx-pch \
       --disable-multilib \
-      --disable-decimal-float \
-      --disable-threads \
-      --disable-libatomic \
-      --disable-libgomp \
-      --disable-libquadmath \
-      --disable-libssp \
-      --disable-libvtv \
-      --disable-libstdcxx \
-      --enable-languages=c,c++
+      --disable-bootstrap \
+      --disable-libgomp
 
   make "${MAKE_PARALLEL}"
 }
@@ -81,11 +75,23 @@ function build() {
 function instal() {
   echo -e "Installing $PKG_NAME"
   make "${MAKE_PARALLEL}" install
+  ln -sv gcc /tools/bin/cc
+}
+
+function verify() {
+  echo 'int main(){}' >verify.c
+  cc verify.c
+  VERIFY=$(readelf -l a.out | grep ': /tools')
+  echo "$VERIFY"
+  if [ -z "$VERIFY" ]; then
+    echo error "CC is not installed properly, exiting..."
+    exit 1
+  fi
 }
 
 function clean() {
   echo -e "Cleaning up..."
-  rm -rf ${SRC_DIR} ${TARBALL}
+  rm -rf ${SRC_DIR} ${TARBALL} a.out verify.c
 }
 
 # Run the installation procedure
@@ -97,6 +103,7 @@ time {
   pushd ${SRC_DIR}
   build
   instal
+  verify
   popd
   clean
 }
