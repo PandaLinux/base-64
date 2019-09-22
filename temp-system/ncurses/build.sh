@@ -24,7 +24,7 @@ function prepare() {
 }
 
 function unpack() {
-  techo -e "Unpacking $TARBALL"
+  echo -e "Unpacking $TARBALL"
   tar xf ${TARBALL}
 }
 
