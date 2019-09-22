@@ -1,11 +1,10 @@
 stages:
 - name: compile
   steps:
-  - runScriptConfig:
-      image: ubuntu:xenial
-      shellScript: |-
-        bash configure.sh
-        sudo su - cub
-        ./install.sh
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: base-64:latest
+      registry: 127.0.0.1:34992
 timeout: 60
 notification: {}
