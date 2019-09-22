@@ -1,5 +1,5 @@
 stages:
-- name: compile
+- name: test in docker
   steps:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
