@@ -32,7 +32,7 @@ echo() {
 function requireRoot() {
     # Already root?
     if [[ $(whoami) == 'root' ]]; then
-        "$*"
+        $*
     elif [[ -x /bin/sudo || -x /usr/bin/sudo ]]; then
         sudo "$*"
     else

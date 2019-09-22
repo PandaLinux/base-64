@@ -112,14 +112,7 @@ if [ ! -d "${INSTALL_DIR}"/dev ]; then
   # Create necessary directories and symlinks
   echo warn "Creating necessary folders..."
 
-  if [ $(readlink /tools) ]; then
-    requireRoot rm -rf /tools
-  fi
-
   install -d "${INSTALL_DIR}"/tools
-  install -d "${LOGS_DIR}"
-  install -d "${DONE_DIR}"
-
   requireRoot ln -s "${INSTALL_DIR}"/tools /
 fi
 
