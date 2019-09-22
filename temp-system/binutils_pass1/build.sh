@@ -4,11 +4,13 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="binutils"
-PKG_VERSION="2.30"
+PKG_VERSION="2.32"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
+
+LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$TARBALL"
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,7 +20,7 @@ function showHelp() {
 }
 
 function prepare() {
-    ln -sv ../../sources/${TARBALL} ${TARBALL}
+    wget "$WGET_OPTIONS" "$LINK" -O "$TARBALL"
 }
 
 function unpack() {
@@ -30,19 +32,19 @@ function build() {
     cd      ${BUILD_DIR}  &&
 		 
     ../configure --prefix=/tools            \
-             --with-sysroot=${INSTALL_DIR}        \
-             --with-lib-path=/tools/lib \
-             --target=${TARGET}          \
-             --disable-nls              \
+             --with-sysroot="${INSTALL_DIR}"\
+             --with-lib-path=/tools/lib     \
+             --target="${TARGET}"           \
+             --disable-nls                  \
              --disable-werror
 
-    make ${MAKE_PARALLEL}
+    make "${MAKE_PARALLEL}"
     
     mkdir -v /tools/lib && ln -sv lib /tools/lib64
 }
 
 function instal() {
-    make ${MAKE_PARALLEL} install
+    make "${MAKE_PARALLEL}" install
 }
 
 function clean() {
@@ -52,6 +54,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f /tools/bin/${TARGET}-ld ]; then
-    touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
+if [ -f /tools/bin/"${TARGET}"-ld ]; then
+    touch "${DONE_DIR_TEMP_SYSTEM}"/$(basename $(pwd))
 fi
