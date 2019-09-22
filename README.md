@@ -36,4 +36,4 @@ Abhimanyu Saharan
 
 Buy us a cup of coffee.
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)]https://paypal.me/AbhimanyuSaharan)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/AbhimanyuSaharan)
