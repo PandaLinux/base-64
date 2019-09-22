@@ -4,13 +4,12 @@ shopt -s -o pipefail
 set -e # Exit on error
 
 PKG_NAME="expect"
-PKG_VERSION="5.54.5"
+PKG_VERSION="5.45.4"
 
 TARBALL="${PKG_NAME}${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}${PKG_VERSION}"
-BUILD_DIR="${PKG_NAME}-build"
 
-LINK="http://prdownloads.sourceforge.net/$PKG_NAME/$TARBALL"
+LINK="https://prdownloads.sourceforge.net/$PKG_NAME/$TARBALL"
 
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
