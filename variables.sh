@@ -9,32 +9,6 @@
 # Path of current script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-## User information
-PANDA_USER="cub"
-PANDA_GROUP="cub"
-PANDA_HOME="den"
-
-# Set install directory
-INSTALL_DIR=/tmp/panda64
-LOGS_DIR=${INSTALL_DIR}/logs
-DONE_DIR=${INSTALL_DIR}/done
-
-# Package installation directories
-ROOT_DIR=/home/${PANDA_HOME}
-TEMP_SYSTEM_DIR=${INSTALL_DIR}/temp-system
-BUILD_SYSTEM_DIR=${INSTALL_DIR}/build-system
-CONFIGURE_SYSTEM_DIR=${INSTALL_DIR}/configure-system
-FINALIZE_SYSTEM_DIR=${INSTALL_DIR}/finalize-system
-
-## Rest of the configurations
-PANDA_HOST=$(echo ${MACHTYPE} | sed -e 's/-[^-]*/-panda/')
-TARGET="x86_64-panda-linux-gnu"
-PATH="/tools/bin:/bin:/usr/bin"
-BUILD64="-m64"
-LC_ALL="POSIX"
-VM_LINUZ="vmlinuz-4.15.3-systemd"
-SYSTEM_MAP="System.map-4.15.3"
-
 # Set fonts for Help.
 NORM=`tput sgr0`
 BOLD=`tput bold`
@@ -42,8 +16,3 @@ REV=`tput smso`
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
 YELLOW=`tput setaf 3`
-
-MAKE_TESTS=TRUE
-MAKE_PARALLEL=-j1
-DO_BACKUP=FALSE
-MIN_SPACE_REQ=6291456
