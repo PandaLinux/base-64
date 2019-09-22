@@ -1,10 +1,11 @@
 stages:
-- name: test in docker
+- name: Build Temporary System
   steps:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: base-64:latest
+      tag: temp-system:latest
+      pushRemote: true
       registry: 127.0.0.1:34992
 timeout: 60
 notification: {}
