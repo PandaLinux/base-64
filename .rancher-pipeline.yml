@@ -4,7 +4,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile.temp
       buildContext: .
-      tag: temp-system:latest
+      tag: pandalinux/temp-system:latest
       pushRemote: true
       registry: index.docker.io
 timeout: 60
