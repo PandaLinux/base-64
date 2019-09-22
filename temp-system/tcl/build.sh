@@ -37,7 +37,7 @@ function build() {
   make "${MAKE_PARALLEL}"
 }
 
-function tests() {
+function verify() {
   echo -e "Running tests for $PKG_NAME"
   TZ=UTC make "$MAKE_PARALLEL" test
 }
@@ -63,7 +63,7 @@ time {
   unpack
   pushd ${SRC_DIR}
   build
-  tests
+  verify
   instal
   popd
   clean

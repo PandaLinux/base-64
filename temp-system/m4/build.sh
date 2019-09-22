@@ -8,7 +8,6 @@ PKG_VERSION="1.4.18"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
-BUILD_DIR="${PKG_NAME}-build"
 
 LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$TARBALL"
 

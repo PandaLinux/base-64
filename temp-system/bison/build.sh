@@ -33,7 +33,7 @@ function build() {
   make "$MAKE_PARALLEL"
 }
 
-function tests() {
+function verify() {
   echo -e "Running tests for $PKG_NAME"
   make "$MAKE_PARALLEL" check
 }
@@ -56,12 +56,8 @@ time {
   unpack
   pushd ${SRC_DIR}
   build
-  tests
+  verify
   instal
   popd
   clean
 }
-# Verify installation
-if [ -f ${TOOLS_DIR}/bin/bash ]; then
-  touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
-fi
