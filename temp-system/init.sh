@@ -7,7 +7,7 @@ source "$SRC"/variables.sh
 
 echo warn "Constructing temporary system..."
 
-_list=(binutils_pass1 gcc_pass1 linux_headers glibc libstdc++ binutils_pass2 gcc_pass2 tcl expect)
+_list=(binutils_pass1 gcc_pass1 linux_headers glibc libstdc++ binutils_pass2 gcc_pass2 tcl expect dejagnu)
 
     for i in "${_list[@]}"; do
         case $i in
