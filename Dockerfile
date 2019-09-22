@@ -42,4 +42,4 @@ FROM BASE
 ADD . $SRC
 
 WORKDIR $SRC
-RUN /bin/bash install.sh
+ENTRYPOINT ["/bin/bash", "install.sh"]
