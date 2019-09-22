@@ -2,7 +2,7 @@ stages:
 - name: Build Temporary System
   steps:
   - publishImageConfig:
-      dockerfilePath: ./Dockerfile
+      dockerfilePath: ./Dockerfile.temp
       buildContext: .
       tag: temp-system:latest
       pushRemote: true

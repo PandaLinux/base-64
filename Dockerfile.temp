@@ -1,12 +1,10 @@
-FROM alpine:3.9 as BASE
+FROM alpine:3.9
 
 MAINTAINER Abhimanyu Saharan <desk.abhimanyu@gmail.com>
 
 ENV TERM=xterm
 ENV SRC="/src"
 ENV INSTALL_DIR="/tmp/panda64"
-ENV LOGS_DIR="/tmp/panda64/logs"
-ENV DONE_DIR="/tmp/panda64/done"
 ENV TEMP_SYSTEM_DIR="/tmp/panda64/temp-system"
 ENV BUILD_SYSTEM_DIR="/tmp/panda64/build-system"
 ENV CONFIGURE_SYSTEM_DIR="/tmp/panda64/configure-system"
@@ -19,7 +17,6 @@ ENV VM_LINUZ="vmlinuz-5.2.8-systemd"
 ENV SYSTEM_MAP="System.map-5.2.8"
 ENV MAKE_TESTS=TRUE
 ENV MAKE_PARALLEL=-j8
-ENV DO_BACKUP=FALSE
 
 RUN apk add --no-cache --virtual .deps \
     bash binutils bison bzip2 \
@@ -35,10 +32,7 @@ RUN apk add --no-cache --virtual .deps \
     wget \
     xterm xz
 
-
-
-FROM BASE
 ADD . $SRC
 
 WORKDIR $SRC
-RUN /bin/bash install.sh
+RUN /bin/bash install-temp-system.sh
