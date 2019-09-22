@@ -4,11 +4,13 @@ shopt -s -o pipefail
 set -e 		# Exit on error
 
 PKG_NAME="gcc"
-PKG_VERSION="7.3.0"
+PKG_VERSION="9.2.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
+
+LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$SRC_DIR/$TARBALL"
 
 function showHelp() {
     echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -18,14 +20,11 @@ function showHelp() {
 }
 
 function prepare() {
-    ln -sv ../../sources/${TARBALL} ${TARBALL}
+    wget "$WGET_OPTIONS" "$LINK" -O "$TARBALL"
 }
 
 function unpack() {
     tar xf ${TARBALL}
-    tar -xf ../../sources/mpfr-4.0.1.tar.xz && mv mpfr-4.0.1 ${SRC_DIR}/mpfr
-    tar -xf ../../sources/gmp-6.1.2.tar.xz && mv gmp-6.1.2 ${SRC_DIR}/gmp
-    tar -xf ../../sources/mpc-1.1.0.tar.gz && mv mpc-1.1.0 ${SRC_DIR}/mpc
 }
 
 function build() {
@@ -41,18 +40,23 @@ do
 #define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
   touch $file.orig
 done
-    
-    sed -e '/m64=/s/lib64/lib/' \
+
+    case $(uname -m) in
+      x86_64)
+        sed -e '/m64=/s/lib64/lib/' \
         -i.orig gcc/config/i386/t-linux64
-    
+        ;;
+    esac
+
+    ./contrib/download_prerequisites &&
     mkdir   ${BUILD_DIR}  &&
     cd      ${BUILD_DIR}  &&
 
     ../configure                                       \
-    --target=${TARGET}                              \
+    --target="${TARGET}"                              \
     --prefix=/tools                                \
     --with-glibc-version=2.11                      \
-    --with-sysroot=${INSTALL_DIR}                            \
+    --with-sysroot="${INSTALL_DIR}"                            \
     --with-newlib                                  \
     --without-headers                              \
     --with-local-prefix=/tools                     \
@@ -64,18 +68,17 @@ done
     --disable-threads                              \
     --disable-libatomic                            \
     --disable-libgomp                              \
-    --disable-libmpx                               \
     --disable-libquadmath                          \
     --disable-libssp                               \
     --disable-libvtv                               \
     --disable-libstdcxx                            \
     --enable-languages=c,c++
 
-    make ${MAKE_PARALLEL}
+    make "${MAKE_PARALLEL}"
 }
 
 function instal() {
-    make ${MAKE_PARALLEL} install
+    make "${MAKE_PARALLEL}" install
 }
 
 function clean() {
@@ -85,6 +88,6 @@ function clean() {
 # Run the installation procedure
 time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;instal;popd;clean; }
 # Verify installation
-if [ -f /tools/bin/${TARGET}-gcc ]; then
-    touch ${DONE_DIR_TEMP_SYSTEM}/$(basename $(pwd))
+if [ -f /tools/bin/"${TARGET}"-gcc ]; then
+    touch "${DONE_DIR_TEMP_SYSTEM}"/$(basename $(pwd))
 fi
