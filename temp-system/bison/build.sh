@@ -3,15 +3,16 @@
 shopt -s -o pipefail
 set -e # Exit on error
 
-PKG_NAME="bash"
-PKG_VERSION="5.0"
+PKG_NAME="bison"
+PKG_VERSION="3.4.1"
 
-TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
+TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
+
 
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
-  echo -e "Description: The Bash package contains the Bourne-Again SHell."
+  echo -e "Description: The Bison package contains a parser generator."
   echo -e "--------------------------------------------------------------------------------------------------------------"
   echo -e ""
 }
@@ -34,13 +35,12 @@ function build() {
 
 function tests() {
   echo -e "Running tests for $PKG_NAME"
-  make "$MAKE_PARALLEL" tests
+  make "$MAKE_PARALLEL" check
 }
 
 function instal() {
   echo -e "Installing $PKG_NAME"
   make "${MAKE_PARALLEL}" install
-  ln -sv bash /tools/bin/sh
 }
 
 function clean() {
