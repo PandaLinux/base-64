@@ -24,6 +24,8 @@ for i in "${_list[@]}"; do
 done
 echo empty
 
+set +e
+
 echo warn "Stripping"
 strip --strip-debug /tools/lib/*
 /usr/bin/strip --strip-unneeded /tools/{,s}bin/*
