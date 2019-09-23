@@ -9,7 +9,7 @@ PKG_VERSION="1.0.8"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
-LINK="http://www.bzip.org/$PKG_VERSION/$TARBALL"
+LINK="https://www.sourceware.org/pub/$PKG_NAME/$TARBALL"
 
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
