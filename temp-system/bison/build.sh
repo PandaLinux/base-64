@@ -9,6 +9,8 @@ PKG_VERSION="3.4.1"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
+LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$TARBALL"
+
 
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
