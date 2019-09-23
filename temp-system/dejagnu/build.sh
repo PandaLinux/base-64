@@ -34,16 +34,6 @@ function build() {
   ./configure --prefix=/tools
 }
 
-function verify() {
-  echo -e "Running tests for $PKG_NAME"
-  make "$MAKE_PARALLEL" check
-}
-
-function instal() {
-  echo -e "Installing $PKG_NAME"
-  make "${MAKE_PARALLEL}" install
-}
-
 function clean() {
   echo -e "Cleaning up..."
   rm -rf ${SRC_DIR} ${TARBALL}
@@ -58,7 +48,6 @@ time {
   pushd ${SRC_DIR}
   build
   instal
-  verify
   popd
   clean
 }

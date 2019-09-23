@@ -32,12 +32,12 @@ function unpack() {
 function build() {
   echo -e "Configuring $PKG_NAME"
   ./configure --prefix=/tools
-  make "$MAKE_PARALLEL"
+  make
 }
 
 function instal() {
   echo -e "Installing $PKG_NAME"
-  make "${MAKE_PARALLEL}" install
+  make install
 }
 
 function clean() {

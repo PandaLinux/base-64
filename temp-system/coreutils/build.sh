@@ -30,14 +30,10 @@ function unpack() {
 
 function build() {
   echo -e "Configuring $PKG_NAME"
+
   ./configure --prefix=/tools --enable-install-program=hostname
 
   make "$MAKE_PARALLEL"
-}
-
-function verify() {
-  echo -e "Running tests for $PKG_NAME"
-  make "$MAKE_PARALLEL" RUN_EXPENSIVE_TESTS=yes check
 }
 
 function instal() {
@@ -58,7 +54,6 @@ time {
   unpack
   pushd ${SRC_DIR}
   build
-  verify
   instal
   popd
   clean

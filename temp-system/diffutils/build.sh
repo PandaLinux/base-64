@@ -34,11 +34,6 @@ function build() {
   make "$MAKE_PARALLEL"
 }
 
-function verify() {
-  echo -e "Running tests for $PKG_NAME"
-  make "$MAKE_PARALLEL" check
-}
-
 function instal() {
   echo -e "Installing $PKG_NAME"
   make "${MAKE_PARALLEL}" install
@@ -57,7 +52,6 @@ time {
   unpack
   pushd ${SRC_DIR}
   build
-  verify
   instal
   popd
   clean
