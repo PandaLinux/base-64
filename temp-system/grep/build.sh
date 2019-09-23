@@ -35,6 +35,11 @@ function build() {
   make "$MAKE_PARALLEL"
 }
 
+function instal() {
+  echo -e "Installing $PKG_NAME"
+  make "${MAKE_PARALLEL}" install
+}
+
 function clean() {
   echo -e "Cleaning up..."
   rm -rf ${SRC_DIR} ${TARBALL}
