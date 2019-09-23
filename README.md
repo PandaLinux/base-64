@@ -1,7 +1,5 @@
 # PANDA LINUX
 
-[![Gitter](https://badges.gitter.im/PandaLinux/base-64.svg)](https://gitter.im/PandaLinux/base-64?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Gratipay Team](https://img.shields.io/gratipay/team/Panda-Linux.svg?style=flat-square)](https://gratipay.com/Panda-Linux)
 [![GitHub forks](https://img.shields.io/github/forks/PandaLinux/base-64.svg?style=flat-square)](https://github.com/PandaLinux/base-64/network)
 [![GitHub stars](https://img.shields.io/github/stars/PandaLinux/base-64.svg?style=flat-square)](https://github.com/PandaLinux/base-64/stargazers)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/PandaLinux/base-64/master/LICENSE.md)
@@ -10,8 +8,6 @@ Panda Linux is an `open-source` and `free` operating system. Panda Linux is a [s
 It is built entirely by compiling source-code, using custom optimizations.
 
 Currently, Panda Linux only supports `x86-64` architecture.
-
-**Note: We have also opened up a forum page for our disscussions: [Forum](https://tux-tips.com/forum/topic/panda-linux). You can use either to discuss out your ideas and other stuff related to development of `Panda Linux`**
 
 ## Installation Instructions
 
@@ -40,4 +36,4 @@ Abhimanyu Saharan
 
 Buy us a cup of coffee.
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZJDFMDKR9X6P8)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/AbhimanyuSaharan)
