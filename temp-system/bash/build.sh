@@ -9,6 +9,8 @@ PKG_VERSION="5.0"
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
+LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$TARBALL"
+
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
   echo -e "Description: The Bash package contains the Bourne-Again SHell."
