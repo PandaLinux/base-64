@@ -31,7 +31,7 @@ function unpack() {
 
 function build() {
   echo -e "Configuring $PKG_NAME"
-  ./configure --prefix=/tools --without-bash-malloc
+  ./configure --prefix=/tools
   make "$MAKE_PARALLEL"
 }
 
