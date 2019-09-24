@@ -11,11 +11,7 @@ ENV TERM=xterm \
     FINALIZE_SYSTEM_DIR="/tmp/panda64/finalize-system" \
     TARGET="x86_64-panda-linux-gnu" \
     PATH="/tools/bin:$PATH" \
-    BUILD64="-m64" \
-    LC_ALL="POSIX" \
     FORCE_UNSAFE_CONFIGURE=1 \
-    VM_LINUZ="vmlinuz-5.2.8-systemd" \
-    SYSTEM_MAP="System.map-5.2.8" \
     MAKE_TESTS=TRUE \
     MAKE_PARALLEL=-j8
 
@@ -36,4 +32,4 @@ RUN apk add --no-cache --virtual .deps \
 ADD . $SRC
 
 WORKDIR $SRC
-RUN /bin/bash install-temp-system.sh
+RUN /bin/bash install.sh temp-system
