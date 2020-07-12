@@ -16,3 +16,8 @@ REV=`tput smso`
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
 YELLOW=`tput setaf 3`
+
+export INSTALL_DIR="${DIR}/rootfs"
+export MAKE_TESTS=TRUE
+export MAKE_PARALLEL="-j$(nproc)"
+export TARGET=panda

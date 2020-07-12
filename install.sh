@@ -2,6 +2,8 @@
 
 set -e # Exit upon error
 
+SRC="$(pwd)"
+
 # This script generates a 64-bit system
 source "$SRC"/variables.sh
 source "$SRC"/functions.sh
@@ -34,7 +36,7 @@ echo empty
 # Validate path provided by the user
 if [ ! -d "$INSTALL_DIR" ]; then
   echo warn "Creating $INSTALL_DIR"
-  requireRoot mkdir -p "$INSTALL_DIR"
+  mkdir -p "$INSTALL_DIR"
 fi
 
 #----------------------------------------------------------------------------------------------------#
@@ -44,14 +46,15 @@ fi
 echo empty
 echo success "Starting installation..."
 
-# Copying data to the installation location
-echo warn "Copying data to ${INSTALL_DIR}. Please wait..."
-cp -ur ./* "${INSTALL_DIR}"
-
 case "$1" in
+build-rootfs)
+  # Constructing root filesystem
+  pushd "build-rootfs" && bash init.sh && popd
+  ;;
+
 temp-system)
   # Constructing temporary system
-  pushd "${TEMP_SYSTEM_DIR}" && bash init.sh && popd
+  pushd "temp-system" && bash init.sh && popd
   ;;
 
 testChroot)
@@ -60,17 +63,17 @@ testChroot)
 
 basic-system)
   # Building the basic system
-  pushd "${BUILD_SYSTEM_DIR}" && bash init.sh && popd
+  pushd "build-system" && bash init.sh && popd
   ;;
 
 configure-system)
   # Configuring the system
-  pushd "${CONFIGURE_SYSTEM_DIR}" && bash init.sh && popd
+  pushd "configure-system" && bash init.sh && popd
   ;;
 
 finalize-system)
   # Finalize the system
-  pushd "${FINALIZE_SYSTEM_DIR}" && bash init.sh && popd
+  pushd "finalize-system" && bash init.sh && popd
   ;;
 
 *)
@@ -85,6 +88,4 @@ esac
 #----------------------------------------------------------------------------------------------------#
 
 echo empty
-echo warn "Removing installation files"
-rm -rf "$SRC"
 echo success "Done!"

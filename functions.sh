@@ -41,7 +41,7 @@ function requireRoot() {
   if [[ $(whoami) == 'root' ]]; then
     $*
   elif [[ -x /bin/sudo || -x /usr/bin/sudo ]]; then
-    sudo "$*"
+    sudo $*
   else
     echo error "We require root privileges to install."
     echo error "Please run the script as root."
