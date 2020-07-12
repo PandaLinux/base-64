@@ -37,6 +37,15 @@ echo empty
 if [ ! -d "$INSTALL_DIR" ]; then
   echo warn "Creating $INSTALL_DIR"
   mkdir -p "$INSTALL_DIR"
+  mkdir -p "${INSTALL_DIR}/bin"
+  mkdir -p "${INSTALL_DIR}/etc"
+  mkdir -p "${INSTALL_DIR}/dev"
+  mkdir -p "${INSTALL_DIR}/etc"
+  mkdir -p "${INSTALL_DIR}/lib"
+  mkdir -p "${INSTALL_DIR}/proc"
+  mkdir -p "${INSTALL_DIR}/run"
+  mkdir -p "${INSTALL_DIR}/sbin"
+  mkdir -p "${INSTALL_DIR}/usr"
 fi
 
 #----------------------------------------------------------------------------------------------------#

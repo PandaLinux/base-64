@@ -31,10 +31,6 @@ function build() {
     make "${MAKE_PARALLEL}"
 }
 
-function runTest() {
-    make "${MAKE_PARALLEL}" tests
-}
-
 function runInstall() {
     make "${MAKE_PARALLEL}" install
     mv -v "${INSTALL_DIR}/usr/bin/bash" "${INSTALL_DIR}/bin/bash"
