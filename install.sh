@@ -15,7 +15,7 @@ source "$SRC"/functions.sh
 # Display help messgae
 function show_help() {
   cat <<EOF
-Usage: ${0##*/} [temp-system|basic-system|configure-system|finalize-system]
+Usage: ${0##*/} [build-rootfs|basic-system|configure-system|finalize-system]
 
 Compile & install 64bit Panda Linux
 EOF
@@ -33,21 +33,6 @@ echo empty
 echo norm "${BOLD}Tools Directory:${NORM}           /tools"
 echo empty
 
-# Validate path provided by the user
-if [ ! -d "$INSTALL_DIR" ]; then
-  echo warn "Creating $INSTALL_DIR"
-  mkdir -p "$INSTALL_DIR"
-  mkdir -p "${INSTALL_DIR}/bin"
-  mkdir -p "${INSTALL_DIR}/etc"
-  mkdir -p "${INSTALL_DIR}/dev"
-  mkdir -p "${INSTALL_DIR}/etc"
-  mkdir -p "${INSTALL_DIR}/lib"
-  mkdir -p "${INSTALL_DIR}/proc"
-  mkdir -p "${INSTALL_DIR}/run"
-  mkdir -p "${INSTALL_DIR}/sbin"
-  mkdir -p "${INSTALL_DIR}/usr"
-fi
-
 #----------------------------------------------------------------------------------------------------#
 #                               S T A R T   I N S T A L L A T I O N                                  #
 #----------------------------------------------------------------------------------------------------#
@@ -57,13 +42,23 @@ echo success "Starting installation..."
 
 case "$1" in
 build-rootfs)
+  # Remove install directory to keep clean builds
+  if [ -d "$INSTALL_DIR" ]; then
+    rm -rf "${INSTALL_DIR}"
+  fi
+
+  echo warn "Creating $INSTALL_DIR"
+  mkdir -p "$INSTALL_DIR"
+  mkdir -p "${INSTALL_DIR}/bin"
+  mkdir -p "${INSTALL_DIR}/etc"
+  mkdir -p "${INSTALL_DIR}/dev"
+  mkdir -p "${INSTALL_DIR}/etc"
+  mkdir -p "${INSTALL_DIR}/proc"
+  mkdir -p "${INSTALL_DIR}/run"
+  mkdir -p "${INSTALL_DIR}/sbin"
+
   # Constructing root filesystem
   pushd "build-rootfs" && bash init.sh && popd
-  ;;
-
-temp-system)
-  # Constructing temporary system
-  pushd "temp-system" && bash init.sh && popd
   ;;
 
 testChroot)

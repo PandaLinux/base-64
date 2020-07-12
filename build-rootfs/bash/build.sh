@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 shopt -s -o pipefail
-set -e 		# Exit on error
+set -e # Exit on error
+
+source ../../functions.sh
 
 PKG_NAME="bash"
 PKG_VERSION="5.0"
@@ -10,36 +12,47 @@ TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.gz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 
 function showHelp() {
-    echo -e "--------------------------------------------------------------------------------------------------------------"
-    echo -e "Description: The Bash package contains the Bourne-Again SHell."
-    echo -e "--------------------------------------------------------------------------------------------------------------"
-    echo -e ""
+  echo -e "--------------------------------------------------------------------------------------------------------------"
+  echo -e "Description: The Bash package contains the Bourne-Again SHell."
+  echo -e "--------------------------------------------------------------------------------------------------------------"
+  echo -e ""
 }
 
 function prepare() {
-    wget http://ftp.gnu.org/gnu/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz
+  downloadSrc "gnu" "${PKG_NAME}" "${TARBALL}" "$(pwd)"
 }
 
 function unpack() {
-    tar xf ${TARBALL}
+  echo -e "Unpacking $TARBALL"
+  tar xf ${TARBALL}
 }
 
 function build() {
-    ./configure --prefix="${INSTALL_DIR}/usr" \
-                --without-bash-malloc
-
-    make "${MAKE_PARALLEL}"
+  echo -e "Configuring $PKG_NAME"
+  ./configure --prefix="${INSTALL_DIR}" --without-bash-malloc
+  make "$MAKE_PARALLEL"
 }
 
-function runInstall() {
-    make "${MAKE_PARALLEL}" install
-    mv -v "${INSTALL_DIR}/usr/bin/bash" "${INSTALL_DIR}/bin/bash"
-    ln -sv "${INSTALL_DIR}/bin/bash" "${INSTALL_DIR}/bin/sh"
+function instal() {
+  echo -e "Installing $PKG_NAME"
+  make "${MAKE_PARALLEL}" install
+  ln -sv bash "${INSTALL_DIR}"/bin/sh
 }
 
 function clean() {
-    rm -rf ${SRC_DIR} ${TARBALL}
+  echo -e "Cleaning up..."
+  rm -rf ${SRC_DIR} ${TARBALL}
 }
 
 # Run the installation procedure
-time { showHelp;clean;prepare;unpack;pushd ${SRC_DIR};build;runInstall;popd;clean; }
+time {
+  showHelp
+  clean
+  prepare
+  unpack
+  pushd ${SRC_DIR}
+  build
+  instal
+  popd
+  clean
+}

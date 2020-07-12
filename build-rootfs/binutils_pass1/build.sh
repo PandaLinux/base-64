@@ -3,14 +3,15 @@
 shopt -s -o pipefail
 set -e # Exit on error
 
+source ../../variables.sh
+source ../../functions.sh
+
 PKG_NAME="binutils"
-PKG_VERSION="2.32"
+PKG_VERSION="2.34"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
-
-LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$TARBALL"
 
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -20,38 +21,37 @@ function showHelp() {
 }
 
 function prepare() {
-  echo -e "Downloading $TARBALL from $LINK"
-  wget "$LINK" -O "$TARBALL"
+  downloadSrc "gnu" "${PKG_NAME}" "${TARBALL}" "$(pwd)"
 }
 
 function unpack() {
-  echo -e "Unpacking $TARBALL"
+  echo warn "Unpacking $TARBALL"
   tar xf ${TARBALL}
 }
 
 function build() {
-  echo -e "Configuring $PKG_NAME"
+  echo warn "Configuring $PKG_NAME"
   mkdir ${BUILD_DIR} &&
     cd ${BUILD_DIR} &&
-    ../configure --prefix=/tools \
-      --with-sysroot="${INSTALL_DIR}" \
-      --with-lib-path=/tools/lib \
-      --target="${TARGET}" \
+    ../configure --prefix="${INSTALL_DIR}" \
+      --with-sysroot=$LFS \
+      --with-lib-path="${INSTALL_DIR}"/lib \
+      --target=$LFS_TGT \
       --disable-nls \
       --disable-werror
 
   make "${MAKE_PARALLEL}"
 
-  mkdir -v /tools/lib && ln -sv lib /tools/lib64
+  mkdir -v "${INSTALL_DIR}"/lib && ln -sv lib "${INSTALL_DIR}"/lib64
 }
 
-function instal() {
-  echo -e "Installing $PKG_NAME"
+function runInstall() {
+  echo warn "Installing $PKG_NAME"
   make "${MAKE_PARALLEL}" install
 }
 
 function clean() {
-  echo -e "Cleaning up..."
+  echo warn "Cleaning up..."
   rm -rf ${SRC_DIR} ${TARBALL}
 }
 
@@ -63,7 +63,7 @@ time {
   unpack
   pushd ${SRC_DIR}
   build
-  instal
+  runInstall
   popd
   clean
 }

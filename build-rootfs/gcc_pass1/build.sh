@@ -3,14 +3,15 @@
 shopt -s -o pipefail
 set -e # Exit on error
 
+source ../../variables.sh
+source ../../functions.sh
+
 PKG_NAME="gcc"
 PKG_VERSION="9.2.0"
 
 TARBALL="${PKG_NAME}-${PKG_VERSION}.tar.xz"
 SRC_DIR="${PKG_NAME}-${PKG_VERSION}"
 BUILD_DIR="${PKG_NAME}-build"
-
-LINK="http://ftp.gnu.org/gnu/$PKG_NAME/$SRC_DIR/$TARBALL"
 
 function showHelp() {
   echo -e "--------------------------------------------------------------------------------------------------------------"
@@ -20,25 +21,24 @@ function showHelp() {
 }
 
 function prepare() {
-  echo -e "Downloading $TARBALL from $LINK"
-  wget "$LINK" -O "$TARBALL"
+  downloadSrc "gnu" "${PKG_NAME}" "${TARBALL}" "$(pwd)"
 }
 
 function unpack() {
-  echo -e "Unpacking $TARBALL"
+  echo warn "Unpacking $TARBALL"
   tar xf ${TARBALL}
 }
 
 function build() {
-  echo -e "Configuring $PKG_NAME"
+  echo warn "Configuring $PKG_NAME"
   for file in gcc/config/{linux,i386/linux{,64}}.h; do
     cp -uv $file{,.orig}
-    sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
-      -e 's@/usr@/tools@g' $file.orig >$file
+    sed -e "s@/lib\(64\)\?\(32\)\?/ld@${INSTALL_DIR}&@g" \
+      -e "s@/usr@${INSTALL_DIR}@g" $file.orig >$file
     echo '
 #undef STANDARD_STARTFILE_PREFIX_1
 #undef STANDARD_STARTFILE_PREFIX_2
-#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_1 "${INSTALL_DIR}/lib/"
 #define STANDARD_STARTFILE_PREFIX_2 ""' >>$file
     touch $file.orig
   done
@@ -55,13 +55,13 @@ function build() {
     cd ${BUILD_DIR} &&
     ../configure \
       --target="${TARGET}" \
-      --prefix=/tools \
+      --prefix="${INSTALL_DIR}" \
       --with-glibc-version=2.11 \
       --with-sysroot="${INSTALL_DIR}" \
       --with-newlib \
       --without-headers \
-      --with-local-prefix=/tools \
-      --with-native-system-header-dir=/tools/include \
+      --with-local-prefix="${INSTALL_DIR}" \
+      --with-native-system-header-dir="${INSTALL_DIR}"/include \
       --disable-nls \
       --disable-shared \
       --disable-multilib \
@@ -78,7 +78,7 @@ function build() {
   make "${MAKE_PARALLEL}"
 }
 
-function instal() {
+function runInstall() {
   echo -e "Installing $PKG_NAME"
   make "${MAKE_PARALLEL}" install
 }
@@ -96,7 +96,7 @@ time {
   unpack
   pushd ${SRC_DIR}
   build
-  instal
+  runInstall
   popd
   clean
 }

@@ -131,3 +131,22 @@ function cleanup() {
   requireRoot rm -rf "${INSTALL_DIR}"/tools
   checkCommand
 }
+
+function downloadSrc() {
+  src_type="$1"
+  pkg_name="$2"
+  tarball="$3"
+  folder="$4"
+
+  # Cleanup before downloading
+  rm -rf "${folder:?}/${pkg_name}"
+  rm -rf "${folder:?}/${tarball}"
+
+
+  if [[ "${src_type}" == "gnu" ]]; then
+    link="http://ftp.gnu.org/gnu/${pkg_name}/${tarball}"
+
+    echo warn "Downloading ${tarball} from ${link}"
+    wget -c "${link}" -O "${folder}/${tarball}"
+  fi
+}
