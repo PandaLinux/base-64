@@ -1,7 +1,6 @@
 # PANDA LINUX
 
 [![GitHub forks](https://img.shields.io/github/forks/PandaLinux/base-64.svg?style=flat-square)](https://github.com/PandaLinux/base-64/network)
-[![GitHub stars](https://img.shields.io/github/stars/PandaLinux/base-64.svg?style=flat-square)](https://github.com/PandaLinux/base-64/stargazers)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/PandaLinux/base-64/master/LICENSE.md)
 
 Panda Linux is an `open-source` and `free` operating system. Panda Linux is a [source](http://en.wikipedia.org/wiki/source_code) based [Linux distribution](http://en.wikipedia.org/wiki/Linux_distribution) based on `Debian/Ubuntu`.
